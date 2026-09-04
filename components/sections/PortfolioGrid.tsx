@@ -50,9 +50,8 @@ export function PortfolioGrid({
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
         <div>
           <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-3">
-            <span className="text-bronze">02</span>
-            <span>/</span>
-            <span>{isHomepagePreview ? "SELECTED WORKS" : "COMPLETE CATALOG"}</span>
+            <span className="text-bronze">•</span>
+            <span>{isHomepagePreview ? "SELECTED WORKS" : "COMPLETE ARCHIVE"}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl font-light text-ink">
             {isHomepagePreview ? "Curated Portfolio" : "Photographic Archive"}

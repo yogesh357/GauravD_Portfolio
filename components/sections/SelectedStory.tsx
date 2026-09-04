@@ -66,8 +66,7 @@ export function SelectedStory() {
         {/* Eyebrow and Section Title */}
         <div className="flex flex-col space-y-4 max-w-3xl mb-16 sm:mb-24">
           <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze">
-            <span>04</span>
-            <span>/</span>
+            <span>•</span>
             <span>FEATURED VISUAL ESSAY</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light leading-tight">

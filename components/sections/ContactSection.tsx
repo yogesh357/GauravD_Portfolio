@@ -69,8 +69,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="contact-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze mb-6">
-          <span>06</span>
-          <span>/</span>
+          <span>•</span>
           <span>COMMISSIONS & INQUIRIES</span>
         </div>
 

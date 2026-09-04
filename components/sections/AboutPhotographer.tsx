@@ -6,7 +6,6 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SiteSettings } from "@/lib/db/schema";
-import { ArrowRight, Award, Camera, Globe } from "lucide-react";
 
 interface AboutPhotographerProps {
   settings?: SiteSettings | null;
@@ -18,24 +17,6 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
   const bio =
     settings?.bio ||
     "I photograph people, places, and fleeting moments — searching for the quiet details that usually disappear in the noise of modern life. Based between Paris and Tokyo, creating fine-art visual essays and commissioned editorial works worldwide.";
-
-  const clients = [
-    "Vogue International",
-    "Kinfolk Magazine",
-    "Monocle",
-    "National Geographic Traveller",
-    "Leica Camera AG",
-    "The Architectural Review",
-    "Hasselblad Master Series",
-    "Wallpaper* Magazine",
-  ];
-
-  const exhibitions = [
-    { year: "2025", title: "Quiet Geometry & Sacred Space", venue: "Galerie Vivienne, Paris" },
-    { year: "2024", title: "The Nordic Solitude", venue: "Fotografiska, Stockholm" },
-    { year: "2023", title: "Shadows of the East", venue: "Daikanyama T-Site, Tokyo" },
-    { year: "2022", title: "Sony World Photography Awards", venue: "Somerset House, London (Shortlisted)" },
-  ];
 
   useGSAP(
     () => {
@@ -52,7 +33,7 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
         {
           y: 0,
           opacity: 1,
-          stagger: 0.1,
+          stagger: 0.12,
           duration: 0.9,
           ease: "power2.out",
           scrollTrigger: {
@@ -72,17 +53,10 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       ref={containerRef}
       className="py-24 sm:py-36 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
     >
-      {/* Section Eyebrow */}
-      <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-12 sm:mb-16">
-        <span className="text-bronze">01</span>
-        <span>/</span>
-        <span>ARTIST PROFILE & PHILOSOPHY</span>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-        {/* Left Column: Portrait & Discipline Stats */}
-        <div className="about-element lg:col-span-5 space-y-8">
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted shadow-lg">
+        {/* Left Column: Portrait & Studio Location */}
+        <div className="about-element lg:col-span-5 space-y-6">
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted shadow-xl">
             <Image
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop"
               alt="Gaurav D. Portrait in Paris Studio"
@@ -92,80 +66,41 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
             />
           </div>
 
-          <div className="flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-4">
-            <span>GAURAV D. — FOUNDER & DIRECTOR</span>
-            <span>PARIS ATELIER • 2026</span>
-          </div>
-
-          {/* Discipline Stats */}
-          <div className="grid grid-cols-3 gap-4 pt-2">
-            <div className="space-y-1">
-              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">14+</span>
-              <p className="text-[10px] tracking-widest uppercase text-ink-muted">Years in field</p>
-            </div>
-            <div className="space-y-1">
-              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">24+</span>
-              <p className="text-[10px] tracking-widest uppercase text-ink-muted">Exhibitions</p>
-            </div>
-            <div className="space-y-1">
-              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">Leica</span>
-              <p className="text-[10px] tracking-widest uppercase text-ink-muted">M11 Discipline</p>
-            </div>
+          <div className="flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-4 font-mono">
+            <span>GAURAV D.</span>
+            <span>PARIS • TOKYO</span>
           </div>
         </div>
 
-        {/* Right Column: Statement, Bio, Clients, Exhibitions */}
-        <div className="lg:col-span-7 flex flex-col space-y-12">
-          <div className="space-y-6">
-            <h2 className="about-element font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-ink leading-tight">
-              A pursuit of silence and emotional resonance in an overstimulated world.
-            </h2>
-            <p className="about-element text-ink-muted text-base sm:text-lg leading-relaxed font-light">
+        {/* Right Column: Statement, Bio & Philosophy */}
+        <div className="lg:col-span-7 flex flex-col space-y-8 pt-2">
+          <h2 className="about-element font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-ink leading-[1.1]">
+            A pursuit of silence and emotional resonance in an overstimulated world.
+          </h2>
+
+          <div className="space-y-5 text-ink-muted text-base sm:text-lg leading-relaxed font-light">
+            <p className="about-element">
               {bio}
             </p>
-            <p className="about-element text-ink-muted text-sm sm:text-base leading-relaxed font-light">
+            <p className="about-element">
               Working strictly with available ambient light and mechanical manual focus optics, every
-              frame represents a slow, meditative engagement with time.
+              frame represents a slow, meditative engagement with negative space and fleeting human presence.
             </p>
           </div>
 
-          {/* Selected Clients & Press */}
-          <div className="about-element pt-6 border-t border-ink/10">
-            <p className="text-[11px] font-sans tracking-ultra uppercase text-bronze mb-6">
-              SELECTED CLIENTS & EDITORIAL PUBLICATIONS
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-xs tracking-widest uppercase text-ink/80">
-              {clients.map((client) => (
-                <div
-                  key={client}
-                  className="border-b border-ink/10 pb-2 hover:text-bronze transition-colors"
-                >
-                  {client}
-                </div>
-              ))}
+          {/* Clean Discipline Stats */}
+          <div className="about-element grid grid-cols-3 gap-6 pt-6 border-t border-ink/10">
+            <div className="space-y-1">
+              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">14+</span>
+              <p className="text-[11px] tracking-widest uppercase text-ink-muted">Years in field</p>
             </div>
-          </div>
-
-          {/* Solo & Group Exhibitions */}
-          <div className="about-element pt-6 border-t border-ink/10">
-            <p className="text-[11px] font-sans tracking-ultra uppercase text-bronze mb-6">
-              SOLO & GROUP EXHIBITIONS
-            </p>
-            <div className="flex flex-col space-y-4">
-              {exhibitions.map((ex) => (
-                <div
-                  key={ex.title}
-                  className="flex flex-col sm:flex-row sm:items-baseline justify-between border-b border-ink/5 pb-3 text-sm gap-1 sm:gap-4"
-                >
-                  <div className="flex items-baseline space-x-3">
-                    <span className="font-mono text-xs text-bronze">{ex.year}</span>
-                    <span className="font-serif text-ink text-base sm:text-lg">{ex.title}</span>
-                  </div>
-                  <span className="text-xs text-ink-muted tracking-widest uppercase">
-                    {ex.venue}
-                  </span>
-                </div>
-              ))}
+            <div className="space-y-1">
+              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">50+</span>
+              <p className="text-[11px] tracking-widest uppercase text-ink-muted">Monographs</p>
+            </div>
+            <div className="space-y-1">
+              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">Leica</span>
+              <p className="text-[11px] tracking-widest uppercase text-ink-muted">Rangefinder</p>
             </div>
           </div>
         </div>

@@ -57,10 +57,10 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
   );
 
   const navLinks = [
-    { label: "WORK", href: "/work", number: "01" },
-    { label: "ABOUT", href: "/#about", number: "02" },
-    { label: "STORIES", href: "/#stories", number: "03" },
-    { label: "CONTACT", href: "/#contact", number: "04" },
+    { label: "WORK", href: "/work" },
+    { label: "ABOUT", href: "/#about" },
+    { label: "STORIES", href: "/#stories" },
+    { label: "CONTACT", href: "/#contact" },
   ];
 
   return (
@@ -101,9 +101,6 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
                 href={link.href}
                 className="group relative text-ink hover:text-bronze transition-colors duration-300 py-1"
               >
-                <span className="text-[10px] text-ink-muted mr-1.5 opacity-70 group-hover:text-bronze">
-                  {link.number}
-                </span>
                 <span>{link.label}</span>
                 <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-bronze transition-all duration-300 group-hover:w-full" />
               </a>
@@ -148,7 +145,7 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
       >
         <div className="pt-20">
           <p className="text-[11px] tracking-ultra text-bronze uppercase mb-8">
-            NAVIGATION INDEX
+            NAVIGATION
           </p>
           <nav className="flex flex-col space-y-6">
             {navLinks.map((link) => (
@@ -159,9 +156,6 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
                 className="mobile-nav-item flex items-baseline justify-between border-b border-white/10 pb-4 text-2xl font-serif tracking-wide hover:text-bronze transition-colors"
               >
                 <span>{link.label}</span>
-                <span className="text-xs font-sans tracking-widest text-white/50">
-                  {link.number}
-                </span>
               </a>
             ))}
           </nav>
