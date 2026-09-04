@@ -13,6 +13,8 @@ interface AboutPhotographerProps {
 
 export function AboutPhotographer({ settings }: AboutPhotographerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const portraitWrapperRef = useRef<HTMLDivElement>(null);
+  const portraitInnerRef = useRef<HTMLDivElement>(null);
 
   const bio =
     settings?.bio ||
@@ -27,22 +29,75 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReducedMotion) return;
 
-      gsap.fromTo(
-        ".about-element",
-        { y: 35, opacity: 0 },
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      // 1. Portrait Reveal with Curtain Clip-Path
+      if (portraitWrapperRef.current) {
+        tl.fromTo(
+          portraitWrapperRef.current,
+          { clipPath: "inset(100% 0% 0% 0%)", scale: 1.08 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            scale: 1,
+            duration: 1.2,
+            ease: "power3.inOut",
+          },
+          0
+        );
+      }
+
+      // 2. Headings & Bio Lines Stagger
+      tl.fromTo(
+        ".about-reveal-line",
+        { yPercent: 100, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 1,
+          ease: "power4.out",
+        },
+        0.2
+      );
+
+      // 3. Body text & Stats Stagger
+      tl.fromTo(
+        ".about-text-reveal",
+        { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.12,
-          duration: 0.9,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 78%",
-            toggleActions: "play none none none",
-          },
-        }
+          stagger: 0.1,
+          duration: 0.8,
+          ease: "power3.out",
+        },
+        0.4
       );
+
+      // 4. Subtle Portrait Parallax on continuous scroll
+      if (portraitInnerRef.current) {
+        gsap.fromTo(
+          portraitInnerRef.current,
+          { yPercent: -4, scale: 1.06 },
+          {
+            yPercent: 6,
+            scale: 1.02,
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          }
+        );
+      }
     },
     { scope: containerRef }
   );
@@ -55,18 +110,23 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
         {/* Left Column: Portrait & Studio Location */}
-        <div className="about-element lg:col-span-5 space-y-6">
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted shadow-xl">
-            <Image
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop"
-              alt="Gaurav D. Portrait in Paris Studio"
-              fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover grayscale contrast-105"
-            />
+        <div className="lg:col-span-5 space-y-6">
+          <div
+            ref={portraitWrapperRef}
+            className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted shadow-xl"
+          >
+            <div ref={portraitInnerRef} className="relative w-full h-full">
+              <Image
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop"
+                alt="Gaurav D. Portrait in Paris Studio"
+                fill
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                className="object-cover grayscale contrast-105"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-4 font-mono">
+          <div className="about-text-reveal flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-4 font-mono">
             <span>GAURAV D.</span>
             <span>PARIS • TOKYO</span>
           </div>
@@ -74,22 +134,31 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
 
         {/* Right Column: Statement, Bio & Philosophy */}
         <div className="lg:col-span-7 flex flex-col space-y-8 pt-2">
-          <h2 className="about-element font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-ink leading-[1.1]">
-            A pursuit of silence and emotional resonance in an overstimulated world.
-          </h2>
+          <div className="space-y-1">
+            <div className="overflow-hidden">
+              <h2 className="about-reveal-line font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-ink leading-[1.08]">
+                A pursuit of silence and
+              </h2>
+            </div>
+            <div className="overflow-hidden">
+              <h2 className="about-reveal-line font-serif text-3xl sm:text-5xl lg:text-6xl font-light italic text-ink/90 leading-[1.08]">
+                emotional resonance.
+              </h2>
+            </div>
+          </div>
 
           <div className="space-y-5 text-ink-muted text-base sm:text-lg leading-relaxed font-light">
-            <p className="about-element">
+            <p className="about-text-reveal">
               {bio}
             </p>
-            <p className="about-element">
+            <p className="about-text-reveal">
               Working strictly with available ambient light and mechanical manual focus optics, every
               frame represents a slow, meditative engagement with negative space and fleeting human presence.
             </p>
           </div>
 
           {/* Clean Discipline Stats */}
-          <div className="about-element grid grid-cols-3 gap-6 pt-6 border-t border-ink/10">
+          <div className="about-text-reveal grid grid-cols-3 gap-6 pt-6 border-t border-ink/10">
             <div className="space-y-1">
               <span className="font-serif text-3xl sm:text-4xl text-ink font-light">14+</span>
               <p className="text-[11px] tracking-widest uppercase text-ink-muted">Years in field</p>

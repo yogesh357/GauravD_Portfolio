@@ -49,10 +49,6 @@ export default async function PhotoDetailPage({ params }: Props) {
   const prevPhoto = currentIndex > 0 ? allPhotos[currentIndex - 1] : allPhotos[allPhotos.length - 1];
   const nextPhoto = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : allPhotos[0];
 
-  const relatedPhotos = allPhotos
-    .filter((p) => p.categoryId === photo.categoryId && p.slug !== photo.slug)
-    .slice(0, 3);
-
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
       <Navbar />
@@ -224,47 +220,6 @@ export default async function PhotoDetailPage({ params }: Props) {
             </Link>
           )}
         </div>
-
-        {/* Related Category Works */}
-        {relatedPhotos.length > 0 && (
-          <div className="mt-24 pt-12 border-t border-ink/10">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="font-serif text-2xl sm:text-3xl font-light text-ink">
-                Related {photo.category?.name || "Works"}
-              </h3>
-              <Link
-                href="/#portfolio"
-                className="text-xs tracking-ultra text-bronze uppercase hover:underline"
-              >
-                VIEW FULL ARCHIVE →
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {relatedPhotos.map((item) => (
-                <Link key={item.id} href={`/work/${item.slug}`} className="group flex flex-col">
-                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.imageAlt}
-                      fill
-                      sizes="(max-width: 640px) 100vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="mt-3">
-                    <span className="text-[10px] tracking-widest text-bronze uppercase">
-                      {item.location || "2025"}
-                    </span>
-                    <p className="font-serif text-lg text-ink group-hover:text-bronze transition-colors">
-                      {item.title}
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
 
       <Footer />

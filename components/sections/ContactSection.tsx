@@ -34,21 +34,36 @@ export function ContactSection({ settings }: ContactSectionProps) {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReducedMotion) return;
 
-      gsap.fromTo(
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top 78%",
+          toggleActions: "play none none none",
+        },
+      });
+
+      tl.fromTo(
+        ".contact-line-reveal",
+        { yPercent: 100, opacity: 0 },
+        {
+          yPercent: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 1.1,
+          ease: "power4.out",
+        },
+        0
+      ).fromTo(
         ".contact-reveal",
-        { y: 40, opacity: 0 },
+        { y: 35, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.12,
-          duration: 1,
+          stagger: 0.1,
+          duration: 0.9,
           ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
+        },
+        0.2
       );
     },
     { scope: containerRef }
@@ -64,7 +79,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
     <section
       id="contact"
       ref={containerRef}
-      className="bg-canvas-dark text-canvas py-28 sm:py-40 px-6 sm:px-12"
+      className="bg-canvas-dark text-canvas py-28 sm:py-40 px-6 sm:px-12 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
@@ -77,9 +92,16 @@ export function ContactSection({ settings }: ContactSectionProps) {
           {/* Left Column: Direct Inquiries & Studio Locations */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-12">
             <div className="space-y-6">
-              <h2 className="contact-reveal font-serif text-4xl sm:text-6xl font-light leading-[1.08]">
-                Have a story worth framing?
-              </h2>
+              <div className="overflow-hidden">
+                <h2 className="contact-line-reveal font-serif text-4xl sm:text-6xl font-light leading-[1.08]">
+                  Have a story
+                </h2>
+              </div>
+              <div className="overflow-hidden">
+                <h2 className="contact-line-reveal font-serif text-4xl sm:text-6xl font-light italic text-canvas/90 leading-[1.08]">
+                  worth framing?
+                </h2>
+              </div>
               <p className="contact-reveal text-canvas/70 text-base sm:text-lg font-light leading-relaxed">
                 Available for international editorial assignments, fine-art print acquisitions, and
                 architectural documentation worldwide.

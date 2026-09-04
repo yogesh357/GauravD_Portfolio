@@ -22,36 +22,60 @@ export function SelectedStory() {
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReducedMotion) return;
 
-      // Parallax effect on dark section images
+      // 1. Text & Header Reveal
       gsap.fromTo(
-        leftImageRef.current,
-        { y: 50 },
+        ".story-reveal",
+        { y: 40, opacity: 0 },
         {
-          y: -50,
-          ease: "none",
+          y: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 1,
+          ease: "power3.out",
           scrollTrigger: {
             trigger: el,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.2,
+            start: "top 75%",
+            toggleActions: "play none none none",
           },
         }
       );
 
-      gsap.fromTo(
-        rightImageRef.current,
-        { y: -30 },
-        {
-          y: 40,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.5,
-          },
-        }
-      );
+      // 2. Parallax effect on dark section images
+      if (leftImageRef.current) {
+        gsap.fromTo(
+          leftImageRef.current,
+          { y: 60, clipPath: "inset(6% 0% 6% 0%)" },
+          {
+            y: -50,
+            clipPath: "inset(0% 0% 0% 0%)",
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.2,
+            },
+          }
+        );
+      }
+
+      if (rightImageRef.current) {
+        gsap.fromTo(
+          rightImageRef.current,
+          { y: -30, clipPath: "inset(6% 0% 6% 0%)" },
+          {
+            y: 50,
+            clipPath: "inset(0% 0% 0% 0%)",
+            ease: "none",
+            scrollTrigger: {
+              trigger: el,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1.5,
+            },
+          }
+        );
+      }
     },
     { scope: containerRef }
   );
@@ -65,14 +89,14 @@ export function SelectedStory() {
       <div className="max-w-7xl mx-auto">
         {/* Eyebrow and Section Title */}
         <div className="flex flex-col space-y-4 max-w-3xl mb-16 sm:mb-24">
-          <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze">
+          <div className="story-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze">
             <span>•</span>
             <span>FEATURED VISUAL ESSAY</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light leading-tight">
+          <h2 className="story-reveal font-serif text-3xl sm:text-5xl lg:text-6xl font-light leading-tight">
             Shadows of Kyoto — A Study in Zen Architecture
           </h2>
-          <p className="text-sm sm:text-base text-canvas/70 font-light leading-relaxed pt-2">
+          <p className="story-reveal text-sm sm:text-base text-canvas/70 font-light leading-relaxed pt-2">
             A three-week photographic immersion into the secluded Zen monasteries and cedar forests of
             Higashiyama. Documenting the sacred boundary between natural morning light and ancient
             hand-hewn timber.

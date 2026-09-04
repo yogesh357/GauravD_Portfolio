@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUp } from "lucide-react";
 
 export function Footer() {
   const [parisTime, setParisTime] = useState<string>("");
   const [tokyoTime, setTokyoTime] = useState<string>("");
+  const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const updateClocks = () => {
@@ -32,15 +36,44 @@ export function Footer() {
     return () => clearInterval(interval);
   }, []);
 
+  useGSAP(
+    () => {
+      gsap.registerPlugin(ScrollTrigger);
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) return;
+
+      gsap.fromTo(
+        ".footer-reveal",
+        { y: 25, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    },
+    { scope: footerRef }
+  );
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer className="bg-canvas-dark text-canvas/70 border-t border-white/10 py-16 sm:py-20 px-6 sm:px-12 text-xs tracking-widest uppercase">
+    <footer
+      ref={footerRef}
+      className="bg-canvas-dark text-canvas/70 border-t border-white/10 py-16 sm:py-20 px-6 sm:px-12 text-xs tracking-widest uppercase"
+    >
       <div className="max-w-7xl mx-auto flex flex-col space-y-12">
         {/* Top Tier: Wordmark and World Clocks */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-white/10">
+        <div className="footer-reveal flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-white/10">
           <div className="space-y-1">
             <Link
               href="/"
@@ -69,7 +102,7 @@ export function Footer() {
         </div>
 
         {/* Middle Tier: Navigation Links & Admin CMS */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-[11px]">
             <a href="#work" className="hover:text-canvas transition-colors">
               WORK
@@ -103,7 +136,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Tier: Copyright & Colophon */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-6 border-t border-white/5 gap-2">
+        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-6 border-t border-white/5 gap-2">
           <p>© {new Date().getFullYear()} GAURAV D. ALL PHOTOGRAPHS COPYRIGHTED.</p>
           <p>DESIGNED WITH EDITORIAL RESTRAINT • POWERED BY NEXT.JS & GSAP</p>
         </div>
