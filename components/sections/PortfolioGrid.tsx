@@ -155,12 +155,12 @@ export function PortfolioGrid({
     <section
       id="portfolio"
       ref={sectionRef}
-      className="py-24 sm:py-36 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
+      className="py-10 sm:py-14 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
     >
       {/* Section Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 gap-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 gap-4 sm:gap-6">
         <div>
-          <div className="portfolio-header-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-3">
+          <div className="portfolio-header-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-2">
             <span className="text-bronze">•</span>
             <span>{isHomepagePreview ? "SELECTED WORKS" : "COMPLETE ARCHIVE"}</span>
           </div>
@@ -170,43 +170,38 @@ export function PortfolioGrid({
         </div>
 
         {/* Dynamic Category Filter Pills */}
-        <div className="portfolio-header-reveal flex flex-wrap gap-2 sm:gap-3">
+        <div className="portfolio-header-reveal flex flex-wrap gap-2">
           <button
             onClick={() => handleCategoryChange("all")}
-            className={`px-4 py-2 text-xs uppercase tracking-widest transition-all duration-300 ${
+            className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${
               activeCategory === "all"
                 ? "bg-ink text-canvas font-medium shadow-sm"
                 : "border border-ink/15 text-ink hover:border-ink"
             }`}
           >
-            ALL ({initialPhotos.length})
+            ALL
           </button>
 
-          {categories.map((cat) => {
-            const count = initialPhotos.filter(
-              (p) => p.category?.slug === cat.slug || p.categoryId === cat.id
-            ).length;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => handleCategoryChange(cat.slug)}
-                className={`px-4 py-2 text-xs uppercase tracking-widest transition-all duration-300 ${
-                  activeCategory === cat.slug
-                    ? "bg-ink text-canvas font-medium shadow-sm"
-                    : "border border-ink/15 text-ink hover:border-ink"
-                }`}
-              >
-                {cat.name} ({count})
-              </button>
-            );
-          })}
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => handleCategoryChange(cat.slug)}
+              className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${
+                activeCategory === cat.slug
+                  ? "bg-ink text-canvas font-medium shadow-sm"
+                  : "border border-ink/15 text-ink hover:border-ink"
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Pinterest-style Multi-column Masonry Gallery */}
       <div
         ref={masonryContainerRef}
-        className="columns-1 sm:columns-2 lg:columns-3 gap-6 sm:gap-8 [column-fill:_balance]"
+        className="columns-1 sm:columns-2 lg:columns-3 gap-5 sm:gap-6 [column-fill:_balance]"
       >
         {displayedPhotos.map((photo) => {
           // Determine natural responsive aspect ratio styling
@@ -221,7 +216,7 @@ export function PortfolioGrid({
           return (
             <article
               key={photo.id}
-              className="masonry-item break-inside-avoid mb-8 sm:mb-10 w-full inline-block group"
+              className="masonry-item break-inside-avoid mb-6 sm:mb-8 w-full inline-block group"
             >
               <Link
                 href={`/work/${photo.slug}`}
@@ -249,7 +244,7 @@ export function PortfolioGrid({
               </Link>
 
               {/* Photo Metadata Band */}
-              <div className="pt-3.5 flex flex-col space-y-1">
+              <div className="pt-2.5 flex flex-col space-y-0.5">
                 <div className="flex items-center justify-between text-[10px] font-sans tracking-ultra uppercase text-bronze">
                   <span>{photo.category?.name || "PORTFOLIO"}</span>
                   <span>{photo.shotAt || photo.location || "2025"}</span>
@@ -280,22 +275,22 @@ export function PortfolioGrid({
       </div>
 
       {displayedPhotos.length === 0 && (
-        <div className="py-24 text-center text-ink-muted">
+        <div className="py-16 text-center text-ink-muted">
           <p className="font-serif text-xl">No photographs published in this category yet.</p>
         </div>
       )}
 
       {/* View More Works Button (Homepage Preview Mode) */}
       {isHomepagePreview && initialPhotos.length > 6 && (
-        <div className="mt-16 sm:mt-20 flex flex-col items-center text-center space-y-4 pt-12 border-t border-ink/10">
+        <div className="mt-8 sm:mt-10 flex flex-col items-center text-center space-y-3 pt-6 border-t border-ink/10">
           <p className="text-xs text-ink-muted tracking-widest uppercase">
             EXPLORE THE COMPLETE CATALOG OF FINE ART AND COMMISSIONED MONOGRAPHS
           </p>
           <Link
             href="/work"
-            className="group inline-flex items-center space-x-3 px-8 py-4 bg-ink text-canvas text-xs font-medium tracking-ultra uppercase hover:bg-bronze transition-all duration-300 shadow-md"
+            className="group inline-flex items-center space-x-3 px-7 py-3.5 bg-ink text-canvas text-xs font-medium tracking-ultra uppercase hover:bg-bronze transition-all duration-300 shadow-md"
           >
-            <span>VIEW ALL WORKS ({initialPhotos.length} PHOTOGRAPHS)</span>
+            <span>VIEW ALL WORKS</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

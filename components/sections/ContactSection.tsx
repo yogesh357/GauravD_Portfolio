@@ -79,38 +79,38 @@ export function ContactSection({ settings }: ContactSectionProps) {
     <section
       id="contact"
       ref={containerRef}
-      className="bg-canvas-dark text-canvas py-28 sm:py-40 px-6 sm:px-12 overflow-hidden"
+      className="bg-canvas-dark text-canvas py-14 sm:py-20 px-6 sm:px-12 overflow-hidden border-t border-white/10"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="contact-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze mb-6">
+        <div className="contact-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze mb-4">
           <span>•</span>
           <span>COMMISSIONS & INQUIRIES</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Direct Inquiries & Studio Locations */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-12">
-            <div className="space-y-6">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
+            <div className="space-y-4">
               <div className="overflow-hidden">
-                <h2 className="contact-line-reveal font-serif text-4xl sm:text-6xl font-light leading-[1.08]">
+                <h2 className="contact-line-reveal font-serif text-3xl sm:text-5xl font-light leading-[1.08]">
                   Have a story
                 </h2>
               </div>
               <div className="overflow-hidden">
-                <h2 className="contact-line-reveal font-serif text-4xl sm:text-6xl font-light italic text-canvas/90 leading-[1.08]">
+                <h2 className="contact-line-reveal font-serif text-3xl sm:text-5xl font-light italic text-canvas/90 leading-[1.08]">
                   worth framing?
                 </h2>
               </div>
-              <p className="contact-reveal text-canvas/70 text-base sm:text-lg font-light leading-relaxed">
+              <p className="contact-reveal text-canvas/70 text-sm sm:text-base font-light leading-relaxed">
                 Available for international editorial assignments, fine-art print acquisitions, and
                 architectural documentation worldwide.
               </p>
             </div>
 
-            <div className="contact-reveal space-y-8 border-t border-white/10 pt-8">
+            <div className="contact-reveal space-y-6 border-t border-white/10 pt-6">
               <div>
-                <p className="text-[10px] tracking-ultra text-bronze uppercase mb-2">DIRECT CONTACT</p>
+                <p className="text-[10px] tracking-ultra text-bronze uppercase mb-1.5">DIRECT CONTACT</p>
                 <a
                   href={`mailto:${email}`}
                   className="font-serif text-2xl sm:text-3xl text-canvas hover:text-bronze transition-colors"
@@ -120,7 +120,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
                 <p className="text-xs text-canvas/50 font-mono pt-1">{phone}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-6 text-xs tracking-widest uppercase text-canvas/60">
+              <div className="grid grid-cols-2 gap-4 text-xs tracking-widest uppercase text-canvas/60">
                 <div>
                   <p className="text-white font-medium mb-1">PARIS ATELIER</p>
                   <p>18 Rue Vivienne</p>
@@ -133,7 +133,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center space-x-6 text-xs tracking-widest uppercase">
+              <div className="pt-1 flex items-center space-x-6 text-xs tracking-widest uppercase">
                 <a
                   href={instagram}
                   target="_blank"
@@ -157,7 +157,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
           </div>
 
           {/* Right Column: Interactive Form */}
-          <div className="contact-reveal lg:col-span-7 bg-white/[0.03] border border-white/10 p-8 sm:p-12">
+          <div className="contact-reveal lg:col-span-7 bg-white/[0.03] border border-white/10 p-6 sm:p-8">
             {formSubmitted ? (
               <div className="py-16 text-center space-y-4">
                 <CheckCircle2 className="w-12 h-12 text-bronze mx-auto" />

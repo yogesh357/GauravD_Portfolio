@@ -24,7 +24,6 @@ export function Hero({
   const headlineRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
   const imageInnerRef = useRef<HTMLDivElement>(null);
-  const metaBarRef = useRef<HTMLDivElement>(null);
   const captionRef = useRef<HTMLDivElement>(null);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   const mouseContentRef = useRef<HTMLDivElement>(null);
@@ -46,14 +45,7 @@ export function Hero({
 
       const masterTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // Step A: Top Meta Bar Reveal
-      masterTimeline.fromTo(
-        metaBarRef.current,
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, delay: 0.1 }
-      );
-
-      // Step B: Editorial Headline Masked Line-by-Line Stagger
+      // Step A: Editorial Headline Masked Line-by-Line Stagger
       masterTimeline.fromTo(
         ".hero-text-line",
         { yPercent: 110, opacity: 0 },
@@ -63,11 +55,11 @@ export function Hero({
           duration: 1.2,
           stagger: 0.09,
           ease: "power4.out",
-        },
-        "-=0.6"
+          delay: 0.1,
+        }
       );
 
-      // Step C: Main Photograph Cinematic Entrance (Clip-path + Scale + Position Shift)
+      // Step B: Main Photograph Cinematic Entrance (Clip-path + Scale + Position Shift)
       if (imageWrapperRef.current && imageInnerRef.current) {
         masterTimeline.fromTo(
           imageWrapperRef.current,
@@ -94,7 +86,7 @@ export function Hero({
         );
       }
 
-      // Step D: Caption & Plate Details Reveal
+      // Step C: Caption & Plate Details Reveal
       if (captionRef.current) {
         masterTimeline.fromTo(
           captionRef.current,
@@ -104,7 +96,7 @@ export function Hero({
         );
       }
 
-      // Step E: Scroll Indicator & Footer Cue Reveal
+      // Step D: Scroll Indicator & Footer Cue Reveal
       if (scrollIndicatorRef.current) {
         masterTimeline.fromTo(
           scrollIndicatorRef.current,
@@ -139,15 +131,6 @@ export function Hero({
           scrollTl.to(
             headlineRef.current,
             { yPercent: -30, opacity: 0.15, ease: "none" },
-            0
-          );
-        }
-
-        // Meta bar drifts
-        if (metaBarRef.current) {
-          scrollTl.to(
-            metaBarRef.current,
-            { yPercent: -40, opacity: 0, ease: "none" },
             0
           );
         }
@@ -239,47 +222,39 @@ export function Hero({
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[95vh] lg:min-h-screen flex flex-col justify-between pt-28 sm:pt-36 pb-10 px-6 sm:px-12 max-w-7xl mx-auto overflow-visible"
+      className="relative min-h-[calc(100vh-60px)] lg:h-[calc(100vh-10px)] lg:max-h-[860px] flex flex-col justify-between pt-16 sm:pt-20 pb-3 px-6 sm:px-12 max-w-7xl mx-auto overflow-visible"
     >
-      {/* 1. Top Editorial Metadata Layer */}
+      {/* 1. Monumental Split Heading & Artistic Statement */}
       <div
-        ref={metaBarRef}
-        className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-ink/10 pb-4 text-xs tracking-ultra uppercase text-ink-muted gap-2"
+        ref={mouseContentRef}
+        className="pt-1 pb-1 sm:pb-2 flex flex-col md:flex-row md:items-end justify-between gap-4 max-w-7xl"
       >
-        <div className="flex items-center space-x-3">
-          <span className="text-ink font-medium">{photographerName}</span>
-          <span className="text-bronze">•</span>
-          <span>PARIS — TOKYO</span>
-        </div>
-
-        <div className="flex items-center space-x-2 text-[11px] text-ink/80">
-          <span className="w-1.5 h-1.5 rounded-full bg-bronze animate-pulse" />
-          <span>FINE ART & EDITORIAL MONOGRAPHS</span>
-        </div>
-      </div>
-
-      {/* 2. Monumental Split Heading (Dedicated space, strictly above photograph) */}
-      <div ref={mouseContentRef} className="pt-8 sm:pt-12 pb-6 sm:pb-8 flex flex-col max-w-5xl">
-        <div ref={headlineRef} className="space-y-1">
+        <div ref={headlineRef} className="space-y-0">
           <div className="overflow-hidden">
-            <h1 className="hero-text-line font-serif text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light tracking-tight text-ink leading-[0.96]">
+            <h1 className="hero-text-line font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[4.2rem] font-light tracking-tight text-ink leading-[0.98]">
               Stories,
             </h1>
           </div>
           <div className="overflow-hidden">
-            <h2 className="hero-text-line font-serif text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-light italic text-ink/90 leading-[0.96] pl-2 sm:pl-4">
+            <h2 className="hero-text-line font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[4.2rem] font-light italic text-ink/90 leading-[0.98] pl-2 sm:pl-3">
               framed in light.
             </h2>
           </div>
         </div>
+
+        <div className="overflow-hidden hidden md:block max-w-xs pb-1 text-right">
+          <p className="hero-text-line text-xs tracking-wider text-ink-muted leading-relaxed font-light">
+            Fine art & editorial monographs exploring light, negative space, and fleeting human presence.
+          </p>
+        </div>
       </div>
 
-      {/* 3. Centerpiece Photographic Master Canvas (Pristine, Expansive, No Text Collision) */}
-      <div className="relative w-full my-4 sm:my-6">
+      {/* 2. Centerpiece Photographic Master Canvas */}
+      <div className="relative w-full my-1 flex-1 flex flex-col justify-center">
         <div
           ref={imageWrapperRef}
           style={{ clipPath: "inset(0% 0% 0% 0%)" }}
-          className="relative w-full h-[52vh] sm:h-[62vh] lg:h-[70vh] overflow-hidden bg-canvas-muted shadow-2xl group cursor-pointer"
+          className="relative w-full h-[28vh] sm:h-[34vh] md:h-[38vh] lg:h-[40vh] max-h-[380px] min-h-[220px] overflow-hidden bg-canvas-muted shadow-2xl group cursor-pointer"
         >
           <div ref={imageInnerRef} className="relative w-full h-full">
             <Image
@@ -288,24 +263,18 @@ export function Hero({
               fill
               priority
               sizes="(max-width: 1280px) 100vw, 1280px"
-              className="object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105"
+              className="object-cover object-[center_35%] transition-transform duration-1000 ease-out group-hover:scale-105"
             />
           </div>
 
           {/* Luxury Soft Film Vignette */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40 pointer-events-none" />
-
-          {/* Floating Subtle Plate Tag */}
-          <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-3 py-1.5 editorial-glass text-[10px] tracking-ultra text-canvas uppercase border border-white/20 rounded-full flex items-center space-x-2">
-            <span className="w-1 h-1 rounded-full bg-bronze" />
-            <span>FEATURED MONOGRAPH</span>
-          </div>
         </div>
 
-        {/* 4. Editorial Caption & Essay Link (Cleanly Underneath) */}
+        {/* 3. Editorial Caption & Essay Link */}
         <div
           ref={captionRef}
-          className="mt-4 flex flex-col sm:flex-row sm:items-baseline justify-between text-xs text-ink-muted tracking-widest uppercase gap-3 font-mono"
+          className="mt-2 flex flex-col sm:flex-row sm:items-baseline justify-between text-xs text-ink-muted tracking-widest uppercase gap-2 font-mono"
         >
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="font-serif text-sm text-ink font-light italic normal-case">
@@ -329,10 +298,10 @@ export function Hero({
         </div>
       </div>
 
-      {/* 5. Minimalist Animated Scroll Indicator */}
+      {/* 4. Minimalist Animated Scroll Indicator */}
       <div
         ref={scrollIndicatorRef}
-        className="flex items-center justify-between border-t border-ink/10 pt-6 text-xs text-ink-muted tracking-widest uppercase mt-4"
+        className="flex items-center justify-between border-t border-ink/10 pt-3 sm:pt-4 text-xs text-ink-muted tracking-widest uppercase mt-1 sm:mt-2"
       >
         <div className="flex items-center space-x-4 text-[11px] font-sans">
           <span>PARIS ATELIER</span>
@@ -348,7 +317,7 @@ export function Hero({
           className="flex items-center space-x-2.5 text-ink hover:text-bronze transition-colors cursor-pointer group select-none"
         >
           <span className="text-[10px] tracking-ultra font-sans">SCROLL TO EXPLORE</span>
-          <div className="w-6 h-6 rounded-full border border-ink/20 flex items-center justify-center group-hover:border-bronze transition-colors">
+          <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-ink/20 flex items-center justify-center group-hover:border-bronze transition-colors">
             <ArrowDown className="scroll-indicator-arrow w-3 h-3 text-ink group-hover:text-bronze" />
           </div>
         </div>

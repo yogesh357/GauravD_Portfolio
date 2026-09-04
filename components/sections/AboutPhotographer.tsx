@@ -106,14 +106,14 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
     <section
       id="about"
       ref={containerRef}
-      className="py-24 sm:py-36 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
+      className="py-10 sm:py-14 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Left Column: Portrait & Studio Location */}
-        <div className="lg:col-span-5 space-y-6">
+        <div className="lg:col-span-5 space-y-4">
           <div
             ref={portraitWrapperRef}
-            className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted shadow-xl"
+            className="relative aspect-[4/5] w-full max-w-md overflow-hidden bg-canvas-muted shadow-xl"
           >
             <div ref={portraitInnerRef} className="relative w-full h-full">
               <Image
@@ -126,14 +126,14 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
             </div>
           </div>
 
-          <div className="about-text-reveal flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-4 font-mono">
+          <div className="about-text-reveal flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-3 font-mono">
             <span>GAURAV D.</span>
             <span>PARIS • TOKYO</span>
           </div>
         </div>
 
         {/* Right Column: Statement, Bio & Philosophy */}
-        <div className="lg:col-span-7 flex flex-col space-y-8 pt-2">
+        <div className="lg:col-span-7 flex flex-col space-y-6 pt-1">
           <div className="space-y-1">
             <div className="overflow-hidden">
               <h2 className="about-reveal-line font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-ink leading-[1.08]">
@@ -147,7 +147,7 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
             </div>
           </div>
 
-          <div className="space-y-5 text-ink-muted text-base sm:text-lg leading-relaxed font-light">
+          <div className="space-y-4 text-ink-muted text-base sm:text-lg leading-relaxed font-light">
             <p className="about-text-reveal">
               {bio}
             </p>
@@ -158,7 +158,7 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
           </div>
 
           {/* Clean Discipline Stats */}
-          <div className="about-text-reveal grid grid-cols-3 gap-6 pt-6 border-t border-ink/10">
+          <div className="about-text-reveal grid grid-cols-3 gap-6 pt-4 border-t border-ink/10">
             <div className="space-y-1">
               <span className="font-serif text-3xl sm:text-4xl text-ink font-light">14+</span>
               <p className="text-[11px] tracking-widest uppercase text-ink-muted">Years in field</p>

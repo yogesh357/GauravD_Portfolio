@@ -69,11 +69,11 @@ export function Footer() {
   return (
     <footer
       ref={footerRef}
-      className="bg-canvas-dark text-canvas/70 border-t border-white/10 py-16 sm:py-20 px-6 sm:px-12 text-xs tracking-widest uppercase"
+      className="bg-canvas-dark text-canvas/70 border-t border-white/10 py-10 sm:py-12 px-6 sm:px-12 text-xs tracking-widest uppercase"
     >
-      <div className="max-w-7xl mx-auto flex flex-col space-y-12">
+      <div className="max-w-7xl mx-auto flex flex-col space-y-8">
         {/* Top Tier: Wordmark and World Clocks */}
-        <div className="footer-reveal flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-white/10">
+        <div className="footer-reveal flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
           <div className="space-y-1">
             <Link
               href="/"
@@ -102,9 +102,9 @@ export function Footer() {
         </div>
 
         {/* Middle Tier: Navigation Links & Admin CMS */}
-        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-[11px]">
-            <a href="#work" className="hover:text-canvas transition-colors">
+            <a href="#portfolio" className="hover:text-canvas transition-colors">
               WORK
             </a>
             <a href="#about" className="hover:text-canvas transition-colors">
@@ -136,7 +136,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Tier: Copyright & Colophon */}
-        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-6 border-t border-white/5 gap-2">
+        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2">
           <p>© {new Date().getFullYear()} GAURAV D. ALL PHOTOGRAPHS COPYRIGHTED.</p>
           <p>DESIGNED WITH EDITORIAL RESTRAINT • POWERED BY NEXT.JS & GSAP</p>
         </div>

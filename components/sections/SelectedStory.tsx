@@ -84,19 +84,19 @@ export function SelectedStory() {
     <section
       id="stories"
       ref={containerRef}
-      className="bg-canvas-dark text-canvas py-28 sm:py-40 px-6 sm:px-12 my-12 overflow-hidden"
+      className="bg-canvas-dark text-canvas py-14 sm:py-20 px-6 sm:px-12 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Eyebrow and Section Title */}
-        <div className="flex flex-col space-y-4 max-w-3xl mb-16 sm:mb-24">
+        <div className="flex flex-col space-y-3 max-w-3xl mb-8 sm:mb-12">
           <div className="story-reveal flex items-center space-x-3 text-xs tracking-ultra uppercase text-bronze">
             <span>•</span>
             <span>FEATURED VISUAL ESSAY</span>
           </div>
-          <h2 className="story-reveal font-serif text-3xl sm:text-5xl lg:text-6xl font-light leading-tight">
+          <h2 className="story-reveal font-serif text-3xl sm:text-5xl font-light leading-tight">
             Shadows of Kyoto — A Study in Zen Architecture
           </h2>
-          <p className="story-reveal text-sm sm:text-base text-canvas/70 font-light leading-relaxed pt-2">
+          <p className="story-reveal text-sm sm:text-base text-canvas/70 font-light leading-relaxed pt-1">
             A three-week photographic immersion into the secluded Zen monasteries and cedar forests of
             Higashiyama. Documenting the sacred boundary between natural morning light and ancient
             hand-hewn timber.
@@ -104,7 +104,7 @@ export function SelectedStory() {
         </div>
 
         {/* Dual-image Juxtaposition Spread */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Main Large Visual */}
           <div ref={leftImageRef} className="lg:col-span-7 flex flex-col group">
             <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-white/5 border border-white/10">
@@ -116,14 +116,14 @@ export function SelectedStory() {
                 className="object-cover transition-transform duration-1000 group-hover:scale-105"
               />
             </div>
-            <div className="mt-4 flex justify-between text-xs tracking-widest text-canvas/60 uppercase">
+            <div className="mt-3 flex justify-between text-xs tracking-widest text-canvas/60 uppercase">
               <span>PLATE I — CEDAR LATTICE REFLECTIONS</span>
               <span>KYOTO • 2025</span>
             </div>
           </div>
 
           {/* Secondary Detail Image + Story Narrative */}
-          <div className="lg:col-span-5 flex flex-col space-y-8">
+          <div className="lg:col-span-5 flex flex-col space-y-6">
             <div ref={rightImageRef} className="relative aspect-[4/5] w-3/4 self-end lg:self-auto overflow-hidden bg-white/5 border border-white/10 group">
               <Image
                 src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?q=80&w=1200&auto=format&fit=crop"
@@ -134,7 +134,7 @@ export function SelectedStory() {
               />
             </div>
 
-            <div className="space-y-4 pt-2">
+            <div className="space-y-3 pt-1">
               <p className="text-xs tracking-ultra text-bronze uppercase">
                 EXIF & MEDIUM FORMAT DISCIPLINE
               </p>
@@ -145,7 +145,7 @@ export function SelectedStory() {
 
               <Link
                 href="/work/kyoto-temple-pavilion"
-                className="inline-flex items-center space-x-2 text-xs font-medium tracking-ultra uppercase text-bronze hover:text-canvas transition-colors pt-2"
+                className="inline-flex items-center space-x-2 text-xs font-medium tracking-ultra uppercase text-bronze hover:text-canvas transition-colors pt-1"
               >
                 <span>READ COMPLETE VISUAL ESSAY</span>
                 <ArrowUpRight className="w-4 h-4" />
