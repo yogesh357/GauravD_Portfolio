@@ -1,0 +1,101 @@
+import React from "react";
+import Link from "next/link";
+import {
+  LayoutDashboard,
+  Images,
+  PlusCircle,
+  FolderTree,
+  Settings,
+  ExternalLink,
+  Camera,
+} from "lucide-react";
+
+export const metadata = {
+  title: "Studio CMS — Gaurav D. Photography",
+};
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-[#111111] text-[#F4F1EB] flex flex-col md:flex-row">
+      {/* Sidebar Navigation */}
+      <aside className="w-full md:w-64 bg-[#0D0D0D] border-b md:border-b-0 md:border-r border-white/10 p-6 flex flex-col justify-between shrink-0">
+        <div className="space-y-8">
+          {/* Admin Header */}
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-full bg-bronze/20 border border-bronze/40 flex items-center justify-center text-bronze">
+              <Camera className="w-4 h-4" />
+            </div>
+            <div>
+              <Link href="/admin" className="font-serif text-lg tracking-wider text-canvas block">
+                GAURAV D.
+              </Link>
+              <span className="text-[10px] tracking-ultra text-bronze uppercase block">
+                STUDIO CMS
+              </span>
+            </div>
+          </div>
+
+          {/* Navigation Links */}
+          <nav className="flex flex-col space-y-1 text-xs tracking-widest uppercase">
+            <Link
+              href="/admin"
+              className="flex items-center space-x-3 px-3 py-2.5 rounded hover:bg-white/5 hover:text-bronze transition-colors"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>DASHBOARD</span>
+            </Link>
+
+            <Link
+              href="/admin/photos"
+              className="flex items-center space-x-3 px-3 py-2.5 rounded hover:bg-white/5 hover:text-bronze transition-colors"
+            >
+              <Images className="w-4 h-4" />
+              <span>PHOTOGRAPHS</span>
+            </Link>
+
+            <Link
+              href="/admin/photos/new"
+              className="flex items-center space-x-3 px-3 py-2.5 rounded text-bronze hover:bg-bronze/10 transition-colors"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>NEW PHOTO</span>
+            </Link>
+
+            <Link
+              href="/admin/categories"
+              className="flex items-center space-x-3 px-3 py-2.5 rounded hover:bg-white/5 hover:text-bronze transition-colors"
+            >
+              <FolderTree className="w-4 h-4" />
+              <span>CATEGORIES</span>
+            </Link>
+
+            <Link
+              href="/admin/settings"
+              className="flex items-center space-x-3 px-3 py-2.5 rounded hover:bg-white/5 hover:text-bronze transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              <span>SETTINGS</span>
+            </Link>
+          </nav>
+        </div>
+
+        {/* View Live Portfolio Link */}
+        <div className="pt-6 border-t border-white/10 mt-6">
+          <Link
+            href="/"
+            target="_blank"
+            className="group flex items-center justify-between px-3 py-2 text-xs tracking-widest uppercase text-canvas/70 hover:text-canvas transition-colors border border-white/10 rounded"
+          >
+            <span>LIVE PORTFOLIO</span>
+            <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
+        </div>
+      </aside>
+
+      {/* Main Admin Workspace */}
+      <main className="flex-1 p-6 sm:p-10 lg:p-12 overflow-y-auto max-w-6xl">
+        {children}
+      </main>
+    </div>
+  );
+}

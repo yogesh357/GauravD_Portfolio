@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --canvas: #F4F1EB;
+    --canvas-dark: #0D0D0D;
+    --ink: #111111;
+    --ink-muted: #6F6B63;
+    --bronze: #9E8262;
+  }
+
+  html {
+    background-color: var(--canvas);
+    color: var(--ink);
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: #111111;
+    color: #F4F1EB;
+  }
+}
+
+/* Custom Fine-art Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F4F1EB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C8C2B7;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9E8262;
+}
+
+/* Editorial Typography Utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+/* Smooth Clip Paths */
+.clip-inset-0 {
+  clip-path: inset(0% 0% 0% 0%);
+}
+
+.clip-inset-bottom {
+  clip-path: inset(100% 0% 0% 0%);
+}
+
+/* Editorial Glass Effect */
+.editorial-glass {
+  background: rgba(244, 241, 235, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.editorial-glass-dark {
+  background: rgba(13, 13, 13, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
