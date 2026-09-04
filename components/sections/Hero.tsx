@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowDown } from "lucide-react";
 import { Photo } from "@/lib/db/schema";
 
 interface HeroProps {
@@ -20,70 +21,84 @@ export function Hero({
   tagline = "Stories, framed in light.",
 }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const leftColRef = useRef<HTMLDivElement>(null);
-  const rightColRef = useRef<HTMLDivElement>(null);
-  const mainImageRef = useRef<HTMLDivElement>(null);
-  const secondaryImageRef = useRef<HTMLDivElement>(null);
+  const backgroundTextRef = useRef<HTMLDivElement>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const headlineTopRef = useRef<HTMLHeadingElement>(null);
+  const headlineBottomRef = useRef<HTMLHeadingElement>(null);
 
-  const heroImage1 =
+  const heroImage =
     featuredPhoto?.imageUrl ||
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop";
-  const heroImage2 =
-    "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop";
-
   const heroTitle = featuredPhoto?.title || "Between Shadows & Solitude";
   const heroSlug = featuredPhoto?.slug || "between-shadows-and-solitude";
+  const heroLocation = featuredPhoto?.location || "Paris, France";
 
   useGSAP(
     () => {
+      gsap.registerPlugin(ScrollTrigger);
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReducedMotion) return;
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // Staggered entrance for left editorial column
+      // 1. Initial entrance animations on page load
       tl.fromTo(
-        ".hero-eyebrow",
-        { opacity: 0, y: 20 },
+        ".hero-meta-top",
+        { opacity: 0, y: -15 },
         { opacity: 1, y: 0, duration: 0.8, delay: 0.1 }
       )
         .fromTo(
-          ".hero-title-word",
-          { opacity: 0, y: 45, rotateX: -15 },
-          { opacity: 1, y: 0, rotateX: 0, duration: 1, stagger: 0.08 },
+          ".hero-headline-top-word",
+          { opacity: 0, y: 70, skewY: 4 },
+          { opacity: 1, y: 0, skewY: 0, duration: 1.1, stagger: 0.08, ease: "power4.out" },
           "-=0.5"
         )
+        // Image Curtain Clip-Path Reveal
         .fromTo(
-          ".hero-description",
+          imageContainerRef.current,
+          { clipPath: "inset(100% 0% 0% 0%)", scale: 1.14 },
+          { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 1.5, ease: "power3.inOut" },
+          "-=0.9"
+        )
+        .fromTo(
+          ".hero-headline-bottom-word",
+          { opacity: 0, y: 60, skewY: -3 },
+          { opacity: 1, y: 0, skewY: 0, duration: 1.1, stagger: 0.08, ease: "power4.out" },
+          "-=1.0"
+        )
+        .fromTo(
+          ".hero-meta-bottom",
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 0.8 },
           "-=0.5"
-        )
-        .fromTo(
-          ".hero-cta-group",
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.8 },
-          "-=0.5"
-        )
-        // Staggered clip-path image reveals on right side
-        .fromTo(
-          mainImageRef.current,
-          { clipPath: "inset(100% 0% 0% 0%)", scale: 1.08 },
-          { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 1.4, ease: "power3.inOut" },
-          "-=1.1"
-        )
-        .fromTo(
-          secondaryImageRef.current,
-          { clipPath: "inset(0% 100% 0% 0%)", opacity: 0, x: 20 },
-          { clipPath: "inset(0% 0% 0% 0%)", opacity: 1, x: 0, duration: 1.2, ease: "power3.out" },
-          "-=0.8"
-        )
-        .fromTo(
-          ".hero-floating-badge",
-          { opacity: 0, scale: 0.9 },
-          { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" },
-          "-=0.4"
         );
+
+      // 2. Scroll-Driven Parallax Layering with ScrollTrigger
+      if (imageContainerRef.current) {
+        gsap.to(imageContainerRef.current, {
+          yPercent: -10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      }
+
+      if (backgroundTextRef.current) {
+        gsap.to(backgroundTextRef.current, {
+          yPercent: 18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        });
+      }
     },
     { scope: containerRef }
   );
@@ -91,149 +106,139 @@ export function Hero({
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[92vh] flex flex-col justify-center pt-28 sm:pt-36 pb-16 px-6 sm:px-12 max-w-7xl mx-auto overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-between pt-28 sm:pt-36 pb-12 px-6 sm:px-12 max-w-7xl mx-auto overflow-hidden select-none"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-        {/* Left Column: Rich Editorial Typography & Actions */}
-        <div ref={leftColRef} className="lg:col-span-6 flex flex-col space-y-6 sm:space-y-8 z-10">
-          {/* Eyebrow */}
-          <div className="hero-eyebrow flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted">
-            <span className="inline-block w-8 h-[1px] bg-bronze" />
-            <span>FINE ART & EDITORIAL VISUAL ARTIST</span>
-          </div>
+      {/* Oversized Ghost Watermark in Background */}
+      <div
+        ref={backgroundTextRef}
+        aria-hidden="true"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-0"
+      >
+        <span className="font-serif text-[18vw] leading-none text-ink/[0.03] tracking-tighter uppercase whitespace-nowrap block">
+          GAURAV D.
+        </span>
+      </div>
 
-          {/* Large Title */}
-          <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ink leading-[1.08]">
-            {tagline.split(" ").map((word, idx) => (
+      {/* Top Editorial Index Strip */}
+      <div className="hero-meta-top relative z-10 flex items-center justify-between border-b border-ink/10 pb-4 text-[11px] font-sans tracking-ultra uppercase text-ink-muted">
+        <div className="flex items-center space-x-3">
+          <span className="text-bronze">01</span>
+          <span>/</span>
+          <span>VISUAL ESSAYS & MONOGRAPHS</span>
+        </div>
+        <div className="hidden sm:flex items-center space-x-6">
+          <span>PARIS ATELIER (02E)</span>
+          <span className="text-bronze">•</span>
+          <span>TOKYO (MINATO)</span>
+        </div>
+        <div className="text-right">
+          <span>EDITION 2026</span>
+        </div>
+      </div>
+
+      {/* Main Art-Directed Editorial Canvas */}
+      <div className="relative z-10 my-8 sm:my-12 flex flex-col items-center">
+        {/* Top Headline Anchor */}
+        <div className="w-full flex justify-start mb-2 sm:mb-4">
+          <h1
+            ref={headlineTopRef}
+            className="font-serif text-4xl sm:text-7xl lg:text-8xl xl:text-9xl font-light tracking-tight text-ink leading-[0.95]"
+          >
+            {"The Architecture".split(" ").map((word, idx) => (
               <span
                 key={idx}
-                className="hero-title-word inline-block mr-3 sm:mr-4 transform-gpu"
+                className="hero-headline-top-word inline-block mr-3 sm:mr-6 transform-gpu"
               >
                 {word}
               </span>
             ))}
           </h1>
-
-          {/* Subtext Statement */}
-          <p className="hero-description text-ink-muted text-base sm:text-lg font-light leading-relaxed max-w-lg">
-            Documenting the quiet boundary between natural light, brutalist architecture, and human
-            vulnerability. Creating visual monographs across Paris, Tokyo, and remote terrains worldwide.
-          </p>
-
-          {/* Discipline Badges */}
-          <div className="hero-description flex flex-wrap items-center gap-3 pt-1 text-[11px] font-mono tracking-widest text-ink/70 uppercase">
-            <span className="bg-ink/5 border border-ink/10 px-3 py-1 rounded-full">
-              LEICA M11 / MONOCHROME
-            </span>
-            <span className="bg-ink/5 border border-ink/10 px-3 py-1 rounded-full">
-              35MM & MEDIUM FORMAT
-            </span>
-            <span className="bg-ink/5 border border-ink/10 px-3 py-1 rounded-full text-bronze">
-              PARIS • TOKYO
-            </span>
-          </div>
-
-          {/* CTAs */}
-          <div className="hero-cta-group flex flex-wrap items-center gap-4 pt-2">
-            <Link
-              href="/work"
-              className="group inline-flex items-center space-x-2 px-6 py-3.5 bg-ink text-canvas text-xs font-medium tracking-ultra uppercase hover:bg-bronze transition-all duration-300 shadow-sm"
-            >
-              <span>EXPLORE COMPLETE ARCHIVE</span>
-              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-
-            <a
-              href="#contact"
-              className="inline-flex items-center space-x-2 px-6 py-3.5 border border-ink/20 text-ink text-xs font-medium tracking-ultra uppercase hover:border-ink hover:bg-ink/5 transition-all duration-300"
-            >
-              <span>COMMISSION INQUIRY</span>
-            </a>
-          </div>
         </div>
 
-        {/* Right Column: Intertwined Asymmetric Image Composition */}
-        <div ref={rightColRef} className="lg:col-span-6 relative w-full flex items-center justify-center lg:justify-end">
-          {/* Main Large Artwork */}
+        {/* Central Monumental Fine-Art Canvas */}
+        <div className="relative w-full sm:w-[85%] lg:w-[72%] my-[-2vw] sm:my-[-3vw] z-10">
           <div
-            ref={mainImageRef}
-            className="relative w-full sm:w-[88%] aspect-[4/5] overflow-hidden bg-canvas-muted shadow-2xl border border-ink/5 group"
+            ref={imageContainerRef}
+            className="relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/9] overflow-hidden bg-canvas-muted shadow-2xl group"
           >
             <Image
-              src={heroImage1}
-              alt="Fine art photography portrait composition"
+              src={heroImage}
+              alt="Fine art photography hero composition"
               fill
               priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 1024px) 100vw, 80vw"
               className="object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105"
             />
-            {/* Subtle Gradient & Tag */}
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent opacity-70" />
-            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-canvas">
+            {/* Subtle Vignette & Frame Highlight */}
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent opacity-60 pointer-events-none" />
+
+            {/* In-Frame Curatorial Tag */}
+            <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex items-end justify-between text-canvas">
               <div>
-                <span className="text-[10px] tracking-ultra uppercase text-bronze-light block">
-                  SELECTED MONOGRAPH
+                <span className="text-[9px] sm:text-[10px] tracking-ultra uppercase text-canvas/70 font-mono block mb-0.5">
+                  PLATE 01 • {heroLocation}
                 </span>
-                <p className="font-serif text-xl sm:text-2xl text-canvas font-light">
+                <p className="font-serif text-base sm:text-xl text-canvas font-light">
                   {heroTitle}
                 </p>
               </div>
               <Link
                 href={`/work/${heroSlug}`}
-                className="text-[10px] tracking-ultra uppercase text-canvas/80 hover:text-canvas underline underline-offset-4"
+                className="text-[10px] sm:text-xs font-mono tracking-widest uppercase text-canvas/90 hover:text-bronze-light transition-colors underline underline-offset-4"
               >
-                VIEW ESSAY →
+                VIEW MONOGRAPH →
               </Link>
             </div>
           </div>
+        </div>
 
-          {/* Secondary Overlapping Frame (Architectural Detail) */}
-          <div
-            ref={secondaryImageRef}
-            className="hidden sm:block absolute -bottom-8 -left-6 w-56 lg:w-64 aspect-[16/10] overflow-hidden bg-canvas border-2 border-canvas shadow-2xl z-20 group"
+        {/* Bottom Headline Overlapping the Frame */}
+        <div className="w-full flex justify-end mt-2 sm:mt-4 z-20">
+          <h2
+            ref={headlineBottomRef}
+            className="font-serif text-3xl sm:text-6xl lg:text-8xl xl:text-9xl font-light italic tracking-tight text-ink leading-[0.95] text-right"
           >
-            <Image
-              src={heroImage2}
-              alt="Architectural light and shadow detail"
-              fill
-              sizes="256px"
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-ink/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute bottom-2 left-2.5 right-2.5 text-[9px] font-mono tracking-widest text-canvas bg-ink/80 px-2 py-1 uppercase backdrop-blur-sm">
-              COPENHAGEN • 45MM F/4
-            </div>
-          </div>
-
-          {/* Floating Curatorial Badge */}
-          <div className="hero-floating-badge absolute -top-4 right-4 sm:-right-4 bg-canvas border border-ink/15 px-4 py-2.5 shadow-lg z-20 flex items-center space-x-2 text-ink">
-            <Sparkles className="w-3.5 h-3.5 text-bronze" />
-            <span className="text-[10px] font-mono tracking-widest uppercase">
-              2026 EDITION ARCHIVE
-            </span>
-          </div>
+            {"of Fleeting Light.".split(" ").map((word, idx) => (
+              <span
+                key={idx}
+                className="hero-headline-bottom-word inline-block mr-3 sm:mr-6 transform-gpu"
+              >
+                {word}
+              </span>
+            ))}
+          </h2>
         </div>
       </div>
 
-      {/* Bottom Scroll Cue */}
-      <div className="mt-12 sm:mt-16 flex items-center justify-between border-t border-ink/10 pt-6 text-xs text-ink-muted tracking-widest uppercase">
-        <div className="flex items-center space-x-6">
-          <span>PARIS STUDIO (02E)</span>
-          <span className="text-bronze">•</span>
-          <span>TOKYO (MINATO)</span>
-          <span className="hidden sm:inline text-bronze">•</span>
-          <span className="hidden sm:inline">WORLDWIDE ASSIGNMENTS</span>
+      {/* Bottom Editorial Colophon & Scroll Trigger */}
+      <div className="hero-meta-bottom relative z-10 grid grid-cols-1 sm:grid-cols-12 gap-6 items-end border-t border-ink/10 pt-6 text-xs text-ink-muted">
+        {/* Curatorial Brief */}
+        <div className="sm:col-span-6 space-y-1">
+          <p className="text-[10px] tracking-ultra uppercase text-bronze font-sans font-medium">
+            CURATORIAL STATEMENT
+          </p>
+          <p className="text-ink/80 text-xs sm:text-sm font-light leading-relaxed max-w-md">
+            A photographic study in available daylight, negative space, and quiet human vulnerability
+            across contemporary architectural landscapes.
+          </p>
         </div>
 
+        {/* Coordinates */}
+        <div className="sm:col-span-3 font-mono text-[11px] tracking-widest uppercase text-ink/60">
+          <p>48.8688° N, 2.3413° E</p>
+          <p>LEICA M11 & HASSELBLAD</p>
+        </div>
+
+        {/* Minimalist Scroll Cue */}
         <div
           onClick={() => {
             const el = document.getElementById("about");
             el?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="flex items-center space-x-2 text-ink hover:text-bronze transition-colors cursor-pointer"
+          className="sm:col-span-3 flex items-center justify-start sm:justify-end space-x-2 text-ink hover:text-bronze transition-colors cursor-pointer group"
         >
-          <span className="text-[11px] tracking-ultra">SCROLL TO DISCOVER</span>
-          <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
+          <span className="text-[10px] tracking-ultra uppercase">SCROLL TO EXPLORE</span>
+          <ArrowDown className="w-3.5 h-3.5 transition-transform group-hover:translate-y-1" />
         </div>
       </div>
     </section>
