@@ -60,8 +60,12 @@ Configure your environment variables in `.env.local`:
 # Optional: Neon / PostgreSQL database URL. (If left blank, the app uses the built-in seed store)
 DATABASE_URL="postgresql://neondb_owner:password@ep-sample-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
-# Admin CMS Access Secret
-ADMIN_PASSWORD="editorial-studio"
+# JWT Secret for Session Signing
+JWT_SECRET="gauravd-secure-jwt-secret-key-2026-studio-art"
+
+# Default Admin Credentials (Seeded into Database)
+# Email: gaurav@gmail.com
+# Password: Gaurav@1234
 
 # Public site settings
 NEXT_PUBLIC_SITE_NAME="Gaurav D. — Visual Artist & Photographer"

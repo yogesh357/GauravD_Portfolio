@@ -1,15 +1,13 @@
 import { getCategories, getPhotos, getSiteSettings } from "@/lib/db/queries";
 import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { ArtistStatement } from "@/components/sections/ArtistStatement";
-import { FeaturedWork } from "@/components/sections/FeaturedWork";
+import { AboutPhotographer } from "@/components/sections/AboutPhotographer";
 import { PortfolioGrid } from "@/components/sections/PortfolioGrid";
 import { SelectedStory } from "@/components/sections/SelectedStory";
-import { AboutPhotographer } from "@/components/sections/AboutPhotographer";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/layout/Footer";
 
-export const revalidate = 60; // ISR revalidation every 60 seconds
+export const revalidate = 60;
 
 export default async function HomePage() {
   const [categories, allPhotos, settings] = await Promise.all([
@@ -26,32 +24,30 @@ export default async function HomePage() {
       {/* Editorial Floating Navbar */}
       <Navbar siteName={settings?.photographerName || "GAURAV D."} />
 
-      {/* 1. Hero Section */}
+      {/* 1. Hero Section (Split Typography & Multi-Image Art-Directed Composition) */}
       <Hero
         featuredPhoto={heroPhoto}
         photographerName={settings?.photographerName}
         tagline={settings?.tagline}
       />
 
-      {/* 2. Intro / Artist Statement */}
-      <ArtistStatement />
-
-      {/* 3. Featured Work Asymmetric Showcase */}
-      <FeaturedWork photos={featuredPhotos.length >= 3 ? featuredPhotos : allPhotos} />
-
-      {/* 4. Complete Database-Driven Archive with Category Filter */}
-      <PortfolioGrid initialPhotos={allPhotos} categories={categories} />
-
-      {/* 5. Selected Story / Immersive Essay Spread */}
-      <SelectedStory />
-
-      {/* 6. About the Photographer & Credentials */}
+      {/* 2. Unified About & Philosophy (Biography, Discipline, Clients & Exhibitions) */}
       <AboutPhotographer settings={settings} />
 
-      {/* 7. Contact CTA & Inquiry Form */}
+      {/* 3. Selected Works Gallery (Curated Preview with Category Filters + Link to /work) */}
+      <PortfolioGrid
+        initialPhotos={allPhotos}
+        categories={categories}
+        isHomepagePreview={true}
+      />
+
+      {/* 4. Featured Visual Story / Narrative Essay Spread ("Shadows of Kyoto") */}
+      <SelectedStory />
+
+      {/* 5. Contact CTA & Commission Dialogue Form */}
       <ContactSection settings={settings} />
 
-      {/* 8. Minimalist Editorial Footer */}
+      {/* 6. Minimalist Editorial Footer with Studio Clocks */}
       <Footer />
     </main>
   );

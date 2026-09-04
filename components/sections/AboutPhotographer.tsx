@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SiteSettings } from "@/lib/db/schema";
+import { ArrowRight, Award, Camera, Globe } from "lucide-react";
 
 interface AboutPhotographerProps {
   settings?: SiteSettings | null;
@@ -71,17 +72,17 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       ref={containerRef}
       className="py-24 sm:py-36 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
     >
-      {/* Eyebrow */}
-      <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-16">
-        <span className="text-bronze">05</span>
+      {/* Section Eyebrow */}
+      <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-12 sm:mb-16">
+        <span className="text-bronze">01</span>
         <span>/</span>
-        <span>ARTIST PROFILE & RECOGNITION</span>
+        <span>ARTIST PROFILE & PHILOSOPHY</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-        {/* Left Column: Photographer Portrait */}
-        <div className="about-element lg:col-span-5">
-          <div className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted">
+        {/* Left Column: Portrait & Discipline Stats */}
+        <div className="about-element lg:col-span-5 space-y-8">
+          <div className="relative aspect-[4/5] w-full overflow-hidden bg-canvas-muted shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop"
               alt="Gaurav D. Portrait in Paris Studio"
@@ -90,24 +91,45 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
               className="object-cover grayscale contrast-105"
             />
           </div>
-          <div className="mt-4 flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase">
+
+          <div className="flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-4">
             <span>GAURAV D. — FOUNDER & DIRECTOR</span>
-            <span>PARIS STUDIO • 2026</span>
+            <span>PARIS ATELIER • 2026</span>
+          </div>
+
+          {/* Discipline Stats */}
+          <div className="grid grid-cols-3 gap-4 pt-2">
+            <div className="space-y-1">
+              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">14+</span>
+              <p className="text-[10px] tracking-widest uppercase text-ink-muted">Years in field</p>
+            </div>
+            <div className="space-y-1">
+              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">24+</span>
+              <p className="text-[10px] tracking-widest uppercase text-ink-muted">Exhibitions</p>
+            </div>
+            <div className="space-y-1">
+              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">Leica</span>
+              <p className="text-[10px] tracking-widest uppercase text-ink-muted">M11 Discipline</p>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Biography, Clients, Exhibitions */}
+        {/* Right Column: Statement, Bio, Clients, Exhibitions */}
         <div className="lg:col-span-7 flex flex-col space-y-12">
           <div className="space-y-6">
             <h2 className="about-element font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-ink leading-tight">
-              A pursuit of stillness in an overstimulated world.
+              A pursuit of silence and emotional resonance in an overstimulated world.
             </h2>
             <p className="about-element text-ink-muted text-base sm:text-lg leading-relaxed font-light">
               {bio}
             </p>
+            <p className="about-element text-ink-muted text-sm sm:text-base leading-relaxed font-light">
+              Working strictly with available ambient light and mechanical manual focus optics, every
+              frame represents a slow, meditative engagement with time.
+            </p>
           </div>
 
-          {/* Selected Clients Grid */}
+          {/* Selected Clients & Press */}
           <div className="about-element pt-6 border-t border-ink/10">
             <p className="text-[11px] font-sans tracking-ultra uppercase text-bronze mb-6">
               SELECTED CLIENTS & EDITORIAL PUBLICATIONS
@@ -124,7 +146,7 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
             </div>
           </div>
 
-          {/* Selected Exhibitions & Honors */}
+          {/* Solo & Group Exhibitions */}
           <div className="about-element pt-6 border-t border-ink/10">
             <p className="text-[11px] font-sans tracking-ultra uppercase text-bronze mb-6">
               SOLO & GROUP EXHIBITIONS

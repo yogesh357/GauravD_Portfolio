@@ -17,6 +17,39 @@ async function main() {
   const sqlClient = postgres(connectionString, { max: 1 });
   const db = drizzle(sqlClient, { schema });
 
+  console.log("Ensuring users table exists...");
+  await sqlClient`
+    CREATE TABLE IF NOT EXISTS users (
+      id VARCHAR(64) PRIMARY KEY,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      name VARCHAR(255) NOT NULL DEFAULT 'Gaurav D.',
+      role VARCHAR(50) NOT NULL DEFAULT 'admin',
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL
+    );
+  `;
+
+  console.log("Seeding admin user...");
+  const bcrypt = await import("bcryptjs");
+  const hashedPassword = await bcrypt.hash("Gaurav@1234", 10);
+  await db
+    .insert(schema.users)
+    .values({
+      id: "user-admin-1",
+      email: "gaurav@gmail.com",
+      password: hashedPassword,
+      name: "Gaurav D.",
+      role: "admin",
+    })
+    .onConflictDoUpdate({
+      target: schema.users.email,
+      set: {
+        password: hashedPassword,
+        updatedAt: new Date(),
+      },
+    });
+
   console.log("Seeding categories...");
   for (const cat of INITIAL_CATEGORIES) {
     await db

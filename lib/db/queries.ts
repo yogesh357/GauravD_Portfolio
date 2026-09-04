@@ -1,6 +1,22 @@
 import { fallbackStore, getDb, schema } from "./index";
 import { eq, desc, asc, and } from "drizzle-orm";
 
+export async function getUserByEmail(email: string) {
+  const normalizedEmail = email.trim().toLowerCase();
+  const db = getDb();
+  if (db) {
+    try {
+      const result = await db.query.users.findFirst({
+        where: eq(schema.users.email, normalizedEmail),
+      });
+      if (result) return result;
+    } catch {
+      // Fallback
+    }
+  }
+  return fallbackStore.getUserByEmail(normalizedEmail);
+}
+
 export async function getCategories() {
   const db = getDb();
   if (db) {

@@ -1,6 +1,22 @@
 import { pgTable, text, varchar, integer, boolean, timestamp, index, uuid } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
+export const users = pgTable(
+  "users",
+  {
+    id: varchar("id", { length: 64 }).primaryKey().$defaultFn(() => crypto.randomUUID()),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    password: varchar("password", { length: 255 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull().default("Gaurav D."),
+    role: varchar("role", { length: 50 }).notNull().default("admin"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    emailIdx: index("users_email_idx").on(table.email),
+  })
+);
+
 export const categories = pgTable(
   "categories",
   {
@@ -72,6 +88,8 @@ export const photosRelations = relations(photos, ({ one }) => ({
   }),
 }));
 
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
 export type Category = typeof categories.$inferSelect;
 export type NewCategory = typeof categories.$inferInsert;
 export type Photo = typeof photos.$inferSelect;

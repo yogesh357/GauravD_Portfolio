@@ -8,7 +8,9 @@ import {
   Settings,
   ExternalLink,
   Camera,
+  LogOut,
 } from "lucide-react";
+import { logoutAction } from "./auth-actions";
 
 export const metadata = {
   title: "Studio CMS — Gaurav D. Photography",
@@ -79,8 +81,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </nav>
         </div>
 
-        {/* View Live Portfolio Link */}
-        <div className="pt-6 border-t border-white/10 mt-6">
+        {/* View Live Portfolio Link & Logout */}
+        <div className="pt-6 border-t border-white/10 mt-6 space-y-3">
           <Link
             href="/"
             target="_blank"
@@ -89,6 +91,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span>LIVE PORTFOLIO</span>
             <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
+
+          <form action={logoutAction}>
+            <button
+              type="submit"
+              className="w-full flex items-center space-x-2.5 px-3 py-2 text-xs tracking-widest uppercase text-rose-400/80 hover:text-rose-300 hover:bg-rose-500/10 transition-colors rounded"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>SIGN OUT</span>
+            </button>
+          </form>
         </div>
       </aside>
 

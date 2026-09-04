@@ -7,6 +7,7 @@ const connectionString = process.env.DATABASE_URL || "";
 
 // In-memory / Fallback store so the entire website and admin functions seamlessly
 class FallbackStore {
+  private users: (schema.User)[] = [];
   private categories: (schema.Category)[] = [];
   private photos: (schema.Photo)[] = [];
   private siteSettings: schema.SiteSettings = {
@@ -27,6 +28,20 @@ class FallbackStore {
 
   reset() {
     const now = new Date();
+    // Default admin user: gaurav@gmail.com / Gaurav@1234
+    // Pre-computed bcrypt hash for Gaurav@1234
+    this.users = [
+      {
+        id: "user-admin-1",
+        email: "gaurav@gmail.com",
+        password: "$2a$10$w09u7i/n0aT.y8L7oU48.eN4L9f1r51HlWjS1xL8O7vA6e1G7zY3W",
+        name: "Gaurav D.",
+        role: "admin",
+        createdAt: now,
+        updatedAt: now,
+      },
+    ];
+
     this.categories = INITIAL_CATEGORIES.map((cat) => ({
       id: cat.id,
       name: cat.name,
@@ -58,6 +73,26 @@ class FallbackStore {
         updatedAt: now,
       };
     });
+  }
+
+  getUserByEmail(email: string) {
+    return this.users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase()) || null;
+  }
+
+  createUser(data: schema.NewUser) {
+    const id = data.id || `user-${Date.now()}`;
+    const now = new Date();
+    const newUser: schema.User = {
+      id,
+      email: data.email,
+      password: data.password,
+      name: data.name || "Gaurav D.",
+      role: data.role || "admin",
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.users.push(newUser);
+    return newUser;
   }
 
   getCategories() {

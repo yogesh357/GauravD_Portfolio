@@ -5,15 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Photo, Category } from "@/lib/db/schema";
 
 interface PortfolioGridProps {
   initialPhotos: (Photo & { category?: Category | null })[];
   categories: Category[];
+  isHomepagePreview?: boolean;
 }
 
-export function PortfolioGrid({ initialPhotos, categories }: PortfolioGridProps) {
+export function PortfolioGrid({
+  initialPhotos,
+  categories,
+  isHomepagePreview = false,
+}: PortfolioGridProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -21,6 +26,8 @@ export function PortfolioGrid({ initialPhotos, categories }: PortfolioGridProps)
     activeCategory === "all"
       ? initialPhotos
       : initialPhotos.filter((p) => p.category?.slug === activeCategory || p.categoryId === activeCategory);
+
+  const displayedPhotos = isHomepagePreview ? filteredPhotos.slice(0, 6) : filteredPhotos;
 
   // GSAP animation when activeCategory changes
   useGSAP(
@@ -43,12 +50,12 @@ export function PortfolioGrid({ initialPhotos, categories }: PortfolioGridProps)
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
         <div>
           <div className="flex items-center space-x-3 text-xs tracking-ultra uppercase text-ink-muted mb-3">
-            <span className="text-bronze">03</span>
+            <span className="text-bronze">02</span>
             <span>/</span>
-            <span>COMPLETE ARCHIVE</span>
+            <span>{isHomepagePreview ? "SELECTED WORKS" : "COMPLETE CATALOG"}</span>
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl font-light text-ink">
-            Selected Works
+            {isHomepagePreview ? "Curated Portfolio" : "Photographic Archive"}
           </h2>
         </div>
 
@@ -91,14 +98,14 @@ export function PortfolioGrid({ initialPhotos, categories }: PortfolioGridProps)
         ref={gridRef}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
       >
-        {filteredPhotos.map((photo, index) => (
+        {displayedPhotos.map((photo) => (
           <article
             key={photo.id}
             className="gallery-item group flex flex-col justify-between"
           >
             <Link
               href={`/work/${photo.slug}`}
-              className="block relative overflow-hidden bg-canvas-muted"
+              className="block relative overflow-hidden bg-canvas-muted shadow-sm"
             >
               <div
                 className={`relative w-full overflow-hidden ${
@@ -146,9 +153,25 @@ export function PortfolioGrid({ initialPhotos, categories }: PortfolioGridProps)
         ))}
       </div>
 
-      {filteredPhotos.length === 0 && (
+      {displayedPhotos.length === 0 && (
         <div className="py-20 text-center text-ink-muted">
           <p className="font-serif text-xl">No photographs published in this category yet.</p>
+        </div>
+      )}
+
+      {/* View More Works Button (Homepage Preview Mode) */}
+      {isHomepagePreview && initialPhotos.length > 6 && (
+        <div className="mt-16 sm:mt-20 flex flex-col items-center text-center space-y-4 pt-12 border-t border-ink/10">
+          <p className="text-xs text-ink-muted tracking-widest uppercase">
+            EXPLORE THE COMPLETE CATALOG OF FINE ART AND COMMISSIONED MONOGRAPHS
+          </p>
+          <Link
+            href="/work"
+            className="group inline-flex items-center space-x-3 px-8 py-4 bg-ink text-canvas text-xs font-medium tracking-ultra uppercase hover:bg-bronze transition-all duration-300 shadow-md"
+          >
+            <span>VIEW ALL WORKS ({initialPhotos.length} PHOTOGRAPHS)</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       )}
     </section>

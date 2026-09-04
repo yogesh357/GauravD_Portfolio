@@ -57,10 +57,10 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
   );
 
   const navLinks = [
-    { label: "WORK", href: "#work", number: "01" },
-    { label: "ABOUT", href: "#about", number: "02" },
-    { label: "STORIES", href: "#stories", number: "03" },
-    { label: "CONTACT", href: "#contact", number: "04" },
+    { label: "WORK", href: "/work", number: "01" },
+    { label: "ABOUT", href: "/#about", number: "02" },
+    { label: "STORIES", href: "/#stories", number: "03" },
+    { label: "CONTACT", href: "/#contact", number: "04" },
   ];
 
   return (
