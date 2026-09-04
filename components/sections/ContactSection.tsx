@@ -103,14 +103,13 @@ export function ContactSection({ settings }: ContactSectionProps) {
                 </h2>
               </div>
               <p className="contact-reveal text-canvas/70 text-sm sm:text-base font-light leading-relaxed">
-                Available for international editorial assignments, fine-art print acquisitions, and
-                architectural documentation worldwide.
+                Available for editorial assignments, fine-art prints, and creative collaborations worldwide. Reach out directly or send a message below.
               </p>
             </div>
 
             <div className="contact-reveal space-y-6 border-t border-white/10 pt-6">
               <div>
-                <p className="text-[10px] tracking-ultra text-bronze uppercase mb-1.5">DIRECT CONTACT</p>
+                <p className="text-[10px] tracking-ultra text-bronze uppercase mb-1.5">EMAIL & PHONE</p>
                 <a
                   href={`mailto:${email}`}
                   className="font-serif text-2xl sm:text-3xl text-canvas hover:text-bronze transition-colors"
@@ -122,12 +121,12 @@ export function ContactSection({ settings }: ContactSectionProps) {
 
               <div className="grid grid-cols-2 gap-4 text-xs tracking-widest uppercase text-canvas/60">
                 <div>
-                  <p className="text-white font-medium mb-1">PARIS ATELIER</p>
+                  <p className="text-white font-medium mb-1">PARIS</p>
                   <p>18 Rue Vivienne</p>
                   <p>75002 Paris, France</p>
                 </div>
                 <div>
-                  <p className="text-white font-medium mb-1">TOKYO STUDIO</p>
+                  <p className="text-white font-medium mb-1">TOKYO</p>
                   <p>Minami-Aoyama</p>
                   <p>Minato-ku, Tokyo</p>
                 </div>
@@ -156,38 +155,37 @@ export function ContactSection({ settings }: ContactSectionProps) {
             </div>
           </div>
 
-          {/* Right Column: Interactive Form */}
+          {/* Right Column: Clean Form */}
           <div className="contact-reveal lg:col-span-7 bg-white/[0.03] border border-white/10 p-6 sm:p-8">
             {formSubmitted ? (
               <div className="py-16 text-center space-y-4">
                 <CheckCircle2 className="w-12 h-12 text-bronze mx-auto" />
-                <h3 className="font-serif text-3xl font-light text-canvas">Inquiry Received</h3>
+                <h3 className="font-serif text-3xl font-light text-canvas">Message Sent</h3>
                 <p className="text-sm text-canvas/70 max-w-md mx-auto">
-                  Thank you, {formData.name}. Your message has been routed to Gaurav&apos;s studio desk.
-                  You will receive a response within 24 hours.
+                  Thank you, {formData.name}. Your message has been received and you will hear back within 24 hours.
                 </p>
                 <button
                   onClick={() => setFormSubmitted(false)}
                   className="mt-6 text-xs tracking-ultra uppercase text-bronze hover:underline"
                 >
-                  SEND ANOTHER INQUIRY
+                  SEND ANOTHER MESSAGE
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <p className="text-xs tracking-ultra uppercase text-canvas/50 mb-2">
-                  INITIATE A COMMISSION DIALOGUE
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <p className="text-xs tracking-ultra uppercase text-canvas/50 mb-1">
+                  SEND A MESSAGE
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-[11px] tracking-widest uppercase text-canvas/60 mb-2">
-                      YOUR NAME *
+                      NAME *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Elena Rostova"
+                      placeholder="Your Name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full bg-white/5 border border-white/15 px-4 py-3 text-sm text-canvas placeholder:text-canvas/30 focus:border-bronze focus:outline-none transition-colors"
@@ -196,12 +194,12 @@ export function ContactSection({ settings }: ContactSectionProps) {
 
                   <div>
                     <label className="block text-[11px] tracking-widest uppercase text-canvas/60 mb-2">
-                      EMAIL ADDRESS *
+                      EMAIL *
                     </label>
                     <input
                       type="email"
                       required
-                      placeholder="elena@atelier.com"
+                      placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full bg-white/5 border border-white/15 px-4 py-3 text-sm text-canvas placeholder:text-canvas/30 focus:border-bronze focus:outline-none transition-colors"
@@ -211,7 +209,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
 
                 <div>
                   <label className="block text-[11px] tracking-widest uppercase text-canvas/60 mb-2">
-                    PROJECT NATURE / INQUIRY TYPE
+                    INQUIRY TYPE
                   </label>
                   <select
                     value={formData.inquiryType}
@@ -219,21 +217,20 @@ export function ContactSection({ settings }: ContactSectionProps) {
                     className="w-full bg-canvas-dark border border-white/15 px-4 py-3 text-sm text-canvas focus:border-bronze focus:outline-none transition-colors"
                   >
                     <option value="Editorial Commission">Editorial Commission</option>
-                    <option value="Architectural Documentation">Architectural Documentation</option>
-                    <option value="Fine Art Print Acquisition">Fine Art Print Acquisition</option>
-                    <option value="Exhibition / Museum Loan">Exhibition / Museum Loan</option>
-                    <option value="Commercial Campaign">Commercial Campaign</option>
+                    <option value="Fine Art Print">Fine Art Print Acquisition</option>
+                    <option value="Commercial / Brand">Commercial Project</option>
+                    <option value="General Inquiry">General Inquiry</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-[11px] tracking-widest uppercase text-canvas/60 mb-2">
-                    PROJECT VISION & TIMELINE *
+                    MESSAGE *
                   </label>
                   <textarea
                     required
                     rows={4}
-                    placeholder="Briefly describe the context, location, and desired timeline..."
+                    placeholder="Tell me about your project or inquiry..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full bg-white/5 border border-white/15 px-4 py-3 text-sm text-canvas placeholder:text-canvas/30 focus:border-bronze focus:outline-none transition-colors"
@@ -242,9 +239,9 @@ export function ContactSection({ settings }: ContactSectionProps) {
 
                 <button
                   type="submit"
-                  className="w-full group inline-flex items-center justify-center space-x-2 py-4 bg-canvas text-ink text-xs font-medium tracking-ultra uppercase hover:bg-bronze hover:text-white transition-all duration-300"
+                  className="w-full group inline-flex items-center justify-center space-x-2 py-3.5 bg-canvas text-ink text-xs font-medium tracking-ultra uppercase hover:bg-bronze hover:text-white transition-all duration-300"
                 >
-                  <span>TRANSMIT INQUIRY</span>
+                  <span>SEND MESSAGE</span>
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </button>
               </form>
