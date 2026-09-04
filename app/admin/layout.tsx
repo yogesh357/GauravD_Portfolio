@@ -9,14 +9,28 @@ import {
   ExternalLink,
   Camera,
   LogOut,
+  UserCheck,
 } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth";
 import { logoutAction } from "./auth-actions";
 
 export const metadata = {
   title: "Studio CMS — Gaurav D. Photography",
 };
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const user = await getCurrentUser();
+
+  // If unauthenticated (e.g. on /admin/login), do NOT render the admin navigation or sidebar
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0D0D0D] text-[#F4F1EB]">
+        {children}
+      </div>
+    );
+  }
+
+  // Only render the administrative dashboard shell for authenticated users
   return (
     <div className="min-h-screen bg-[#111111] text-[#F4F1EB] flex flex-col md:flex-row">
       {/* Sidebar Navigation */}
@@ -34,6 +48,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <span className="text-[10px] tracking-ultra text-bronze uppercase block">
                 STUDIO CMS
               </span>
+            </div>
+          </div>
+
+          {/* User Badge */}
+          <div className="bg-white/[0.02] border border-white/10 p-3 rounded text-[11px] flex items-center space-x-2.5">
+            <UserCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="overflow-hidden">
+              <p className="text-canvas font-medium truncate">{user.name || "Gaurav D."}</p>
+              <p className="text-canvas/50 text-[10px] font-mono truncate">{user.email}</p>
             </div>
           </div>
 
