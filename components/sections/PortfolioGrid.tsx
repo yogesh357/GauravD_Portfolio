@@ -29,8 +29,8 @@ export function PortfolioGrid({
     activeCategory === "all"
       ? initialPhotos
       : initialPhotos.filter(
-          (p) => p.category?.slug === activeCategory || p.categoryId === activeCategory
-        );
+        (p) => p.category?.slug === activeCategory || p.categoryId === activeCategory
+      );
 
   const displayedPhotos = isHomepagePreview ? filteredPhotos.slice(0, 6) : filteredPhotos;
 
@@ -59,7 +59,6 @@ export function PortfolioGrid({
     }
   };
 
-  // K72-Inspired GSAP Choreographed Entrance & Dynamic Height Expansion ScrollTriggers
   useGSAP(
     () => {
       gsap.registerPlugin(ScrollTrigger);
@@ -81,7 +80,7 @@ export function PortfolioGrid({
       const masterTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 85%",
+          start: "top 75%",
           toggleActions: "play none none none",
         },
         defaults: { ease: "power4.out" },
@@ -124,7 +123,7 @@ export function PortfolioGrid({
           initialCards,
           {
             opacity: 0,
-            scale: 1.06,
+            scale: 0.6,
             y: 40,
             clipPath: "inset(8% 0% 8% 0%)",
           },
@@ -141,7 +140,6 @@ export function PortfolioGrid({
         );
       }
 
-      // 2. Responsive K72-Style Scroll-Driven Height Expansion & Optical Parallax
       const mm = gsap.matchMedia();
 
       mm.add(
@@ -163,7 +161,6 @@ export function PortfolioGrid({
             const expandCard = wrapper.querySelector<HTMLElement>(".project-expand-card");
             const innerImg = wrapper.querySelector<HTMLElement>(".project-inner-img");
 
-            // Dedicated scroll entrance for subsequent items entering viewport
             if (index >= (isDesktop ? 2 : 1)) {
               gsap.fromTo(
                 wrapper,
@@ -190,7 +187,6 @@ export function PortfolioGrid({
               );
             }
 
-            // K72 Height Expansion: Container starts compact and dynamically expands as scrolled!
             if (expandCard) {
               const startHeight = isDesktop ? 360 : isTablet ? 300 : 240;
               const targetHeight = isDesktop ? 600 : isTablet ? 480 : 380;
@@ -275,11 +271,10 @@ export function PortfolioGrid({
         <div className="portfolio-meta-reveal flex flex-wrap gap-2">
           <button
             onClick={() => handleCategoryChange("all")}
-            className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${
-              activeCategory === "all"
-                ? "bg-ink text-canvas font-medium shadow-sm"
-                : "border border-ink/15 text-ink hover:border-ink"
-            }`}
+            className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${activeCategory === "all"
+              ? "bg-ink text-canvas font-medium shadow-sm"
+              : "border border-ink/15 text-ink hover:border-ink"
+              }`}
           >
             ALL
           </button>
@@ -288,11 +283,10 @@ export function PortfolioGrid({
             <button
               key={cat.id}
               onClick={() => handleCategoryChange(cat.slug)}
-              className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${
-                activeCategory === cat.slug
-                  ? "bg-ink text-canvas font-medium shadow-sm"
-                  : "border border-ink/15 text-ink hover:border-ink"
-              }`}
+              className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${activeCategory === cat.slug
+                ? "bg-ink text-canvas font-medium shadow-sm"
+                : "border border-ink/15 text-ink hover:border-ink"
+                }`}
             >
               {cat.name}
             </button>
@@ -312,9 +306,8 @@ export function PortfolioGrid({
           return (
             <article
               key={photo.id}
-              className={`project-card-wrapper w-full flex flex-col group will-change-transform ${
-                isRightCol ? "md:mt-12 lg:mt-16" : ""
-              }`}
+              className={`project-card-wrapper w-full flex flex-col group will-change-transform ${isRightCol ? "md:mt-12 lg:mt-16" : ""
+                }`}
             >
               <Link
                 href={`/work/${photo.slug}`}
