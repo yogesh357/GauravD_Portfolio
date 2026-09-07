@@ -23,7 +23,7 @@ export function PortfolioGrid({
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const gridContainerRef = useRef<HTMLDivElement>(null);
+  const masonryContainerRef = useRef<HTMLDivElement>(null);
 
   const filteredPhotos =
     activeCategory === "all"
@@ -34,19 +34,19 @@ export function PortfolioGrid({
 
   const displayedPhotos = isHomepagePreview ? filteredPhotos.slice(0, 6) : filteredPhotos;
 
-  // Handle Category Filtering with Smooth GSAP Stagger Transition & Trigger Cleanup
+  // Smooth Category Switching with GSAP Stagger Transition
   const handleCategoryChange = (newCategory: string) => {
     if (newCategory === activeCategory || isTransitioning) return;
     setIsTransitioning(true);
 
-    const items = gridContainerRef.current?.querySelectorAll(".project-card-wrapper");
+    const items = masonryContainerRef.current?.querySelectorAll(".masonry-item");
     if (items && items.length > 0) {
       gsap.to(items, {
         opacity: 0,
         y: 20,
-        scale: 0.98,
+        scale: 0.94,
         stagger: 0.02,
-        duration: 0.25,
+        duration: 0.28,
         ease: "power2.in",
         onComplete: () => {
           setActiveCategory(newCategory);
@@ -59,87 +59,50 @@ export function PortfolioGrid({
     }
   };
 
+  // GSAP Choreographed ScrollTriggers: Header Reveal, Card Entry Stagger, Dynamic Scaling & Multi-Column Optical Parallax Scrub
   useGSAP(
     () => {
       gsap.registerPlugin(ScrollTrigger);
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const container = gridContainerRef.current;
+      const container = masonryContainerRef.current;
       const section = sectionRef.current;
       if (!container || !section) return;
 
       if (prefersReducedMotion) {
-        gsap.set(".portfolio-heading-line, .portfolio-meta-reveal, .project-card-wrapper, .project-expand-card", {
+        gsap.set(".portfolio-heading-line, .portfolio-meta-reveal, .masonry-item, .parallax-img", {
           opacity: 1,
           y: 0,
+          scale: 1,
           clipPath: "inset(0% 0% 0% 0%)",
         });
         return;
       }
 
-      // 1. Initial Choreographed Page Load / Section Entrance Timeline
-      const masterTimeline = gsap.timeline({
+      // 1. Choreographed Section Header Reveal Timeline
+      const headerTl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top 75%",
+          start: "top 85%",
           toggleActions: "play none none none",
         },
         defaults: { ease: "power4.out" },
       });
 
-      // Heading Reveal with overflow-hidden mask
-      masterTimeline.fromTo(
-        ".portfolio-heading-line",
-        { yPercent: 100, opacity: 0 },
-        {
-          yPercent: 0,
-          opacity: 1,
-          duration: 1.1,
-          stagger: 0.08,
-          ease: "power4.out",
-        },
-        0
-      );
-
-      // Metadata & Category filter pills reveal
-      masterTimeline.fromTo(
-        ".portfolio-meta-reveal",
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          stagger: 0.06,
-          ease: "power3.out",
-        },
-        0.15
-      );
-
-      // Initial visible projects choreographed entrance (First 2 items)
-      const allCardWrappers = container.querySelectorAll<HTMLElement>(".project-card-wrapper");
-      const initialCards = Array.from(allCardWrappers).slice(0, 2);
-
-      if (initialCards.length > 0) {
-        masterTimeline.fromTo(
-          initialCards,
-          {
-            opacity: 0,
-            scale: 0.6,
-            y: 40,
-            clipPath: "inset(8% 0% 8% 0%)",
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            y: 0,
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: 1.2,
-            stagger: 0.12,
-            ease: "expo.out",
-          },
-          0.3
+      headerTl
+        .fromTo(
+          ".portfolio-heading-line",
+          { yPercent: 110, opacity: 0 },
+          { yPercent: 0, opacity: 1, duration: 1.1, stagger: 0.08, ease: "power4.out" },
+          0
+        )
+        .fromTo(
+          ".portfolio-meta-reveal",
+          { y: 25, opacity: 0, scale: 0.96 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.8, stagger: 0.04, ease: "power3.out" },
+          0.15
         );
-      }
 
+      // 2. Responsive ScrollTriggers for Masonry Cards Entrance, Dynamic Scaling & Column Parallax
       const mm = gsap.matchMedia();
 
       mm.add(
@@ -155,89 +118,179 @@ export function PortfolioGrid({
             isMobile: boolean;
           };
 
-          const cardWrappers = container.querySelectorAll<HTMLElement>(".project-card-wrapper");
+          const items = container.querySelectorAll<HTMLElement>(".masonry-item");
+          const cleanups: (() => void)[] = [];
 
-          cardWrappers.forEach((wrapper, index) => {
-            const expandCard = wrapper.querySelector<HTMLElement>(".project-expand-card");
-            const innerImg = wrapper.querySelector<HTMLElement>(".project-inner-img");
+          items.forEach((item, index) => {
+            const wrapper = item.querySelector<HTMLElement>(".image-wrapper");
+            const img = item.querySelector<HTMLElement>(".parallax-img");
+            const badge = item.querySelector<HTMLElement>(".category-badge");
+            const arrow = item.querySelector<HTMLElement>(".arrow-icon");
+            const colIndex = isDesktop ? index % 3 : isTablet ? index % 2 : 0;
 
-            if (index >= (isDesktop ? 2 : 1)) {
-              gsap.fromTo(
-                wrapper,
-                {
-                  opacity: 0,
-                  y: isDesktop ? 60 : 35,
-                  scale: 1.05,
-                  clipPath: "inset(10% 0% 10% 0%)",
+            // A. Card Entrance Animation as it scrolls into view (Clip-path + Y-shift + Scale)
+            const colOffset = isDesktop ? (colIndex === 0 ? 45 : colIndex === 1 ? 80 : 60) : 35;
+            const duration = isDesktop ? (colIndex === 0 ? 1.0 : colIndex === 1 ? 1.25 : 1.1) : 0.9;
+
+            gsap.fromTo(
+              item,
+              {
+                opacity: 0,
+                y: colOffset,
+                scale: 0.92,
+                clipPath: "inset(8% 0% 8% 0%)",
+              },
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration: duration,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: item,
+                  start: "top 92%",
+                  toggleActions: "play none none none",
+                  once: true,
                 },
-                {
-                  opacity: 1,
-                  y: 0,
-                  scale: 1,
-                  clipPath: "inset(0% 0% 0% 0%)",
-                  duration: 1.0,
-                  ease: "power3.out",
-                  scrollTrigger: {
-                    trigger: wrapper,
-                    start: "top 92%",
-                    toggleActions: "play none none none",
-                    once: true,
-                  },
-                }
-              );
-            }
+              }
+            );
 
-            if (expandCard) {
-              const startHeight = isDesktop ? 360 : isTablet ? 300 : 240;
-              const targetHeight = isDesktop ? 600 : isTablet ? 480 : 380;
+            // B. Continuous Dynamic Scaling Scrub on the Card as it travels through Viewport
+            gsap.fromTo(
+              item,
+              {
+                scale: 0.95,
+              },
+              {
+                scale: 1,
+                ease: "power1.out",
+                scrollTrigger: {
+                  trigger: item,
+                  start: "top 95%",
+                  end: "top 45%",
+                  scrub: 1.2,
+                },
+              }
+            );
 
-              gsap.fromTo(
-                expandCard,
-                { height: `${startHeight}px` },
-                {
-                  height: `${targetHeight}px`,
-                  ease: "power2.out",
-                  scrollTrigger: {
-                    trigger: wrapper,
-                    start: "top 85%",
-                    end: "top 10%",
-                    scrub: isMobile ? 0.4 : 1,
-                  },
-                }
-              );
-            }
-
-            // Independent Living Optical Parallax Scrub on Inner Image
-            if (innerImg) {
-              const parallaxRange = isDesktop ? 8 : isTablet ? 6 : 4;
+            // C. Continuous Optical Image Parallax & Lens Scaling Scrub
+            if (wrapper && img) {
+              const parallaxRange = isDesktop ? 10 : isTablet ? 7 : 4;
+              const startScale = isDesktop ? 1.22 : isTablet ? 1.15 : 1.08;
+              const endScale = isDesktop ? 1.04 : 1.02;
 
               gsap.fromTo(
-                innerImg,
+                img,
                 {
                   yPercent: -parallaxRange,
-                  scale: isMobile ? 1.06 : 1.14,
+                  scale: startScale,
                 },
                 {
                   yPercent: parallaxRange,
-                  scale: 1.0,
+                  scale: endScale,
                   ease: "none",
                   scrollTrigger: {
                     trigger: wrapper,
                     start: "top bottom",
                     end: "bottom top",
-                    scrub: isMobile ? 0.4 : true,
+                    scrub: isMobile ? 0.3 : 1.2,
                   },
                 }
               );
+
+              // D. Multi-column Asynchronous Parallax Glide
+              if (isDesktop && colIndex === 1) {
+                // Middle column floats slightly deeper on scroll for physical depth
+                gsap.fromTo(
+                  wrapper,
+                  { y: 25 },
+                  {
+                    y: -25,
+                    ease: "none",
+                    scrollTrigger: {
+                      trigger: wrapper,
+                      start: "top bottom",
+                      end: "bottom top",
+                      scrub: 1.5,
+                    },
+                  }
+                );
+              }
             }
+
+            // E. Interactive GSAP Hover Dynamics
+            const handleMouseEnter = () => {
+              if (img) {
+                gsap.to(img, {
+                  scale: isDesktop ? 1.12 : 1.06,
+                  duration: 0.65,
+                  ease: "power2.out",
+                  overwrite: "auto",
+                });
+              }
+              if (badge) {
+                gsap.to(badge, {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.35,
+                  ease: "power2.out",
+                });
+              }
+              if (arrow) {
+                gsap.to(arrow, {
+                  x: 3,
+                  y: -3,
+                  duration: 0.3,
+                  ease: "power2.out",
+                });
+              }
+            };
+
+            const handleMouseLeave = () => {
+              if (img) {
+                gsap.to(img, {
+                  scale: 1.04,
+                  duration: 0.55,
+                  ease: "power2.out",
+                  overwrite: "auto",
+                });
+              }
+              if (badge) {
+                gsap.to(badge, {
+                  opacity: 0,
+                  y: 6,
+                  duration: 0.3,
+                  ease: "power2.in",
+                });
+              }
+              if (arrow) {
+                gsap.to(arrow, {
+                  x: 0,
+                  y: 0,
+                  duration: 0.3,
+                  ease: "power2.out",
+                });
+              }
+            };
+
+            item.addEventListener("mouseenter", handleMouseEnter);
+            item.addEventListener("mouseleave", handleMouseLeave);
+            cleanups.push(() => {
+              item.removeEventListener("mouseenter", handleMouseEnter);
+              item.removeEventListener("mouseleave", handleMouseLeave);
+            });
           });
+
+          return () => {
+            cleanups.forEach((fn) => fn());
+          };
         }
       );
 
-      // Refresh triggers after dynamic layout recalculations
       const timer = setTimeout(() => {
         ScrollTrigger.refresh();
-      }, 150);
+      }, 120);
 
       return () => {
         clearTimeout(timer);
@@ -272,8 +325,8 @@ export function PortfolioGrid({
           <button
             onClick={() => handleCategoryChange("all")}
             className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${activeCategory === "all"
-              ? "bg-ink text-canvas font-medium shadow-sm"
-              : "border border-ink/15 text-ink hover:border-ink"
+                ? "bg-ink text-canvas font-medium shadow-sm"
+                : "border border-ink/15 text-ink hover:border-ink hover:bg-ink/5"
               }`}
           >
             ALL
@@ -284,8 +337,8 @@ export function PortfolioGrid({
               key={cat.id}
               onClick={() => handleCategoryChange(cat.slug)}
               className={`px-3.5 py-1.5 text-xs uppercase tracking-widest transition-all duration-300 ${activeCategory === cat.slug
-                ? "bg-ink text-canvas font-medium shadow-sm"
-                : "border border-ink/15 text-ink hover:border-ink"
+                  ? "bg-ink text-canvas font-medium shadow-sm"
+                  : "border border-ink/15 text-ink hover:border-ink hover:bg-ink/5"
                 }`}
             >
               {cat.name}
@@ -294,48 +347,57 @@ export function PortfolioGrid({
         </div>
       </div>
 
-      {/* K72-Style Dynamic Expanding Projects Grid */}
+      {/* Pinterest-style Multi-column Masonry Gallery */}
       <div
-        ref={gridContainerRef}
-        className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 lg:gap-12"
+        ref={masonryContainerRef}
+        className="columns-1 sm:columns-2 lg:columns-3 gap-6 sm:gap-8 [column-fill:_balance]"
       >
         {displayedPhotos.map((photo, index) => {
-          // Asymmetric rhythmic stagger for alternate columns on desktop (K72 aesthetic)
-          const isRightCol = index % 2 === 1;
+          // Preserve natural aspect ratios
+          const isLandscape = photo.aspectRatio === "16/10" || photo.aspectRatio === "16/9";
+          const isSquare = photo.aspectRatio === "1/1";
+          const isTall = photo.aspectRatio === "2/3" || photo.aspectRatio === "9/16";
+          const aspectClass = isLandscape
+            ? "aspect-[16/10]"
+            : isSquare
+              ? "aspect-square"
+              : isTall
+                ? "aspect-[2/3]"
+                : "aspect-[4/5]";
 
           return (
             <article
               key={photo.id}
-              className={`project-card-wrapper w-full flex flex-col group will-change-transform ${isRightCol ? "md:mt-12 lg:mt-16" : ""
-                }`}
+              className="masonry-item break-inside-avoid mb-6 sm:mb-8 w-full inline-block group will-change-transform"
+              data-col={index % 3}
             >
               <Link
                 href={`/work/${photo.slug}`}
-                className="block relative overflow-hidden bg-canvas-muted shadow-sm rounded-[1px]"
+                className="block relative overflow-hidden bg-canvas-muted shadow-sm hover:shadow-md transition-shadow duration-500 rounded-[1px]"
               >
-                {/* Expanding Card Container: Height is smoothly expanded by GSAP on scroll */}
+                {/* Fixed Image View: Overflow hidden wrapper */}
                 <div
-                  className="project-expand-card relative w-full h-[240px] sm:h-[300px] lg:h-[360px] overflow-hidden bg-canvas-muted"
+                  className={`image-wrapper relative w-full overflow-hidden bg-canvas-muted ${aspectClass}`}
                   style={{ clipPath: "inset(0% 0% 0% 0%)" }}
                 >
-                  {/* Inner image container: Optical living parallax scrub */}
-                  <div className="project-inner-img relative w-full h-full will-change-transform">
+                  {/* Inner Image: Optical scaling and living parallax scrub */}
+                  <div className="parallax-img relative w-full h-full will-change-transform">
                     <Image
                       src={photo.imageUrl}
                       alt={photo.imageAlt || photo.title}
                       fill
-                      priority={index < 2}
-                      loading={index < 2 ? "eager" : "lazy"}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
-                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      priority={index < 3}
+                      loading={index < 3 ? "eager" : "lazy"}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
                     />
                   </div>
 
                   {/* Subtle hover vignette & overlay */}
-                  <div className="absolute inset-0 bg-ink/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                   {/* Discrete floating category badge on hover */}
-                  <div className="absolute bottom-3 left-3 px-2.5 py-1 editorial-glass text-[9px] tracking-ultra uppercase text-canvas opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="category-badge absolute bottom-3 left-3 px-2.5 py-1 editorial-glass text-[9px] tracking-ultra uppercase text-canvas opacity-0 translate-y-1 transition-none pointer-events-none">
                     <span>{photo.category?.name || "MONOGRAPH"}</span>
                   </div>
                 </div>
@@ -349,15 +411,15 @@ export function PortfolioGrid({
                 </div>
 
                 <div className="flex items-baseline justify-between pt-0.5">
-                  <h3 className="font-serif text-lg sm:text-xl lg:text-2xl font-light text-ink group-hover:text-bronze transition-colors">
+                  <h3 className="font-serif text-lg sm:text-xl font-light text-ink group-hover:text-bronze transition-colors">
                     <Link href={`/work/${photo.slug}`}>{photo.title}</Link>
                   </h3>
                   <Link
                     href={`/work/${photo.slug}`}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity text-ink hover:text-bronze pl-2"
+                    className="arrow-icon opacity-70 group-hover:opacity-100 transition-opacity text-ink hover:text-bronze pl-2 inline-block will-change-transform"
                     aria-label={`View photograph essay for ${photo.title}`}
                   >
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
@@ -380,16 +442,16 @@ export function PortfolioGrid({
 
       {/* View More Works Button (Homepage Preview Mode) */}
       {isHomepagePreview && initialPhotos.length > 6 && (
-        <div className="mt-12 sm:mt-16 flex flex-col items-center text-center space-y-3 pt-8 border-t border-ink/10">
+        <div className="mt-10 sm:mt-12 flex flex-col items-center text-center space-y-3 pt-6 border-t border-ink/10">
           <p className="text-xs text-ink-muted tracking-widest uppercase">
             EXPLORE THE COMPLETE CATALOG OF FINE ART AND COMMISSIONED MONOGRAPHS
           </p>
           <Link
             href="/work"
-            className="group inline-flex items-center space-x-3 px-7 py-3.5 bg-ink text-canvas text-xs font-medium tracking-ultra uppercase hover:bg-bronze transition-all duration-300 shadow-md"
+            className="group inline-flex items-center space-x-3 px-7 py-3.5 bg-ink text-canvas text-xs font-medium tracking-ultra uppercase hover:bg-bronze transition-all duration-300 shadow-md hover:shadow-lg"
           >
             <span>VIEW ALL WORKS</span>
-            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5" />
           </Link>
         </div>
       )}
