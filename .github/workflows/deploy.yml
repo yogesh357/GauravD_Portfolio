@@ -18,6 +18,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/GauravD_Portfolio
+            
+            source ~/.nvm/nvm.sh
+            nvm use 20
 
             git pull origin main
 
