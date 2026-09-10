@@ -80,10 +80,10 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       if (portraitInnerRef.current) {
         gsap.fromTo(
           portraitInnerRef.current,
-          { yPercent: -4, scale: 1.05 },
+          { yPercent: -2, scale: 1.02 },
           {
-            yPercent: 5,
-            scale: 1.01,
+            yPercent: 2,
+            scale: 1.0,
             ease: "none",
             scrollTrigger: {
               trigger: el,
@@ -106,10 +106,10 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
         {/* Left Column: Portrait & Location Tag */}
-        <div className="lg:col-span-5 flex flex-col items-center lg:items-start space-y-4">
+        <div className="lg:col-span-5 flex flex-col items-center lg:items-start space-y-3.5">
           <div
             ref={portraitWrapperRef}
-            className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] w-full max-w-md overflow-hidden bg-canvas-muted shadow-lg border border-ink/10 rounded-[2px]"
+            className="relative aspect-[3/4.15] w-full max-w-sm sm:max-w-md lg:max-w-[390px] overflow-hidden bg-black shadow-xl border border-ink/15 rounded-[2px]"
           >
             <div ref={portraitInnerRef} className="relative w-full h-full">
               <Image
@@ -117,13 +117,13 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
                 alt="Gaurav Unfiltered with camera"
                 fill
                 priority
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 45vw, 35vw"
                 className="object-cover object-center"
               />
             </div>
           </div>
 
-          <div className="about-text-reveal w-full max-w-md flex items-center justify-between text-[11px] sm:text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-3 font-mono">
+          <div className="about-text-reveal w-full max-w-sm sm:max-w-md lg:max-w-[390px] flex items-center justify-between text-[11px] sm:text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-2.5 font-mono">
             <span className="font-semibold text-ink">GAURAV UNFILTERED</span>
             <span className="text-ink-muted">MAHARASHTRA, INDIA</span>
           </div>

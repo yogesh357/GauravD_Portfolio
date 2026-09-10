@@ -24,7 +24,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
   const name = "Gaurav Damahe";
   const phone = "9699915638";
   const address = "Pune / Mumbai, Maharashtra";
-  const email = settings?.email || "gaurav@gaurav.studio";
+  const email = settings?.email || "gauravxd153@gmail.com";
   const instagram = "https://www.instagram.com/gaurav_unfiltered_?stkn=bXRiZ2cwYWIxNjdy";
 
   useGSAP(
