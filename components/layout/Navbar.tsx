@@ -108,7 +108,7 @@ export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
           {/* Right Action CTA */}
           <div className="hidden sm:flex items-center space-x-6">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/gaurav_unfiltered_?stkn=bXRiZ2cwYWIxNjdy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-ink-muted hover:text-ink tracking-widest uppercase transition-colors font-mono"
@@ -161,7 +161,7 @@ export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
 
         <div className="border-t border-white/10 pt-6 flex flex-col space-y-3 text-xs tracking-widest uppercase text-white/60">
           <div className="flex justify-between items-center">
-            <span>PARIS / TOKYO</span>
+            <span>PUNE / MUMBAI</span>
             <a
               href="mailto:gaurav@gaurav.studio"
               className="text-bronze hover:underline lowercase"

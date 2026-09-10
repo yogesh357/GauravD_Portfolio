@@ -8,23 +8,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUp } from "lucide-react";
 
 export function Footer() {
-  const [parisTime, setParisTime] = useState<string>("");
-  const [tokyoTime, setTokyoTime] = useState<string>("");
+  const [indiaTime, setIndiaTime] = useState<string>("");
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const updateClocks = () => {
       const now = new Date();
-      setParisTime(
-        now.toLocaleTimeString("en-GB", {
-          timeZone: "Europe/Paris",
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      );
-      setTokyoTime(
-        now.toLocaleTimeString("en-GB", {
-          timeZone: "Asia/Tokyo",
+      setIndiaTime(
+        now.toLocaleTimeString("en-IN", {
+          timeZone: "Asia/Kolkata",
           hour: "2-digit",
           minute: "2-digit",
         })
@@ -86,17 +78,12 @@ export function Footer() {
             </p>
           </div>
 
-          {/* International Studio Time Clocks */}
-          <div className="flex items-center space-x-8 font-mono text-[11px]">
+          {/* Studio Time Clock */}
+          <div className="flex items-center space-x-6 font-mono text-[11px]">
             <div className="flex items-center space-x-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-canvas/50">PARIS:</span>
-              <span className="text-canvas">{parisTime || "12:00"} CET</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-canvas/50">TOKYO:</span>
-              <span className="text-canvas">{tokyoTime || "20:00"} JST</span>
+              <span className="text-canvas/50">PUNE / MUMBAI:</span>
+              <span className="text-canvas">{indiaTime || "12:00"} IST</span>
             </div>
           </div>
         </div>
