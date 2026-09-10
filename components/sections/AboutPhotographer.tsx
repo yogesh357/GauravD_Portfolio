@@ -16,10 +16,6 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
   const portraitWrapperRef = useRef<HTMLDivElement>(null);
   const portraitInnerRef = useRef<HTMLDivElement>(null);
 
-  const bio =
-    settings?.bio ||
-    "I photograph people, places, and fleeting moments — searching for the quiet details that usually disappear in the noise of modern life. Based between Paris and Tokyo, creating fine-art visual essays and commissioned editorial works worldwide.";
-
   useGSAP(
     () => {
       gsap.registerPlugin(ScrollTrigger);
@@ -69,25 +65,25 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       // 3. Body text & Stats Stagger
       tl.fromTo(
         ".about-text-reveal",
-        { y: 30, opacity: 0 },
+        { y: 25, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.1,
+          stagger: 0.08,
           duration: 0.8,
           ease: "power3.out",
         },
-        0.4
+        0.35
       );
 
       // 4. Subtle Portrait Parallax on continuous scroll
       if (portraitInnerRef.current) {
         gsap.fromTo(
           portraitInnerRef.current,
-          { yPercent: -4, scale: 1.06 },
+          { yPercent: -4, scale: 1.05 },
           {
-            yPercent: 6,
-            scale: 1.02,
+            yPercent: 5,
+            scale: 1.01,
             ease: "none",
             scrollTrigger: {
               trigger: el,
@@ -106,70 +102,83 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
     <section
       id="about"
       ref={containerRef}
-      className="py-10 sm:py-14 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
+      className="py-10 sm:py-14 lg:py-16 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-        {/* Left Column: Portrait & Studio Location */}
-        <div className="lg:col-span-5 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+        {/* Left Column: Portrait & Location Tag */}
+        <div className="lg:col-span-5 flex flex-col items-center lg:items-start space-y-4">
           <div
             ref={portraitWrapperRef}
-            className="relative aspect-[4/5] w-full max-w-md overflow-hidden bg-canvas-muted shadow-xl"
+            className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] w-full max-w-md overflow-hidden bg-canvas-muted shadow-lg border border-ink/10 rounded-[2px]"
           >
             <div ref={portraitInnerRef} className="relative w-full h-full">
               <Image
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop"
-                alt="Gaurav D. Portrait in Paris Studio"
+                src="/siteImages/gaurav_about_img.webp"
+                alt="Gaurav Unfiltered with camera"
                 fill
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                className="object-cover grayscale contrast-105"
+                priority
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                className="object-cover object-center"
               />
             </div>
           </div>
 
-          <div className="about-text-reveal flex items-center justify-between text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-3 font-mono">
-            <span>GAURAV D.</span>
-            <span>PARIS • TOKYO</span>
+          <div className="about-text-reveal w-full max-w-md flex items-center justify-between text-[11px] sm:text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-3 font-mono">
+            <span className="font-semibold text-ink">GAURAV UNFILTERED</span>
+            <span className="text-ink-muted">MAHARASHTRA, INDIA</span>
           </div>
         </div>
 
-        {/* Right Column: Statement, Bio & Philosophy */}
-        <div className="lg:col-span-7 flex flex-col space-y-6 pt-1">
-          <div className="space-y-1">
-            <div className="overflow-hidden">
-              <h2 className="about-reveal-line font-serif text-3xl sm:text-5xl lg:text-6xl font-light text-ink leading-[1.08]">
-                A pursuit of silence and
-              </h2>
+        {/* Right Column: Statement, Narrative & Badges */}
+        <div className="lg:col-span-7 flex flex-col space-y-5 lg:space-y-6 pt-1">
+          <div>
+            <div className="about-text-reveal flex items-center space-x-2.5 text-xs tracking-ultra uppercase text-ink-muted mb-2.5">
+              <span className="text-bronze">•</span>
+              <span>ABOUT & PERSPECTIVE</span>
             </div>
             <div className="overflow-hidden">
-              <h2 className="about-reveal-line font-serif text-3xl sm:text-5xl lg:text-6xl font-light italic text-ink/90 leading-[1.08]">
-                emotional resonance.
+              <h2 className="about-reveal-line font-serif text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-light text-ink leading-tight">
+                Maharashtra — <span className="italic font-normal text-ink/90">Culture in Focus</span>
               </h2>
             </div>
           </div>
 
-          <div className="space-y-4 text-ink-muted text-base sm:text-lg leading-relaxed font-light">
-            <p className="about-text-reveal">
-              {bio}
+          <div className="space-y-3.5 sm:space-y-4 text-ink-muted text-sm sm:text-base leading-relaxed font-light">
+            <p className="about-text-reveal text-ink font-serif text-lg sm:text-xl lg:text-2xl italic leading-relaxed text-pretty text-ink/90">
+              &ldquo;I&apos;m Gaurav, a photographer drawn to people, culture and the small moments that often go unnoticed.&rdquo;
             </p>
             <p className="about-text-reveal">
-              Working strictly with available ambient light and mechanical manual focus optics, every
-              frame represents a slow, meditative engagement with negative space and fleeting human presence.
+              I love travelling with a camera and documenting life as it happens — from the busy streets of Mumbai to quieter corners of Maharashtra.
+            </p>
+            <p className="about-text-reveal">
+              My work focuses on street photography, portraits, travel and the culture of Maharashtra. I look for honest expressions, everyday gestures, changing light and moments that tell something about a place or a person.
+            </p>
+            <p className="about-text-reveal">
+              Photography, for me, is less about creating a perfect picture and more about preserving a feeling, a face, a place or a moment that might otherwise disappear.
             </p>
           </div>
 
-          {/* Clean Discipline Stats */}
-          <div className="about-text-reveal grid grid-cols-3 gap-6 pt-4 border-t border-ink/10">
-            <div className="space-y-1">
-              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">14+</span>
-              <p className="text-[11px] tracking-widest uppercase text-ink-muted">Years in field</p>
+          {/* Badges Strip: Responsive, cleanly formatted cards */}
+          <div className="about-text-reveal grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 pt-5 mt-2 border-t border-ink/10">
+            <div className="p-3 sm:p-3.5 bg-canvas-muted/50 border border-ink/5 rounded-[2px] flex flex-col justify-center">
+              <span className="text-[10px] tracking-widest uppercase text-bronze font-mono mb-0.5">Camera Body</span>
+              <span className="font-serif text-base sm:text-lg text-ink font-normal leading-snug">
+                Canon M50 Mark II
+              </span>
             </div>
-            <div className="space-y-1">
-              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">50+</span>
-              <p className="text-[11px] tracking-widest uppercase text-ink-muted">Monographs</p>
+
+            <div className="p-3 sm:p-3.5 bg-canvas-muted/50 border border-ink/5 rounded-[2px] flex flex-col justify-center">
+              <span className="text-[10px] tracking-widest uppercase text-bronze font-mono mb-0.5">Visual Stories</span>
+              <span className="font-serif text-base sm:text-lg text-ink font-normal leading-snug">
+                Stories to discover
+              </span>
             </div>
-            <div className="space-y-1">
-              <span className="font-serif text-3xl sm:text-4xl text-ink font-light">Leica</span>
-              <p className="text-[11px] tracking-widest uppercase text-ink-muted">Rangefinder</p>
+
+            <div className="p-3 sm:p-3.5 bg-canvas-muted/50 border border-ink/5 rounded-[2px] flex flex-col justify-center">
+              <span className="text-[10px] tracking-widest uppercase text-bronze font-mono mb-0.5">Explorations</span>
+              <span className="font-serif text-base sm:text-lg text-ink font-normal leading-snug">
+                Maharashtra & beyond
+              </span>
             </div>
           </div>
         </div>
