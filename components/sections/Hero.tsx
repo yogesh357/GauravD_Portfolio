@@ -229,14 +229,14 @@ export function Hero({
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[calc(100vh-60px)] lg:min-h-screen flex flex-col justify-between pt-24 sm:pt-28 lg:pt-32 pb-4 sm:pb-6 px-6 sm:px-12 max-w-7xl mx-auto overflow-hidden select-none"
+      className="relative h-screen min-h-[600px] max-h-[960px] flex flex-col justify-between pt-16 sm:pt-20 lg:pt-22 pb-3 sm:pb-4 px-6 sm:px-12 max-w-7xl mx-auto overflow-hidden select-none"
     >
       {/* Main Hero Composition Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center my-auto w-full relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-2 items-center my-auto w-full relative z-10">
         {/* Left Column: Monumental Branding & Statements */}
         <div
           ref={textContentRef}
-          className="lg:col-span-6 flex flex-col justify-center space-y-3 sm:space-y-4 z-10 pt-2 lg:pt-0"
+          className="lg:col-span-6 flex flex-col justify-center space-y-2.5 sm:space-y-3 z-10"
         >
           {/* Eyebrow Greeting */}
           <div className="hero-reveal-eyebrow text-xs sm:text-sm tracking-[0.25em] uppercase text-ink-muted font-mono font-medium">
@@ -246,19 +246,19 @@ export function Hero({
           {/* Main Hero Title */}
           <div className="space-y-0 -my-1">
             <div className="overflow-hidden">
-              <h1 className="hero-title-line font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[5.8rem] xl:text-[7.2rem] font-light text-ink leading-[0.9] tracking-tight">
+              <h1 className="hero-title-line font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5.2rem] xl:text-[6.5rem] font-light text-ink leading-[0.9] tracking-tight">
                 Gaurav
               </h1>
             </div>
             <div className="overflow-hidden">
-              <h1 className="hero-title-line font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[5.8rem] xl:text-[7.2rem] font-light italic text-ink leading-[0.9] tracking-tight">
+              <h1 className="hero-title-line font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5.2rem] xl:text-[6.5rem] font-light italic text-ink leading-[0.9] tracking-tight">
                 Unfiltered
               </h1>
             </div>
           </div>
 
           {/* Name Plate with Horizontal Divider Line */}
-          <div className="hero-reveal-meta flex items-center space-x-3 sm:space-x-4 pt-3">
+          <div className="hero-reveal-meta flex items-center space-x-3 sm:space-x-4 pt-2">
             <span className="text-xs sm:text-sm tracking-[0.22em] uppercase text-ink font-mono font-medium whitespace-nowrap">
               GAURAV Dhamale
             </span>
@@ -267,57 +267,57 @@ export function Hero({
 
           {/* Tagline / Perspective Subheading */}
           <div className="hero-reveal-meta pt-0.5">
-            <p className="font-serif italic text-xl sm:text-2xl lg:text-[1.75rem] text-ink/85 tracking-wide text-pretty">
+            <p className="font-serif italic text-lg sm:text-xl lg:text-[1.55rem] text-ink/85 tracking-wide text-pretty">
               Maharastra Seen Through My Lens
             </p>
           </div>
         </div>
 
-        {/* Center-Right Column: Styled Cutout Portrait with Artistic Brushstrokes */}
-        <div className="lg:col-span-5 relative flex justify-center items-center">
-          {/* Background Artistic Painterly Brushstrokes matching reference mockup */}
+        {/* Center Column: Styled Cutout Portrait with Confined Background Brushstrokes */}
+        <div className="lg:col-span-4 xl:col-span-4 relative flex justify-center items-center">
+          {/* Background Artistic Painterly Brushstrokes - confined strictly behind portrait */}
           <svg
             ref={brushstrokeRef}
-            viewBox="0 0 600 500"
-            className="hero-brushstroke absolute -inset-10 sm:-inset-16 w-[130%] h-[130%] pointer-events-none -z-10 select-none"
+            viewBox="0 0 450 400"
+            className="hero-brushstroke absolute -left-8 sm:-left-12 -top-4 w-[115%] h-[115%] pointer-events-none -z-10 select-none"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Soft broad textured chalk / paint streaks */}
+            {/* Soft broad textured chalk / paint streaks terminating before the right column */}
             <path
-              d="M 60 380 C 160 310, 290 230, 520 150"
+              d="M 30 320 C 110 250, 190 190, 340 120"
               stroke="#D4C8BA"
-              strokeWidth="32"
+              strokeWidth="24"
               strokeLinecap="round"
-              className="opacity-60"
+              className="opacity-55"
             />
             <path
-              d="M 120 420 C 240 340, 360 250, 560 190"
+              d="M 60 350 C 150 280, 230 210, 360 155"
               stroke="#C9BDB0"
-              strokeWidth="22"
-              strokeLinecap="round"
-              className="opacity-50"
-            />
-            <path
-              d="M 90 300 C 220 220, 350 170, 540 120"
-              stroke="#DDD2C6"
               strokeWidth="18"
               strokeLinecap="round"
-              className="opacity-70"
+              className="opacity-45"
             />
             <path
-              d="M 180 440 C 280 370, 420 300, 570 260"
-              stroke="#C0B4A6"
-              strokeWidth="14"
+              d="M 40 240 C 130 180, 210 140, 330 90"
+              stroke="#DDD2C6"
+              strokeWidth="16"
               strokeLinecap="round"
-              className="opacity-40"
+              className="opacity-65"
+            />
+            <path
+              d="M 80 370 C 170 310, 250 250, 350 205"
+              stroke="#C0B4A6"
+              strokeWidth="12"
+              strokeLinecap="round"
+              className="opacity-35"
             />
           </svg>
 
           {/* Transparent Cutout Hero Portrait Container */}
           <div
             ref={imageWrapperRef}
-            className="hero-portrait-img relative w-full max-w-sm sm:max-w-md aspect-[3/4.2] overflow-visible flex items-end justify-center"
+            className="hero-portrait-img relative w-full max-w-xs sm:max-w-sm lg:max-w-[320px] xl:max-w-[370px] aspect-[3/4.1] overflow-visible flex items-end justify-center"
           >
             <div className="relative w-full h-full">
               <Image
@@ -325,29 +325,34 @@ export function Hero({
                 alt="Gaurav Dhamale — Gaurav Unfiltered"
                 fill
                 priority
-                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 40vw"
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 35vw"
                 className="object-contain object-bottom select-none"
               />
             </div>
           </div>
         </div>
 
-        {/* Far-Right Column: Stacked 3-Line Vertical Badge matching reference mockup */}
-        <div className="hidden lg:flex lg:col-span-1 flex-col items-start justify-center space-y-3.5 text-ink-muted hero-side-badge">
-          <div className="w-[1px] h-12 bg-ink/30" />
-          <div className="text-[9px] tracking-[0.24em] uppercase font-mono text-ink/70 leading-[1.65] select-none">
-            <div>CAPTURING</div>
-            <div>MOMENTS</div>
-            <div>THAT MATTER</div>
+        {/* Far-Right Column: Side Badge matching reference mockup exactly (Vertical line on LEFT of text, 3 lines, dash below) */}
+        <div className="hidden lg:flex lg:col-span-2 xl:col-span-2 items-center justify-start space-x-4 text-ink-muted hero-side-badge pl-4">
+          {/* Vertical line on the left */}
+          <div className="w-[1px] h-20 lg:h-24 bg-ink/35 shrink-0" />
+
+          {/* Text block on right with dash below */}
+          <div className="flex flex-col space-y-2.5">
+            <div className="text-[9px] sm:text-[10px] tracking-[0.24em] uppercase font-mono text-ink/70 leading-[1.65] whitespace-nowrap select-none">
+              <div>CAPTURING</div>
+              <div>MOMENTS</div>
+              <div>THAT MATTER</div>
+            </div>
+            <div className="w-4 h-[1px] bg-ink/35" />
           </div>
-          <div className="w-5 h-[1px] bg-ink/30" />
         </div>
       </div>
 
       {/* Bottom Hero Footer Strip */}
       <div
         ref={footerRef}
-        className="flex flex-col sm:flex-row items-center justify-between border-t border-ink/15 pt-3 sm:pt-4 text-xs text-ink-muted tracking-widest uppercase mt-4 sm:mt-6 gap-3"
+        className="flex flex-col sm:flex-row items-center justify-between border-t border-ink/15 pt-2.5 sm:pt-3 text-xs text-ink-muted tracking-widest uppercase mt-2 sm:mt-4 gap-2.5"
       >
         {/* Left Discipline Metadata */}
         <div className="hero-reveal-footer flex flex-wrap items-center justify-center sm:justify-start gap-x-2.5 text-[10px] sm:text-[11px] font-mono text-ink-muted">
