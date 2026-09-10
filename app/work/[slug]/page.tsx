@@ -15,15 +15,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const photo = await getPhotoBySlug(params.slug);
   if (!photo) {
     return {
-      title: "Photograph Not Found — Gaurav D.",
+      title: "Photograph Not Found — Gaurav ",
     };
   }
 
   return {
-    title: `${photo.title} — Gaurav D. Photography`,
-    description: photo.description || `Fine art photograph by Gaurav D. captured in ${photo.location || "Europe"}.`,
+    title: `${photo.title} — Gaurav  Photography`,
+    description: photo.description || `Fine art photograph by Gaurav captured in ${photo.location || "Europe"}.`,
     openGraph: {
-      title: `${photo.title} — Gaurav D. Photography`,
+      title: `${photo.title} — Gaurav  Photography`,
       description: photo.description || "Fine art photography framed in light.",
       images: [
         {
@@ -71,11 +71,10 @@ export default async function PhotoDetailPage({ params }: Props) {
         {/* Hero Artwork Frame */}
         <div className="relative w-full bg-canvas-muted overflow-hidden mb-12">
           <div
-            className={`relative w-full ${
-              photo.aspectRatio === "16/10"
+            className={`relative w-full ${photo.aspectRatio === "16/10"
                 ? "aspect-[16/10] sm:aspect-[16/9]"
                 : "aspect-[4/5] sm:aspect-[16/10] max-h-[82vh]"
-            }`}
+              }`}
           >
             <Image
               src={photo.imageUrl}

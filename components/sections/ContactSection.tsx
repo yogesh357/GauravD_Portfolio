@@ -21,9 +21,9 @@ export function ContactSection({ settings }: ContactSectionProps) {
   });
   const containerRef = useRef<HTMLElement>(null);
 
-  const email = settings?.email || "gaurav@gauravd.studio";
+  const email = settings?.email || "gaurav@gaurav.studio";
   const phone = settings?.phone || "+33 (0) 1 42 68 55 00";
-  const instagram = settings?.instagram || "https://instagram.com/gauravd.photo";
+  const instagram = settings?.instagram || "https://instagram.com/gaurav.photo";
 
   useGSAP(
     () => {

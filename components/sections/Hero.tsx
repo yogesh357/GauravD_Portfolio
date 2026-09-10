@@ -2,11 +2,10 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { Photo } from "@/lib/db/schema";
 
 interface HeroProps {
@@ -17,105 +16,117 @@ interface HeroProps {
 
 export function Hero({
   featuredPhoto,
-  photographerName = "Gaurav D.",
-  tagline = "Stories, framed in light.",
+  photographerName = "Gaurav Dhamale",
+  tagline = "Maharastra Seen Through My Lens",
 }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const headlineRef = useRef<HTMLDivElement>(null);
+  const textContentRef = useRef<HTMLDivElement>(null);
   const imageWrapperRef = useRef<HTMLDivElement>(null);
-  const imageInnerRef = useRef<HTMLDivElement>(null);
-  const captionRef = useRef<HTMLDivElement>(null);
-  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
-  const mouseContentRef = useRef<HTMLDivElement>(null);
+  const brushstrokeRef = useRef<SVGSVGElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
 
-  const heroImage =
-    featuredPhoto?.imageUrl ||
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop";
-  const heroTitle = featuredPhoto?.title || "Between Shadows & Solitude";
-  const heroSlug = featuredPhoto?.slug || "between-shadows-and-solitude";
-  const heroLocation = featuredPhoto?.location || "Paris, France";
-  const heroSpecs = featuredPhoto?.cameraSpecs || "Leica M11 • Noctilux 50mm f/0.95";
-
-  // 1. GSAP Orchestrated Entrance & ScrollTrigger Transition
+  // 1. GSAP Orchestrated Intro Entrance & ScrollTrigger Scrub
   useGSAP(
     () => {
       gsap.registerPlugin(ScrollTrigger);
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (prefersReducedMotion) return;
+      if (prefersReducedMotion) {
+        gsap.set(
+          ".hero-reveal-eyebrow, .hero-title-line, .hero-reveal-meta, .hero-reveal-footer, .hero-portrait-img, .hero-brushstroke, .hero-side-badge",
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+          }
+        );
+        return;
+      }
 
       const masterTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      // Step A: Editorial Headline Masked Line-by-Line Stagger
+      // Step A: Eyebrow Greeting Fade-in
       masterTimeline.fromTo(
-        ".hero-text-line",
-        { yPercent: 110, opacity: 0 },
+        ".hero-reveal-eyebrow",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.1 },
+        0
+      );
+
+      // Step B: Monumental Typography Line-by-Line Split Reveal
+      masterTimeline.fromTo(
+        ".hero-title-line",
+        { yPercent: 115, opacity: 0 },
         {
           yPercent: 0,
           opacity: 1,
           duration: 1.2,
-          stagger: 0.09,
+          stagger: 0.12,
           ease: "power4.out",
-          delay: 0.1,
-        }
+        },
+        0.15
       );
 
-      // Step B: Main Photograph Cinematic Entrance (Clip-path + Scale + Position Shift)
-      if (imageWrapperRef.current && imageInnerRef.current) {
+      // Step C: Name Divider & Tagline Reveal
+      masterTimeline.fromTo(
+        ".hero-reveal-meta",
+        { y: 25, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: "power3.out",
+        },
+        0.4
+      );
+
+      // Step D: Portrait & Painterly Brushstroke Entrance
+      if (imageWrapperRef.current) {
         masterTimeline.fromTo(
           imageWrapperRef.current,
           {
-            clipPath: "inset(8% 8% 8% 8%)",
-            scale: 1.12,
-            opacity: 0.4,
+            opacity: 0,
+            scale: 1.06,
+            y: 30,
           },
           {
-            clipPath: "inset(0% 0% 0% 0%)",
-            scale: 1,
             opacity: 1,
-            duration: 1.4,
+            scale: 1,
+            y: 0,
+            duration: 1.3,
             ease: "expo.out",
           },
-          "-=0.9"
-        );
-
-        masterTimeline.fromTo(
-          imageInnerRef.current,
-          { scale: 1.14 },
-          { scale: 1, duration: 1.6, ease: "power3.out" },
-          "-=1.4"
+          0.3
         );
       }
 
-      // Step C: Caption & Plate Details Reveal
-      if (captionRef.current) {
+      if (brushstrokeRef.current) {
         masterTimeline.fromTo(
-          captionRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-          "-=0.6"
+          brushstrokeRef.current,
+          { opacity: 0, scale: 0.9, rotate: -3 },
+          { opacity: 1, scale: 1, rotate: 0, duration: 1.5, ease: "power3.out" },
+          0.35
         );
       }
 
-      // Step D: Scroll Indicator & Footer Cue Reveal
-      if (scrollIndicatorRef.current) {
-        masterTimeline.fromTo(
-          scrollIndicatorRef.current,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" },
-          "-=0.5"
-        );
-      }
+      // Step E: Side Badge & Footer Meta & Scroll Cue
+      masterTimeline.fromTo(
+        ".hero-side-badge, .hero-reveal-footer",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.08, ease: "power2.out" },
+        0.55
+      );
 
-      // Continuous ambient loop for scroll indicator pulse
+      // Continuous pulse for down arrow
       gsap.to(".scroll-indicator-arrow", {
-        y: 6,
+        y: 4,
         repeat: -1,
         yoyo: true,
         duration: 1.2,
         ease: "power1.inOut",
       });
 
-      // 2. GSAP ScrollTrigger Scrubbed Transition into Next Section
+      // 2. GSAP ScrollTrigger Transition on scroll
       if (containerRef.current) {
         const scrollTl = gsap.timeline({
           scrollTrigger: {
@@ -126,57 +137,39 @@ export function Hero({
           },
         });
 
-        // Headline glides up and fades gently
-        if (headlineRef.current) {
-          scrollTl.to(
-            headlineRef.current,
-            { yPercent: -30, opacity: 0.15, ease: "none" },
-            0
-          );
+        if (textContentRef.current) {
+          scrollTl.to(textContentRef.current, { yPercent: -20, opacity: 0.25, ease: "none" }, 0);
         }
 
-        // Main photo expands toward viewport edges & shifts parallax
         if (imageWrapperRef.current) {
-          scrollTl.to(
-            imageWrapperRef.current,
-            { yPercent: -8, scale: 1.03, ease: "none" },
-            0
-          );
+          scrollTl.to(imageWrapperRef.current, { yPercent: -10, scale: 1.02, ease: "none" }, 0);
         }
 
-        // Inner photo optical lens shift
-        if (imageInnerRef.current) {
-          scrollTl.to(
-            imageInnerRef.current,
-            { yPercent: 12, scale: 1.08, ease: "none" },
-            0
-          );
+        if (brushstrokeRef.current) {
+          scrollTl.to(brushstrokeRef.current, { rotate: 6, scale: 1.05, opacity: 0.2, ease: "none" }, 0);
         }
 
-        // Caption and scroll indicator fade out quickly on initial scroll
-        if (captionRef.current) {
-          scrollTl.to(captionRef.current, { opacity: 0, yPercent: -15, ease: "none" }, 0);
-        }
-        if (scrollIndicatorRef.current) {
-          scrollTl.to(scrollIndicatorRef.current, { opacity: 0, yPercent: -20, ease: "none" }, 0);
+        if (footerRef.current) {
+          scrollTl.to(footerRef.current, { opacity: 0, y: -15, ease: "none" }, 0);
         }
       }
     },
     { scope: containerRef }
   );
 
-  // 3. Subtle Desktop Mouse Inertia Parallax using GSAP quickTo
+  // 3. Desktop Mouse Parallax using GSAP quickTo
   useEffect(() => {
     const isFinePointer = window.matchMedia("(pointer: fine)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!isFinePointer || prefersReducedMotion) return;
 
-    const wrapper = imageWrapperRef.current;
-    const textEl = mouseContentRef.current;
-    if (!wrapper) return;
+    const imgWrapper = imageWrapperRef.current;
+    const textEl = textContentRef.current;
+    const brushEl = brushstrokeRef.current;
+    if (!imgWrapper) return;
 
-    const setImgX = gsap.quickTo(wrapper, "x", { duration: 0.8, ease: "power2.out" });
-    const setImgY = gsap.quickTo(wrapper, "y", { duration: 0.8, ease: "power2.out" });
+    const setImgX = gsap.quickTo(imgWrapper, "x", { duration: 0.8, ease: "power2.out" });
+    const setImgY = gsap.quickTo(imgWrapper, "y", { duration: 0.8, ease: "power2.out" });
 
     let setTextX: gsap.QuickToFunc | null = null;
     let setTextY: gsap.QuickToFunc | null = null;
@@ -185,19 +178,29 @@ export function Hero({
       setTextY = gsap.quickTo(textEl, "y", { duration: 0.8, ease: "power2.out" });
     }
 
+    let setBrushX: gsap.QuickToFunc | null = null;
+    let setBrushY: gsap.QuickToFunc | null = null;
+    if (brushEl) {
+      setBrushX = gsap.quickTo(brushEl, "x", { duration: 1.1, ease: "power2.out" });
+      setBrushY = gsap.quickTo(brushEl, "y", { duration: 1.1, ease: "power2.out" });
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       const { innerWidth, innerHeight } = window;
-      const xPercent = (e.clientX / innerWidth - 0.5) * 2; // -1 to 1
+      const xPercent = (e.clientX / innerWidth - 0.5) * 2;
       const yPercent = (e.clientY / innerHeight - 0.5) * 2;
 
-      // Subtle image movement
       setImgX(xPercent * 12);
-      setImgY(yPercent * 10);
+      setImgY(yPercent * 8);
 
-      // Subtle opposite text drift for layered physical depth
       if (setTextX && setTextY) {
         setTextX(xPercent * -5);
         setTextY(yPercent * -4);
+      }
+
+      if (setBrushX && setBrushY) {
+        setBrushX(xPercent * -10);
+        setBrushY(yPercent * -7);
       }
     };
 
@@ -207,6 +210,10 @@ export function Hero({
       if (setTextX && setTextY) {
         setTextX(0);
         setTextY(0);
+      }
+      if (setBrushX && setBrushY) {
+        setBrushX(0);
+        setBrushY(0);
       }
     };
 
@@ -222,104 +229,148 @@ export function Hero({
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[calc(100vh-60px)] lg:h-[calc(100vh-10px)] lg:max-h-[860px] flex flex-col justify-between pt-16 sm:pt-20 pb-3 px-6 sm:px-12 max-w-7xl mx-auto overflow-visible"
+      className="relative min-h-[calc(100vh-60px)] lg:min-h-screen flex flex-col justify-between pt-24 sm:pt-28 lg:pt-32 pb-4 sm:pb-6 px-6 sm:px-12 max-w-7xl mx-auto overflow-hidden select-none"
     >
-      {/* 1. Monumental Split Heading & Artistic Statement */}
-      <div
-        ref={mouseContentRef}
-        className="pt-1 pb-1 sm:pb-2 flex flex-col md:flex-row md:items-end justify-between gap-4 max-w-7xl"
-      >
-        <div ref={headlineRef} className="space-y-0">
-          <div className="overflow-hidden">
-            <h1 className="hero-text-line font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[4.2rem] font-light tracking-tight text-ink leading-[0.98]">
-              Stories,
-            </h1>
-          </div>
-          <div className="overflow-hidden">
-            <h2 className="hero-text-line font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[4.2rem] font-light italic text-ink/90 leading-[0.98] pl-2 sm:pl-3">
-              framed in light.
-            </h2>
-          </div>
-        </div>
-
-        <div className="overflow-hidden hidden md:block max-w-xs pb-1 text-right">
-          <p className="hero-text-line text-xs tracking-wider text-ink-muted leading-relaxed font-light">
-            Fine art & editorial monographs exploring light, negative space, and fleeting human presence.
-          </p>
-        </div>
-      </div>
-
-      {/* 2. Centerpiece Photographic Master Canvas */}
-      <div className="relative w-full my-1 flex-1 flex flex-col justify-center">
+      {/* Main Hero Composition Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center my-auto w-full relative z-10">
+        {/* Left Column: Monumental Branding & Statements */}
         <div
-          ref={imageWrapperRef}
-          style={{ clipPath: "inset(0% 0% 0% 0%)" }}
-          className="relative w-full h-[28vh] sm:h-[34vh] md:h-[38vh] lg:h-[40vh] max-h-[380px] min-h-[220px] overflow-hidden bg-canvas-muted shadow-2xl group cursor-pointer"
+          ref={textContentRef}
+          className="lg:col-span-6 flex flex-col justify-center space-y-3 sm:space-y-4 z-10 pt-2 lg:pt-0"
         >
-          <div ref={imageInnerRef} className="relative w-full h-full">
-            <Image
-              src={heroImage}
-              alt={heroTitle}
-              fill
-              priority
-              sizes="(max-width: 1280px) 100vw, 1280px"
-              className="object-cover object-[center_35%] transition-transform duration-1000 ease-out group-hover:scale-105"
-            />
+          {/* Eyebrow Greeting */}
+          <div className="hero-reveal-eyebrow text-xs sm:text-sm tracking-[0.25em] uppercase text-ink-muted font-mono font-medium">
+            HELLO, I&apos;M
           </div>
 
-          {/* Luxury Soft Film Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40 pointer-events-none" />
+          {/* Main Hero Title */}
+          <div className="space-y-0 -my-1">
+            <div className="overflow-hidden">
+              <h1 className="hero-title-line font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[5.8rem] xl:text-[7.2rem] font-light text-ink leading-[0.9] tracking-tight">
+                Gaurav
+              </h1>
+            </div>
+            <div className="overflow-hidden">
+              <h1 className="hero-title-line font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[5.8rem] xl:text-[7.2rem] font-light italic text-ink leading-[0.9] tracking-tight">
+                Unfiltered
+              </h1>
+            </div>
+          </div>
+
+          {/* Name Plate with Horizontal Divider Line */}
+          <div className="hero-reveal-meta flex items-center space-x-3 sm:space-x-4 pt-3">
+            <span className="text-xs sm:text-sm tracking-[0.22em] uppercase text-ink font-mono font-medium whitespace-nowrap">
+              GAURAV Dhamale
+            </span>
+            <div className="h-[1px] w-24 sm:w-36 bg-ink/35" />
+          </div>
+
+          {/* Tagline / Perspective Subheading */}
+          <div className="hero-reveal-meta pt-0.5">
+            <p className="font-serif italic text-xl sm:text-2xl lg:text-[1.75rem] text-ink/85 tracking-wide text-pretty">
+              Maharastra Seen Through My Lens
+            </p>
+          </div>
         </div>
 
-        {/* 3. Editorial Caption & Essay Link */}
-        <div
-          ref={captionRef}
-          className="mt-2 flex flex-col sm:flex-row sm:items-baseline justify-between text-xs text-ink-muted tracking-widest uppercase gap-2 font-mono"
-        >
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="font-serif text-sm text-ink font-light italic normal-case">
-              {heroTitle}
-            </span>
-            <span className="text-bronze">•</span>
-            <span className="text-[11px] font-sans">{heroLocation}</span>
-            <span className="text-bronze hidden sm:inline">•</span>
-            <span className="text-[10px] text-ink-muted hidden md:inline truncate max-w-xs font-mono">
-              {heroSpecs}
-            </span>
-          </div>
-
-          <Link
-            href={`/work/${heroSlug}`}
-            className="group/link inline-flex items-center space-x-1.5 text-[11px] tracking-ultra text-ink hover:text-bronze transition-colors self-start sm:self-auto font-sans uppercase underline underline-offset-4"
+        {/* Center-Right Column: Styled Cutout Portrait with Artistic Brushstrokes */}
+        <div className="lg:col-span-5 relative flex justify-center items-center">
+          {/* Background Artistic Painterly Brushstrokes matching reference mockup */}
+          <svg
+            ref={brushstrokeRef}
+            viewBox="0 0 600 500"
+            className="hero-brushstroke absolute -inset-10 sm:-inset-16 w-[130%] h-[130%] pointer-events-none -z-10 select-none"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <span>VIEW MONOGRAPH ESSAY</span>
-            <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-          </Link>
+            {/* Soft broad textured chalk / paint streaks */}
+            <path
+              d="M 60 380 C 160 310, 290 230, 520 150"
+              stroke="#D4C8BA"
+              strokeWidth="32"
+              strokeLinecap="round"
+              className="opacity-60"
+            />
+            <path
+              d="M 120 420 C 240 340, 360 250, 560 190"
+              stroke="#C9BDB0"
+              strokeWidth="22"
+              strokeLinecap="round"
+              className="opacity-50"
+            />
+            <path
+              d="M 90 300 C 220 220, 350 170, 540 120"
+              stroke="#DDD2C6"
+              strokeWidth="18"
+              strokeLinecap="round"
+              className="opacity-70"
+            />
+            <path
+              d="M 180 440 C 280 370, 420 300, 570 260"
+              stroke="#C0B4A6"
+              strokeWidth="14"
+              strokeLinecap="round"
+              className="opacity-40"
+            />
+          </svg>
+
+          {/* Transparent Cutout Hero Portrait Container */}
+          <div
+            ref={imageWrapperRef}
+            className="hero-portrait-img relative w-full max-w-sm sm:max-w-md aspect-[3/4.2] overflow-visible flex items-end justify-center"
+          >
+            <div className="relative w-full h-full">
+              <Image
+                src="/siteImages/gaurav_hero_cutout.png"
+                alt="Gaurav Dhamale — Gaurav Unfiltered"
+                fill
+                priority
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 50vw, 40vw"
+                className="object-contain object-bottom select-none"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Far-Right Column: Stacked 3-Line Vertical Badge matching reference mockup */}
+        <div className="hidden lg:flex lg:col-span-1 flex-col items-start justify-center space-y-3.5 text-ink-muted hero-side-badge">
+          <div className="w-[1px] h-12 bg-ink/30" />
+          <div className="text-[9px] tracking-[0.24em] uppercase font-mono text-ink/70 leading-[1.65] select-none">
+            <div>CAPTURING</div>
+            <div>MOMENTS</div>
+            <div>THAT MATTER</div>
+          </div>
+          <div className="w-5 h-[1px] bg-ink/30" />
         </div>
       </div>
 
-      {/* 4. Minimalist Animated Scroll Indicator */}
+      {/* Bottom Hero Footer Strip */}
       <div
-        ref={scrollIndicatorRef}
-        className="flex items-center justify-between border-t border-ink/10 pt-3 sm:pt-4 text-xs text-ink-muted tracking-widest uppercase mt-1 sm:mt-2"
+        ref={footerRef}
+        className="flex flex-col sm:flex-row items-center justify-between border-t border-ink/15 pt-3 sm:pt-4 text-xs text-ink-muted tracking-widest uppercase mt-4 sm:mt-6 gap-3"
       >
-        <div className="flex items-center space-x-4 text-[11px] font-sans">
-          <span>PARIS ATELIER</span>
-          <span className="text-bronze">•</span>
-          <span>TOKYO STUDIO</span>
+        {/* Left Discipline Metadata */}
+        <div className="hero-reveal-footer flex flex-wrap items-center justify-center sm:justify-start gap-x-2.5 text-[10px] sm:text-[11px] font-mono text-ink-muted">
+          <span className="text-bronze font-bold text-xs">•</span>
+          <span>PHOTOGRAPHY</span>
+          <span className="text-ink/20">/</span>
+          <span>TRAVEL</span>
+          <span className="text-ink/20">/</span>
+          <span>CULTURE</span>
+          <span className="text-ink/20">/</span>
+          <span className="text-ink font-medium">MAHARASHTRA</span>
         </div>
 
+        {/* Right Scroll Indicator */}
         <div
           onClick={() => {
             const el = document.getElementById("about");
             el?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="flex items-center space-x-2.5 text-ink hover:text-bronze transition-colors cursor-pointer group select-none"
+          className="hero-reveal-footer flex items-center space-x-2 text-[10px] sm:text-[11px] font-mono text-ink hover:text-bronze transition-colors cursor-pointer select-none"
         >
-          <span className="text-[10px] tracking-ultra font-sans">SCROLL TO EXPLORE</span>
-          <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-ink/20 flex items-center justify-center group-hover:border-bronze transition-colors">
-            <ArrowDown className="scroll-indicator-arrow w-3 h-3 text-ink group-hover:text-bronze" />
-          </div>
+          <span>SCROLL</span>
+          <ArrowDown className="scroll-indicator-arrow w-3.5 h-3.5 text-ink hover:text-bronze transition-colors" />
         </div>
       </div>
     </section>
