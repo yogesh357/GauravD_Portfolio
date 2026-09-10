@@ -71,7 +71,7 @@ export function Footer() {
               href="/"
               className="font-serif text-2xl text-canvas tracking-wider hover:text-bronze transition-colors"
             >
-              GAURAV 
+              GAURAV
             </Link>
             <p className="text-[10px] text-canvas/40 tracking-ultra">
               FINE ART & EDITORIAL PHOTOGRAPHY STUDIO
@@ -123,9 +123,19 @@ export function Footer() {
         </div>
 
         {/* Bottom Tier: Copyright & Colophon */}
-        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2">
-          <p>© {new Date().getFullYear()} GAURAV ALL PHOTOGRAPHS COPYRIGHTED.</p>
-          <p>DESIGNED WITH EDITORIAL RESTRAINT • POWERED BY NEXT.JS & GSAP</p>
+        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2 font-mono">
+          <p>© {new Date().getFullYear()} GAURAV. ALL PHOTOGRAPHS COPYRIGHTED.</p>
+          <div className="flex flex-wrap items-center gap-x-2 text-canvas/40">
+            <span>DESIGNED &amp; DEVELOPED BY</span>
+            <span className="text-canvas/80 font-medium tracking-widest">YOGESH</span>
+            <span className="text-canvas/30">•</span>
+            <a
+              href="tel:9763449839"
+              className="text-bronze hover:text-canvas transition-colors font-mono font-medium"
+            >
+              +91 9763449839
+            </a>
+          </div>
         </div>
       </div>
     </footer>
