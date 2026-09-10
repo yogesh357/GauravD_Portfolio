@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
+export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -57,7 +57,7 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
   );
 
   const navLinks = [
-    { label: "WORK", href: "/work" },
+    { label: "HOME", href: "/" },
     { label: "ABOUT", href: "/#about" },
     { label: "STORIES", href: "/#stories" },
     { label: "CONTACT", href: "/#contact" },
@@ -67,29 +67,27 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
     <>
       <header
         ref={navRef}
-        className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 ${
-          isScrolled
-            ? "py-3 px-4 sm:px-8"
-            : "py-6 sm:py-8 px-6 sm:px-12"
-        }`}
+        className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 ${isScrolled
+          ? "py-3 px-4 sm:px-8"
+          : "py-6 sm:py-8 px-6 sm:px-12"
+          }`}
       >
         <div
-          className={`mx-auto max-w-7xl flex items-center justify-between transition-all duration-500 ${
-            isScrolled
-              ? "editorial-glass border border-ink/10 rounded-full px-6 py-3 shadow-sm"
-              : "bg-transparent"
-          }`}
+          className={`mx-auto max-w-7xl flex items-center justify-between transition-all duration-500 ${isScrolled
+            ? "editorial-glass border border-ink/10 rounded-full px-6 py-3 shadow-sm"
+            : "bg-transparent"
+            }`}
         >
           {/* Brand Wordmark */}
           <Link
             href="/"
-            className="group flex items-center space-x-2 text-ink transition-opacity hover:opacity-80"
+            className="group flex items-center space-x-2 text-ink transition-opacity hover:opacity-80 font-mono"
           >
             <span className="font-serif text-xl sm:text-2xl font-light tracking-wider">
               {siteName}
             </span>
             <span className="text-[10px] tracking-widest text-ink-muted uppercase border-l border-ink/20 pl-2 hidden sm:inline-block">
-              STUDIO
+              PHOTOGRAPHER
             </span>
           </Link>
 
@@ -113,16 +111,16 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-ink-muted hover:text-ink tracking-widest uppercase transition-colors"
+              className="text-xs text-ink-muted hover:text-ink tracking-widest uppercase transition-colors font-mono"
             >
               INSTAGRAM
             </a>
             <a
-              href="#contact"
-              className="group inline-flex items-center space-x-1.5 text-xs font-medium tracking-widest uppercase px-4 py-2 rounded-full border border-ink/20 hover:border-ink hover:bg-ink hover:text-canvas transition-all duration-300"
+              href="/work"
+              className="group inline-flex items-center space-x-1.5 text-xs font-medium tracking-widest uppercase px-4 py-2 rounded-full border border-ink/20 hover:border-ink hover:bg-ink hover:text-canvas transition-all duration-300 font-mono"
             >
-              <span>INQUIRE</span>
-              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <span>EXPLORE</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
             </a>
           </div>
 
@@ -165,14 +163,14 @@ export function Navbar({ siteName = "GAURAV D." }: { siteName?: string }) {
           <div className="flex justify-between items-center">
             <span>PARIS / TOKYO</span>
             <a
-              href="mailto:gaurav@gauravd.studio"
+              href="mailto:gaurav@gaurav.studio"
               className="text-bronze hover:underline lowercase"
             >
-              gaurav@gauravd.studio
+              gaurav@gaurav.studio
             </a>
           </div>
           <p className="text-[10px] text-white/40">
-            © {new Date().getFullYear()} GAURAV D. ALL RIGHTS RESERVED.
+            © {new Date().getFullYear()} GAURAV  ALL RIGHTS RESERVED.
           </p>
         </div>
       </div>

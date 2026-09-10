@@ -92,7 +92,7 @@ async function main() {
     .insert(schema.siteSettings)
     .values({
       id: "default",
-      photographerName: "Gaurav D.",
+      photographerName: "Gaurav ",
       tagline: "Stories, framed in light.",
       bio: "I photograph people, places, and fleeting moments — searching for the quiet details that usually disappear.",
       email: "gaurav@gauravd.studio",

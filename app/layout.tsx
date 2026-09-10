@@ -19,9 +19,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Gaurav D. — Photographer & Visual Artist",
+  title: "Gaurav  — Photographer & Visual Artist",
   description:
-    "Fine art photography and visual storytelling by Gaurav D. Exploring the interplay of light, architectural form, human condition, and quiet solitude across Paris, Tokyo, and beyond.",
+    "Fine art photography and visual storytelling by Gaurav  Exploring the interplay of light, architectural form, human condition, and quiet solitude across Paris, Tokyo, and beyond.",
   keywords: [
     "Photographer",
     "Fine Art Photography",
@@ -32,18 +32,18 @@ export const metadata: Metadata = {
     "Tokyo Photographer",
     "Leica Photography",
   ],
-  authors: [{ name: "Gaurav D." }],
+  authors: [{ name: "Gaurav " }],
   openGraph: {
-    title: "Gaurav D. — Photographer & Visual Artist",
+    title: "Gaurav  — Photographer & Visual Artist",
     description: "Fine art photography and visual storytelling framed in light.",
-    url: "https://gauravd.studio",
-    siteName: "Gaurav D. Photography",
+    url: "https://gaurav.studio",
+    siteName: "Gaurav Photography",
     images: [
       {
         url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop",
         width: 1600,
         height: 1066,
-        alt: "Gaurav D. Photography Hero Preview",
+        alt: "Gaurav Photography Hero Preview",
       },
     ],
     locale: "en_US",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gaurav D. — Photographer & Visual Artist",
+    title: "Gaurav  — Photographer & Visual Artist",
     description: "Fine art photography and visual storytelling framed in light.",
     images: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop"],
   },

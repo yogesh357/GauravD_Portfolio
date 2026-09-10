@@ -79,7 +79,7 @@ export function Footer() {
               href="/"
               className="font-serif text-2xl text-canvas tracking-wider hover:text-bronze transition-colors"
             >
-              GAURAV D.
+              GAURAV 
             </Link>
             <p className="text-[10px] text-canvas/40 tracking-ultra">
               FINE ART & EDITORIAL PHOTOGRAPHY STUDIO
@@ -137,7 +137,7 @@ export function Footer() {
 
         {/* Bottom Tier: Copyright & Colophon */}
         <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2">
-          <p>© {new Date().getFullYear()} GAURAV D. ALL PHOTOGRAPHS COPYRIGHTED.</p>
+          <p>© {new Date().getFullYear()} GAURAV ALL PHOTOGRAPHS COPYRIGHTED.</p>
           <p>DESIGNED WITH EDITORIAL RESTRAINT • POWERED BY NEXT.JS & GSAP</p>
         </div>
       </div>

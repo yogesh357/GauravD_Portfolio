@@ -15,7 +15,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { logoutAction } from "./auth-actions";
 
 export const metadata = {
-  title: "Studio CMS — Gaurav D. Photography",
+  title: "Studio CMS — Gaurav  Photography",
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -43,7 +43,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
             <div>
               <Link href="/admin" className="font-serif text-lg tracking-wider text-canvas block">
-                GAURAV D.
+                GAURAV
               </Link>
               <span className="text-[10px] tracking-ultra text-bronze uppercase block">
                 STUDIO CMS
@@ -55,7 +55,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <div className="bg-white/[0.02] border border-white/10 p-3 rounded text-[11px] flex items-center space-x-2.5">
             <UserCheck className="w-4 h-4 text-emerald-400 shrink-0" />
             <div className="overflow-hidden">
-              <p className="text-canvas font-medium truncate">{user.name || "Gaurav D."}</p>
+              <p className="text-canvas font-medium truncate">{user.name || "Gaurav"}</p>
               <p className="text-canvas/50 text-[10px] font-mono truncate">{user.email}</p>
             </div>
           </div>

@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { getPhotos } from "@/lib/db/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gauravd.studio";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://gaurav.studio";
   const photos = await getPhotos({ publishedOnly: true });
 
   const photoEntries: MetadataRoute.Sitemap = photos.map((photo) => ({

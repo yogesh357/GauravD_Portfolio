@@ -7,11 +7,11 @@ import { Footer } from "@/components/layout/Footer";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Complete Works Archive — Gaurav D. Photography",
+  title: "Complete Works Archive — Gaurav  Photography",
   description:
-    "Explore the complete catalog of fine art photographs, editorial essays, and architectural studies by Gaurav D.",
+    "Explore the complete catalog of fine art photographs, editorial essays, and architectural studies by Gaurav ",
   openGraph: {
-    title: "Complete Works Archive — Gaurav D. Photography",
+    title: "Complete Works Archive — Gaurav  Photography",
     description: "Fine art photography portfolio across portraits, architecture, landscapes, and street.",
     images: [
       {
@@ -32,7 +32,7 @@ export default async function WorkArchivePage() {
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
-      <Navbar siteName={settings?.photographerName || "GAURAV D."} />
+      <Navbar siteName={settings?.photographerName || "GAURAV "} />
 
       <main className="pt-20 sm:pt-28 pb-16">
         {/* Full Gallery Archive with K72 Scroll & Page Load Animation */}
