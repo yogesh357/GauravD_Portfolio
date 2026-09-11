@@ -2,10 +2,10 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getPhotoBySlug, getPhotos } from "@/lib/db/queries";
+import { getPhotoBySlug, getPhotos, getSiteSettings } from "@/lib/db/queries";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, MapPin, Calendar, Tag } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Camera, MapPin, Calendar, Tag } from "lucide-react";
 
 interface Props {
   params: { slug: string };
@@ -15,15 +15,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const photo = await getPhotoBySlug(params.slug);
   if (!photo) {
     return {
-      title: "Photograph Not Found — Gaurav ",
+      title: "Photograph Not Found — Gaurav",
     };
   }
 
   return {
-    title: `${photo.title} — Gaurav  Photography`,
+    title: `${photo.title} — Gaurav Photography`,
     description: photo.description || `Fine art photograph by Gaurav captured in ${photo.location || "Europe"}.`,
     openGraph: {
-      title: `${photo.title} — Gaurav  Photography`,
+      title: `${photo.title} — Gaurav Photography`,
       description: photo.description || "Fine art photography framed in light.",
       images: [
         {
@@ -43,15 +43,15 @@ export default async function PhotoDetailPage({ params }: Props) {
     notFound();
   }
 
-  const allPhotos = await getPhotos({ publishedOnly: true });
+  const [allPhotos, settings] = await Promise.all([
+    getPhotos({ publishedOnly: true }),
+    getSiteSettings(),
+  ]);
   const currentIndex = allPhotos.findIndex((p) => p.slug === params.slug);
-
-  const prevPhoto = currentIndex > 0 ? allPhotos[currentIndex - 1] : allPhotos[allPhotos.length - 1];
-  const nextPhoto = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : allPhotos[0];
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
-      <Navbar />
+      <Navbar siteName={settings?.photographerName || "Gaurav D."} />
 
       <main className="pt-28 sm:pt-36 pb-24 px-6 sm:px-12 max-w-7xl mx-auto w-full">
         {/* Top Back Navigation Breadcrumb */}
@@ -72,8 +72,8 @@ export default async function PhotoDetailPage({ params }: Props) {
         <div className="relative w-full bg-canvas-muted overflow-hidden mb-12">
           <div
             className={`relative w-full ${photo.aspectRatio === "16/10"
-                ? "aspect-[16/10] sm:aspect-[16/9]"
-                : "aspect-[4/5] sm:aspect-[16/10] max-h-[82vh]"
+              ? "aspect-[16/10] sm:aspect-[16/9]"
+              : "aspect-[4/5] sm:aspect-[16/10] max-h-[82vh]"
               }`}
           >
             <Image
@@ -165,59 +165,6 @@ export default async function PhotoDetailPage({ params }: Props) {
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
-        </div>
-
-        {/* Previous / Next Project Navigation Bar */}
-        <div className="mt-20 pt-8 border-t border-ink/10 grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {prevPhoto && (
-            <Link
-              href={`/work/${prevPhoto.slug}`}
-              className="group flex items-center space-x-4 p-4 border border-ink/10 hover:border-ink transition-colors bg-canvas-muted/30"
-            >
-              <div className="relative w-16 h-16 shrink-0 overflow-hidden bg-canvas-muted">
-                <Image
-                  src={prevPhoto.imageUrl}
-                  alt={prevPhoto.imageAlt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="overflow-hidden">
-                <p className="text-[10px] tracking-ultra text-bronze uppercase flex items-center space-x-1">
-                  <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-                  <span>PREVIOUS PHOTOGRAPH</span>
-                </p>
-                <p className="font-serif text-lg text-ink truncate group-hover:text-bronze transition-colors">
-                  {prevPhoto.title}
-                </p>
-              </div>
-            </Link>
-          )}
-
-          {nextPhoto && (
-            <Link
-              href={`/work/${nextPhoto.slug}`}
-              className="group flex items-center justify-between sm:justify-end space-x-4 p-4 border border-ink/10 hover:border-ink transition-colors bg-canvas-muted/30 text-right"
-            >
-              <div className="overflow-hidden">
-                <p className="text-[10px] tracking-ultra text-bronze uppercase flex items-center justify-end space-x-1">
-                  <span>NEXT PHOTOGRAPH</span>
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </p>
-                <p className="font-serif text-lg text-ink truncate group-hover:text-bronze transition-colors">
-                  {nextPhoto.title}
-                </p>
-              </div>
-              <div className="relative w-16 h-16 shrink-0 overflow-hidden bg-canvas-muted">
-                <Image
-                  src={nextPhoto.imageUrl}
-                  alt={nextPhoto.imageAlt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </Link>
-          )}
         </div>
       </main>
 

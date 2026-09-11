@@ -22,7 +22,7 @@ export default async function HomePage() {
   return (
     <main className="relative min-h-screen bg-canvas text-ink overflow-x-hidden selection:bg-ink selection:text-canvas">
       {/* Editorial Floating Navbar */}
-      <Navbar siteName={settings?.photographerName || "GAURAV "} />
+      <Navbar siteName={settings?.photographerName || "Gaurav D."} />
 
       {/* 1. Hero Section (Split Typography & Multi-Image Art-Directed Composition) */}
       <Hero

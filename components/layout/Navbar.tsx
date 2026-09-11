@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
+export function Navbar({ siteName = "Gaurav D." }: { siteName?: string }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);

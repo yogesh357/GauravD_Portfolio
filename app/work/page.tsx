@@ -32,7 +32,7 @@ export default async function WorkArchivePage() {
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
-      <Navbar siteName={settings?.photographerName || "GAURAV "} />
+      <Navbar siteName={settings?.photographerName || "Gaurav D."} />
 
       <main className="pt-20 sm:pt-28 pb-16">
         {/* Full Gallery Archive with K72 Scroll & Page Load Animation */}
