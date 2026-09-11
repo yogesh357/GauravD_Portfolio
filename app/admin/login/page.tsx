@@ -74,7 +74,7 @@ function LoginForm() {
             <input
               type="email"
               required
-              placeholder="gauravxd153@gmail.com"
+              placeholder="gaurav@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-white/5 border border-white/15 px-4 py-3 pl-10 rounded text-xs text-canvas placeholder:text-canvas/30 focus:border-bronze focus:outline-none transition-colors"
