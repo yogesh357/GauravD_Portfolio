@@ -10,8 +10,8 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const fromUrl = searchParams.get("from") || "/admin";
 
-  const [email, setEmail] = useState("gaurav@gmail.com");
-  const [password, setPassword] = useState("Gaurav@1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -74,7 +74,7 @@ function LoginForm() {
             <input
               type="email"
               required
-              placeholder="gaurav@gmail.com"
+              placeholder="gauravxd153@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-white/5 border border-white/15 px-4 py-3 pl-10 rounded text-xs text-canvas placeholder:text-canvas/30 focus:border-bronze focus:outline-none transition-colors"
@@ -104,15 +104,6 @@ function LoginForm() {
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
-        </div>
-
-        {/* Demo Credentials Info Box */}
-        <div className="bg-bronze/10 border border-bronze/20 p-3 rounded text-[11px] text-bronze-light font-mono space-y-1">
-          <p className="font-sans font-medium uppercase tracking-wider text-[10px] text-bronze">
-            AUTHENTICATED SEED CREDENTIALS
-          </p>
-          <p className="text-canvas/70">Email: <span className="text-canvas">gaurav@gmail.com</span></p>
-          <p className="text-canvas/70">Password: <span className="text-canvas">Gaurav@1234</span></p>
         </div>
 
         <button
@@ -154,7 +145,7 @@ export default function AdminLoginPage() {
 
       {/* Bottom Footer Note */}
       <div className="relative z-10 text-center text-[10px] tracking-widest text-canvas/30 uppercase">
-        © {new Date().getFullYear()} GAURAV D. STUDIO • ALL RIGHTS RESERVED
+        © {new Date().getFullYear()} GAURAV DAMAHE STUDIO • ALL RIGHTS RESERVED
       </div>
     </div>
   );

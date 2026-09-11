@@ -260,7 +260,7 @@ export function Hero({
           {/* Name Plate with Horizontal Divider Line */}
           <div className="hero-reveal-meta flex items-center space-x-3 sm:space-x-4 pt-2">
             <span className="text-xs sm:text-sm tracking-[0.22em] uppercase text-ink font-mono font-medium whitespace-nowrap">
-              GAURAV Damahe
+              {photographerName}
             </span>
             <div className="h-[1px] w-24 sm:w-36 bg-ink/35" />
           </div>

@@ -1,4 +1,4 @@
-# Gaurav D. — Fine Art & Editorial Photographer Portfolio & Studio CMS
+# Gaurav Damahe — Fine Art & Editorial Photographer Portfolio & Studio CMS
 
 A bespoke, production-ready editorial portfolio website and studio content management system built for professional fine-art and commercial photographers. Designed with an intentional, photography-first aesthetic inspired by high-end contemporary art galleries, luxury magazines, and cinematic visual pacing.
 
@@ -9,17 +9,15 @@ A bespoke, production-ready editorial portfolio website and studio content manag
 - **Editorial Visual Language**: Warm ivory paper canvas (`#F4F1EB`), deep carbon typography (`#111111`), muted warm bronze accents, and elegant typography pairing (`Cormorant Garamond` display serif + `Inter` clean sans).
 - **GSAP & @gsap/react Motion Engine**: Smooth clip-path reveals (`inset(100% 0 0 0)` → `inset(0 0 0 0)`), subtle scroll-driven parallax, word-staggered headline reveals, and floating navigation dock morphing with automatic `prefers-reduced-motion` compliance.
 - **Relational PostgreSQL / Neon Architecture**: Normalized schema modeled with **Drizzle ORM** (`categories`, `photos`, `site_settings`), foreign keys, and indexes on slugs, categories, display order, and publishing status.
-- **Resilient Zero-Friction Storage & DB Engine**: Connects directly to Neon PostgreSQL or runs seamlessly out of the box with the included 16+ curated high-res fine-art photographs.
-- **Abstracted Image Storage Layer**: Decoupled interface (`lib/storage/index.ts`) supporting zero-cost local uploads (`/api/upload`) as well as pluggable adapters for Cloudinary, AWS S3, or Vercel Blob.
+- **Abstracted Image Storage Layer**: Decoupled interface (`lib/storage/index.ts`) supporting direct Cloudinary CDN stream buffer uploads as well as local filesystem uploads (`/public/uploads`).
 - **Dynamic Category Filter & Gallery Showcase**: Database-driven category tabs (`All`, `Portraits`, `Architecture`, `Landscapes`, `Street`, `Editorial`, `Travel`) with smooth GSAP transition animations and zero layout shifts.
 - **Cinematic Photo Detail Pages (`/work/[slug]`)**: Full-bleed responsive high-resolution presentation, detailed technical EXIF metadata (Camera, Lens, Aperture, ISO, Coordinates, Date), previous/next navigation, and dynamic OpenGraph/Twitter SEO tags.
 - **Studio Content Management System (`/admin`)**:
-  - `/admin`: Dashboard with live metrics (total photos, published, featured, categories, storage status).
-  - `/admin/photos`: Catalog inventory with live search, category filtering, instant publish/featured toggles, and deletion.
-  - `/admin/photos/new` & `/admin/photos/[id]`: Photo creator/editor with direct image URL support or local file drag-and-drop upload, automatic slug generator, camera EXIF fields, aspect ratio selection, and live preview.
+  - `/admin`: Dashboard with live metrics (total photos, published, drafts, categories, storage status).
+  - `/admin/photos`: Catalog inventory with live search, category filtering, instant publish toggles, and deletion.
+  - `/admin/photos/new` & `/admin/photos/[id]`: Photo creator/editor with direct drag-and-drop Cloudinary/local upload, automatic slug generator, camera EXIF fields, aspect ratio selection, and live preview.
   - `/admin/categories`: Category taxonomy manager with display order prioritization.
   - `/admin/settings`: Studio configuration (photographer wordmark, tagline, artist bio, email, Instagram, international studio locations).
-- **Global Studio World Clocks**: Live time widgets for Paris (CET) and Tokyo (JST) ateliers.
 
 ---
 
@@ -33,6 +31,7 @@ A bespoke, production-ready editorial portfolio website and studio content manag
 | **Animation** | GSAP 3 + `@gsap/react` + `ScrollTrigger` |
 | **Database** | PostgreSQL (Neon serverless compatible) |
 | **ORM** | Drizzle ORM + Drizzle Kit |
+| **Cloud Storage** | Cloudinary + Local Storage fallback |
 | **Validation** | Zod (Client and Server-side enforcement) |
 | **Icons** | Lucide React |
 
@@ -57,18 +56,18 @@ cp .env.example .env.local
 Configure your environment variables in `.env.local`:
 
 ```env
-# Optional: Neon / PostgreSQL database URL. (If left blank, the app uses the built-in seed store)
+# Neon / PostgreSQL database URL
 DATABASE_URL="postgresql://neondb_owner:password@ep-sample-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
 # JWT Secret for Session Signing
 JWT_SECRET="gauravd-secure-jwt-secret-key-2026-studio-art"
 
 # Default Admin Credentials (Seeded into Database)
-# Email: gaurav@gmail.com
-# Password: Gaurav@1234
+# Email: gauravxd153@gmail.com
+# Password: GCOEARA_cha_ladaka_gaurav
 
 # Public site settings
-NEXT_PUBLIC_SITE_NAME="Gaurav D. — Visual Artist & Photographer"
+NEXT_PUBLIC_SITE_NAME="Gaurav Damahe — Visual Artist & Photographer"
 NEXT_PUBLIC_SITE_URL="http://localhost:3000"
 
 # Optional: Cloudinary Storage (if using remote CDN upload)

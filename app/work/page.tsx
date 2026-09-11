@@ -7,11 +7,11 @@ import { Footer } from "@/components/layout/Footer";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Complete Works Archive — Gaurav  Photography",
+  title: "Complete Works Archive — Gaurav Damahe Photography",
   description:
-    "Explore the complete catalog of fine art photographs, editorial essays, and architectural studies by Gaurav ",
+    "Explore the complete catalog of fine art photographs, editorial essays, and street documentation by Gaurav Damahe.",
   openGraph: {
-    title: "Complete Works Archive — Gaurav  Photography",
+    title: "Complete Works Archive — Gaurav Damahe Photography",
     description: "Fine art photography portfolio across portraits, architecture, landscapes, and street.",
     images: [
       {
@@ -33,7 +33,7 @@ export default async function WorkArchivePage() {
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
       <Navbar
-        siteName={settings?.photographerName || "Gaurav D."}
+        siteName={settings?.photographerName || "Gaurav Damahe"}
         instagram={settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_"}
         email={settings?.email || "gauravxd153@gmail.com"}
         location={settings?.location || "Pune / Mumbai, Maharashtra"}
@@ -49,7 +49,7 @@ export default async function WorkArchivePage() {
       </main>
 
       <Footer
-        siteName={settings?.photographerName || "Gaurav"}
+        siteName={settings?.photographerName || "Gaurav Damahe"}
         location={settings?.location || "Pune / Mumbai"}
       />
     </div>

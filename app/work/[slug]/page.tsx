@@ -52,7 +52,7 @@ export default async function PhotoDetailPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
       <Navbar
-        siteName={settings?.photographerName || "Gaurav D."}
+        siteName={settings?.photographerName || "Gaurav Damahe"}
         instagram={settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_"}
         email={settings?.email || "gauravxd153@gmail.com"}
         location={settings?.location || "Pune / Mumbai, Maharashtra"}

@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUp } from "lucide-react";
 
 export function Footer({
-  siteName = "GAURAV",
+  siteName = "Gaurav Damahe",
   location = "PUNE / MUMBAI",
 }: {
   siteName?: string;

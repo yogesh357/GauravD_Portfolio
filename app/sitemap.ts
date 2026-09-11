@@ -9,7 +9,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${baseUrl}/work/${photo.slug}`,
     lastModified: new Date(photo.updatedAt || new Date()),
     changeFrequency: "monthly",
-    priority: photo.featured ? 0.9 : 0.7,
+    priority: 0.8,
   }));
 
   return [

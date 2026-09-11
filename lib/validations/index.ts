@@ -11,7 +11,6 @@ export const photoSchema = z.object({
   shotAt: z.string().max(100).optional().nullable(),
   cameraSpecs: z.string().max(255).optional().nullable(),
   aspectRatio: z.enum(["4/5", "16/10", "3/4", "1/1", "2/3"]).default("4/5"),
-  featured: z.boolean().default(false),
   published: z.boolean().default(true),
   displayOrder: z.coerce.number().int().default(0),
 });

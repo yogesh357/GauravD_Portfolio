@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Photo, Category } from "@/lib/db/schema";
 import { savePhotoAction } from "@/app/admin/actions";
 import { slugify } from "@/lib/utils";
-import { Upload, Link2, ArrowLeft, Check, AlertCircle } from "lucide-react";
+import { Upload, ArrowLeft, Check, AlertCircle, RefreshCw, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 interface PhotoFormProps {
@@ -19,6 +19,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
 
   const [title, setTitle] = useState(initialPhoto?.title || "");
   const [slug, setSlug] = useState(initialPhoto?.slug || "");
@@ -33,7 +34,6 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
   const [shotAt, setShotAt] = useState(initialPhoto?.shotAt || "");
   const [cameraSpecs, setCameraSpecs] = useState(initialPhoto?.cameraSpecs || "");
   const [aspectRatio, setAspectRatio] = useState(initialPhoto?.aspectRatio || "4/5");
-  const [featured, setFeatured] = useState(initialPhoto?.featured ?? false);
   const [published, setPublished] = useState(initialPhoto?.published ?? true);
   const [displayOrder, setDisplayOrder] = useState(initialPhoto?.displayOrder ?? 0);
 
@@ -53,6 +53,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
     if (!file) return;
 
     setUploading(true);
+    setUploadSuccess(false);
     setErrorMsg(null);
 
     try {
@@ -71,6 +72,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
 
       const data = await res.json();
       setImageUrl(data.url);
+      setUploadSuccess(true);
     } catch (err: unknown) {
       setErrorMsg(err instanceof Error ? err.message : "Failed to upload file");
     } finally {
@@ -81,6 +83,11 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMsg(null);
+
+    if (!imageUrl) {
+      setErrorMsg("Please upload an image for this photograph before saving.");
+      return;
+    }
 
     const formData = new FormData();
     if (initialPhoto?.id) {
@@ -96,7 +103,6 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
     formData.append("shotAt", shotAt);
     formData.append("cameraSpecs", cameraSpecs);
     formData.append("aspectRatio", aspectRatio);
-    formData.append("featured", featured ? "true" : "false");
     formData.append("published", published ? "true" : "false");
     formData.append("displayOrder", String(displayOrder));
 
@@ -122,8 +128,8 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>RETURN TO INVENTORY</span>
         </Link>
-        <span className="text-xs text-bronze uppercase tracking-ultra">
-          {initialPhoto ? "EDITING ENTRY" : "NEW REGISTRATION"}
+        <span className="text-xs text-bronze uppercase tracking-ultra font-mono">
+          {initialPhoto ? "EDITING ENTRY" : "NEW PHOTOGRAPH REGISTRATION"}
         </span>
       </div>
 
@@ -135,7 +141,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Left Column: Essential Details */}
+        {/* Left Column: Essential Metadata */}
         <div className="lg:col-span-7 space-y-6">
           <div>
             <label className="block text-xs font-sans tracking-widest uppercase text-canvas/70 mb-2">
@@ -207,7 +213,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
               </label>
               <input
                 type="text"
-                placeholder="e.g. Paris, France"
+                placeholder="e.g. Pune, Maharashtra"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="w-full bg-white/5 border border-white/15 px-4 py-2.5 rounded text-xs text-canvas focus:border-bronze focus:outline-none"
@@ -234,7 +240,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
             </label>
             <input
               type="text"
-              placeholder="e.g. Leica M11 • Summilux-M 50mm f/1.4 ASPH • 1/250s f/2.0 ISO 100"
+              placeholder="e.g. Canon M50 Mark II • EF-M 22mm f/2 STM • 1/500s f/2.8 ISO 100"
               value={cameraSpecs}
               onChange={(e) => setCameraSpecs(e.target.value)}
               className="w-full bg-white/5 border border-white/15 px-4 py-2.5 rounded text-xs font-mono text-canvas/90 focus:border-bronze focus:outline-none"
@@ -272,8 +278,8 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
             </div>
           </div>
 
-          {/* Featured & Published Switches */}
-          <div className="flex items-center space-x-8 pt-4 border-t border-white/10">
+          {/* Published Switch */}
+          <div className="pt-4 border-t border-white/10">
             <label className="flex items-center space-x-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -285,51 +291,45 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
                 PUBLISH TO LIVE SITE
               </span>
             </label>
-
-            <label className="flex items-center space-x-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={featured}
-                onChange={(e) => setFeatured(e.target.checked)}
-                className="w-4 h-4 rounded border-white/20 accent-bronze"
-              />
-              <span className="text-xs font-sans tracking-widest uppercase text-amber-300">
-                FEATURE IN HERO / HIGHLIGHTS
-              </span>
-            </label>
           </div>
         </div>
 
-        {/* Right Column: Visual Source & Realtime Preview */}
+        {/* Right Column: Direct File Upload & Live Preview */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white/[0.02] border border-white/10 p-6 rounded space-y-4">
-            <p className="text-xs tracking-ultra uppercase text-bronze">
-              IMAGE SOURCE (URL OR FILE UPLOAD)
-            </p>
-
-            <div>
-              <label className="block text-[11px] uppercase tracking-widest text-canvas/50 mb-1.5">
-                Image Web URL (Unsplash / CDN / S3)
-              </label>
-              <div className="relative">
-                <Link2 className="w-4 h-4 text-canvas/40 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="url"
-                  placeholder="https://images.unsplash.com/photo-..."
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  className="w-full bg-white/5 border border-white/15 pl-9 pr-4 py-2.5 rounded text-xs font-mono text-canvas placeholder:text-canvas/30 focus:border-bronze focus:outline-none"
-                />
-              </div>
+          <div className="bg-white/[0.02] border border-white/10 p-6 rounded space-y-5">
+            <div className="flex items-center justify-between">
+              <p className="text-xs tracking-ultra uppercase text-bronze font-mono">
+                IMAGE UPLOAD (CLOUDINARY / STORAGE)
+              </p>
+              {imageUrl && (
+                <span className="inline-flex items-center space-x-1 text-[10px] text-emerald-400 font-mono">
+                  <CheckCircle2 className="w-3 h-3" />
+                  <span>UPLOADED</span>
+                </span>
+              )}
             </div>
 
-            <div className="relative flex items-center justify-center border-t border-white/10 pt-4">
-              <label className="w-full flex flex-col items-center justify-center p-6 border-2 border-dashed border-white/15 hover:border-bronze rounded cursor-pointer transition-colors bg-white/[0.01]">
-                <Upload className="w-6 h-6 text-bronze mb-2" />
-                <span className="text-xs tracking-widest uppercase text-canvas/80">
-                  {uploading ? "UPLOADING TO STORAGE..." : "OR UPLOAD LOCAL IMAGE"}
-                </span>
-                <span className="text-[10px] text-canvas/40 mt-1">JPEG, PNG, WebP up to 10MB</span>
+            {/* Direct File Dropzone */}
+            <div className="relative flex items-center justify-center">
+              <label className="w-full flex flex-col items-center justify-center p-8 border-2 border-dashed border-white/15 hover:border-bronze rounded cursor-pointer transition-all bg-white/[0.01] hover:bg-white/[0.03]">
+                {uploading ? (
+                  <div className="flex flex-col items-center space-y-3 py-2">
+                    <RefreshCw className="w-8 h-8 text-bronze animate-spin" />
+                    <span className="text-xs font-mono tracking-widest uppercase text-canvas/80">
+                      UPLOADING TO STORAGE...
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center space-y-2 py-2 text-center">
+                    <Upload className="w-8 h-8 text-bronze mb-1" />
+                    <span className="text-xs font-medium tracking-widest uppercase text-canvas">
+                      {imageUrl ? "CLICK TO REPLACE IMAGE FILE" : "SELECT OR DROP IMAGE FILE"}
+                    </span>
+                    <span className="text-[10px] text-canvas/40 font-mono">
+                      JPEG, PNG, WebP up to 10MB &bull; Automatic Optimization
+                    </span>
+                  </div>
+                )}
                 <input
                   type="file"
                   accept="image/*"
@@ -339,6 +339,15 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
                 />
               </label>
             </div>
+
+            {imageUrl && (
+              <div className="p-3 bg-white/5 rounded border border-white/10 text-[11px] font-mono text-canvas/70 break-all">
+                <span className="text-bronze text-[10px] block uppercase tracking-widest mb-1">
+                  SECURE STORAGE URL
+                </span>
+                {imageUrl}
+              </div>
+            )}
 
             <div>
               <label className="block text-[11px] uppercase tracking-widest text-canvas/50 mb-1.5">
@@ -357,7 +366,7 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
 
           {/* Live Preview Card */}
           <div className="space-y-2">
-            <p className="text-[11px] tracking-ultra text-canvas/50 uppercase">
+            <p className="text-[11px] tracking-ultra text-canvas/50 uppercase font-mono">
               LIVE EDITORIAL PREVIEW
             </p>
             <div className="border border-white/10 p-4 rounded bg-white/[0.02]">
@@ -375,12 +384,12 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-canvas/30 text-xs tracking-widest uppercase">
-                    No image configured yet
+                    No image uploaded yet
                   </div>
                 )}
               </div>
               <div className="mt-3">
-                <span className="text-[10px] tracking-ultra text-bronze uppercase">
+                <span className="text-[10px] tracking-ultra text-bronze uppercase font-mono">
                   {categories.find((c) => c.id === categoryId)?.name || "CATEGORY"} • {location || "LOCATION"}
                 </span>
                 <p className="font-serif text-lg text-canvas truncate mt-0.5">

@@ -20,13 +20,12 @@ export async function savePhotoAction(formData: FormData) {
       slug: (formData.get("slug") as string) || "",
       description: (formData.get("description") as string) || null,
       imageUrl: formData.get("imageUrl") as string,
-      imageAlt: (formData.get("imageAlt") as string) || formData.get("title") as string,
+      imageAlt: (formData.get("imageAlt") as string) || (formData.get("title") as string),
       categoryId: formData.get("categoryId") as string,
       location: (formData.get("location") as string) || null,
       shotAt: (formData.get("shotAt") as string) || null,
       cameraSpecs: (formData.get("cameraSpecs") as string) || null,
       aspectRatio: (formData.get("aspectRatio") as "4/5" | "16/10" | "3/4" | "1/1" | "2/3") || "4/5",
-      featured: formData.get("featured") === "true" || formData.get("featured") === "on",
       published: formData.get("published") === "true" || formData.get("published") === "on",
       displayOrder: Number(formData.get("displayOrder") || 0),
     };
@@ -40,6 +39,7 @@ export async function savePhotoAction(formData: FormData) {
     }
 
     revalidatePath("/");
+    revalidatePath("/work");
     revalidatePath("/work/[slug]", "page");
     revalidatePath("/admin");
     revalidatePath("/admin/photos");
@@ -55,6 +55,7 @@ export async function deletePhotoAction(id: string) {
   try {
     await deletePhoto(id);
     revalidatePath("/");
+    revalidatePath("/work");
     revalidatePath("/admin");
     revalidatePath("/admin/photos");
     return { success: true };
@@ -69,19 +70,7 @@ export async function togglePublishAction(id: string, currentStatus: boolean) {
     const nextStatus = !currentStatus;
     await updatePhoto(id, { published: nextStatus });
     revalidatePath("/");
-    revalidatePath("/admin/photos");
-    return { success: true, newStatus: nextStatus };
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Toggle failed";
-    return { success: false, error: message };
-  }
-}
-
-export async function toggleFeaturedAction(id: string, currentStatus: boolean) {
-  try {
-    const nextStatus = !currentStatus;
-    await updatePhoto(id, { featured: nextStatus });
-    revalidatePath("/");
+    revalidatePath("/work");
     revalidatePath("/admin/photos");
     return { success: true, newStatus: nextStatus };
   } catch (err: unknown) {
@@ -109,6 +98,7 @@ export async function saveCategoryAction(formData: FormData) {
     }
 
     revalidatePath("/");
+    revalidatePath("/work");
     revalidatePath("/admin");
     revalidatePath("/admin/categories");
     return { success: true };
@@ -122,6 +112,7 @@ export async function deleteCategoryAction(id: string) {
   try {
     await deleteCategory(id);
     revalidatePath("/");
+    revalidatePath("/work");
     revalidatePath("/admin");
     revalidatePath("/admin/categories");
     return { success: true };
@@ -147,6 +138,7 @@ export async function updateSettingsAction(formData: FormData) {
     await updateSiteSettings(validated);
 
     revalidatePath("/");
+    revalidatePath("/work");
     revalidatePath("/admin");
     return { success: true };
   } catch (err: unknown) {

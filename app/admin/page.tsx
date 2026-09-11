@@ -25,7 +25,7 @@ export default async function AdminDashboardPage() {
 
   const totalPhotos = photos.length;
   const publishedPhotos = photos.filter((p) => p.published).length;
-  const featuredPhotos = photos.filter((p) => p.featured).length;
+  const draftPhotos = totalPhotos - publishedPhotos;
   const totalCategories = categories.length;
   const storage = getStorageProvider();
 
@@ -82,11 +82,11 @@ export default async function AdminDashboardPage() {
 
         <div className="bg-white/[0.03] border border-white/10 p-5 rounded space-y-2">
           <div className="flex items-center justify-between text-canvas/50 text-xs">
-            <span className="tracking-widest uppercase">FEATURED WORKS</span>
-            <Star className="w-4 h-4 text-amber-400" />
+            <span className="tracking-widest uppercase">DRAFT ARCHIVE</span>
+            <Images className="w-4 h-4 text-amber-400" />
           </div>
-          <p className="font-serif text-3xl sm:text-4xl text-canvas">{featuredPhotos}</p>
-          <p className="text-[10px] text-canvas/40 tracking-wider">Hero & curated grid</p>
+          <p className="font-serif text-3xl sm:text-4xl text-canvas">{draftPhotos}</p>
+          <p className="text-[10px] text-canvas/40 tracking-wider">Unpublished works</p>
         </div>
 
         <div className="bg-white/[0.03] border border-white/10 p-5 rounded space-y-2">
@@ -105,7 +105,7 @@ export default async function AdminDashboardPage() {
           <div className="flex items-center space-x-2">
             <Database className="w-4 h-4 text-emerald-400" />
             <span className="text-canvas/60">DATABASE:</span>
-            <span className="text-canvas">{process.env.DATABASE_URL ? "PostgreSQL / Neon" : "Drizzle Local Store"}</span>
+            <span className="text-canvas">{process.env.DATABASE_URL ? "PostgreSQL / Neon" : "Drizzle PostgreSQL"}</span>
           </div>
           <div className="flex items-center space-x-2">
             <HardDrive className="w-4 h-4 text-bronze" />
@@ -163,11 +163,6 @@ export default async function AdminDashboardPage() {
                 </div>
 
                 <div className="flex items-center space-x-4 text-xs font-mono">
-                  {photo.featured && (
-                    <span className="bg-amber-400/10 text-amber-300 border border-amber-400/20 px-2 py-0.5 rounded text-[10px]">
-                      FEATURED
-                    </span>
-                  )}
                   {photo.published ? (
                     <span className="bg-emerald-400/10 text-emerald-300 border border-emerald-400/20 px-2 py-0.5 rounded text-[10px]">
                       PUBLISHED

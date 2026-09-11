@@ -19,31 +19,32 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Gaurav  — Photographer & Visual Artist",
+  title: "Gaurav Damahe — Photographer & Visual Artist",
   description:
-    "Fine art photography and visual storytelling by Gaurav  Exploring the interplay of light, architectural form, human condition, and quiet solitude across Paris, Tokyo, and beyond.",
+    "Fine art photography, cultural documentary, and visual storytelling by Gaurav Damahe. Exploring light, fleeting human moments, and quiet solitude across Maharashtra and beyond.",
   keywords: [
+    "Gaurav Damahe",
     "Photographer",
     "Fine Art Photography",
+    "Street Photography",
     "Editorial Photography",
-    "Architecture Photography",
     "Portrait Photography",
-    "Paris Photographer",
-    "Tokyo Photographer",
-    "Leica Photography",
+    "Maharashtra Photographer",
+    "Pune Photographer",
+    "Mumbai Photographer",
   ],
-  authors: [{ name: "Gaurav " }],
+  authors: [{ name: "Gaurav Damahe" }],
   openGraph: {
-    title: "Gaurav  — Photographer & Visual Artist",
+    title: "Gaurav Damahe — Photographer & Visual Artist",
     description: "Fine art photography and visual storytelling framed in light.",
-    url: "https://gaurav.studio",
-    siteName: "Gaurav Photography",
+    url: "https://gaurav.yogeshworks.in",
+    siteName: "Gaurav Damahe Photography",
     images: [
       {
         url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop",
         width: 1600,
         height: 1066,
-        alt: "Gaurav Photography Hero Preview",
+        alt: "Gaurav Damahe Photography Hero Preview",
       },
     ],
     locale: "en_US",
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Gaurav  — Photographer & Visual Artist",
+    title: "Gaurav Damahe — Photographer & Visual Artist",
     description: "Fine art photography and visual storytelling framed in light.",
     images: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop"],
   },

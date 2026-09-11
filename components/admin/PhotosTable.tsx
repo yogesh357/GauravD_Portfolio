@@ -4,17 +4,12 @@ import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Photo, Category } from "@/lib/db/schema";
-import {
-  togglePublishAction,
-  toggleFeaturedAction,
-  deletePhotoAction,
-} from "@/app/admin/actions";
+import { togglePublishAction, deletePhotoAction } from "@/app/admin/actions";
 import {
   Search,
   ExternalLink,
   Edit,
   Trash2,
-  Star,
   Eye,
   EyeOff,
   Filter,
@@ -53,18 +48,6 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
         const updatedStatus = res.newStatus;
         setPhotos((prev) =>
           prev.map((p) => (p.id === id ? { ...p, published: updatedStatus } : p))
-        );
-      }
-    });
-  };
-
-  const handleToggleFeatured = (id: string, current: boolean) => {
-    startTransition(async () => {
-      const res = await toggleFeaturedAction(id, current);
-      if (res.success && typeof res.newStatus === "boolean") {
-        const updatedStatus = res.newStatus;
-        setPhotos((prev) =>
-          prev.map((p) => (p.id === id ? { ...p, featured: updatedStatus } : p))
         );
       }
     });
@@ -133,7 +116,6 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
               <th className="p-4">Title & Story</th>
               <th className="p-4">Category</th>
               <th className="p-4">Location & Specs</th>
-              <th className="p-4 text-center">Featured</th>
               <th className="p-4 text-center">Status</th>
               <th className="p-4 text-right">Actions</th>
             </tr>
@@ -170,20 +152,6 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
                   <p className="text-[10px] text-canvas/40 font-mono truncate max-w-[160px]">
                     {photo.cameraSpecs || "—"}
                   </p>
-                </td>
-                <td className="p-4 text-center">
-                  <button
-                    onClick={() => handleToggleFeatured(photo.id, photo.featured)}
-                    disabled={isPending}
-                    className={`p-1.5 rounded transition-colors ${
-                      photo.featured
-                        ? "text-amber-400 hover:bg-amber-400/20"
-                        : "text-canvas/20 hover:text-canvas/60"
-                    }`}
-                    title={photo.featured ? "Unfeature" : "Mark as Featured"}
-                  >
-                    <Star className="w-4 h-4 fill-current" />
-                  </button>
                 </td>
                 <td className="p-4 text-center">
                   <button

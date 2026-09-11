@@ -16,14 +16,13 @@ export default async function HomePage() {
     getSiteSettings(),
   ]);
 
-  const featuredPhotos = allPhotos.filter((p) => p.featured);
-  const heroPhoto = featuredPhotos[0] || allPhotos[0];
+  const heroPhoto = allPhotos[0];
 
   return (
     <main className="relative min-h-screen bg-canvas text-ink overflow-x-hidden selection:bg-ink selection:text-canvas">
       {/* Editorial Floating Navbar */}
       <Navbar
-        siteName={settings?.photographerName || "Gaurav D."}
+        siteName={settings?.photographerName || "Gaurav Damahe"}
         instagram={settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_"}
         email={settings?.email || "gauravxd153@gmail.com"}
         location={settings?.location || "Pune / Mumbai, Maharashtra"}
@@ -54,7 +53,7 @@ export default async function HomePage() {
 
       {/* 6. Minimalist Editorial Footer with Studio Clocks */}
       <Footer
-        siteName={settings?.photographerName || "Gaurav"}
+        siteName={settings?.photographerName || "Gaurav Damahe"}
         location={settings?.location || "Pune / Mumbai"}
       />
     </main>

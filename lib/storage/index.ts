@@ -1,9 +1,12 @@
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
+
 export interface UploadResult {
   url: string;
   width?: number;
   height?: number;
   format?: string;
   size?: number;
+  publicId?: string;
 }
 
 export interface StorageProvider {
@@ -12,7 +15,7 @@ export interface StorageProvider {
   delete(fileUrl: string): Promise<boolean>;
 }
 
-// 1. Local Storage Provider (zero-cost, self-hosted in public/uploads)
+// 1. Local Storage Provider (zero-cost, self-hosted in public/uploads fallback)
 export class LocalStorageProvider implements StorageProvider {
   name = "local";
 
@@ -48,61 +51,82 @@ export class LocalStorageProvider implements StorageProvider {
   }
 }
 
-// 2. Cloudinary Storage Provider (Pluggable via env vars: CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME)
+// 2. Cloudinary Storage Provider (via official Cloudinary SDK)
 export class CloudinaryStorageProvider implements StorageProvider {
   name = "cloudinary";
 
-  async upload(fileBuffer: Buffer, filename: string, _mimeType: string): Promise<UploadResult> {
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const apiKey = process.env.CLOUDINARY_API_KEY;
-    const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-    if (!cloudName || !apiKey || !apiSecret) {
-      throw new Error("Cloudinary credentials not configured");
+  constructor() {
+    if (process.env.CLOUDINARY_URL) {
+      cloudinary.config({
+        cloudinary_url: process.env.CLOUDINARY_URL,
+      });
+    } else {
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+        secure: true,
+      });
     }
-
-    // Direct HTTP upload implementation to avoid bulky third-party SDK dependencies
-    const base64Data = `data:${_mimeType};base64,${fileBuffer.toString("base64")}`;
-    const timestamp = Math.round(new Date().getTime() / 1000);
-    const crypto = await import("crypto");
-    const signature = crypto
-      .createHash("sha1")
-      .update(`timestamp=${timestamp}${apiSecret}`)
-      .digest("hex");
-
-    const formData = new FormData();
-    formData.append("file", base64Data);
-    formData.append("api_key", apiKey);
-    formData.append("timestamp", String(timestamp));
-    formData.append("signature", signature);
-
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) {
-      throw new Error(`Cloudinary upload failed: ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    return {
-      url: data.secure_url,
-      width: data.width,
-      height: data.height,
-      format: data.format,
-      size: data.bytes,
-    };
   }
 
-  async delete(_fileUrl: string): Promise<boolean> {
-    return true;
+  async upload(fileBuffer: Buffer, filename: string, _mimeType: string): Promise<UploadResult> {
+    const baseName = filename.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_");
+
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "gaurav_photography",
+          public_id: `${Date.now()}_${baseName}`,
+          resource_type: "image",
+          transformation: [{ quality: "auto:best" }],
+        },
+        (error, result: UploadApiResponse | undefined) => {
+          if (error || !result) {
+            reject(new Error(error?.message || "Cloudinary upload failed"));
+            return;
+          }
+          resolve({
+            url: result.secure_url,
+            width: result.width,
+            height: result.height,
+            format: result.format,
+            size: result.bytes,
+            publicId: result.public_id,
+          });
+        }
+      );
+
+      uploadStream.end(fileBuffer);
+    });
+  }
+
+  async delete(fileUrl: string): Promise<boolean> {
+    try {
+      // Extract public_id if from Cloudinary
+      if (!fileUrl.includes("res.cloudinary.com")) return false;
+      const parts = fileUrl.split("/");
+      const uploadIndex = parts.indexOf("upload");
+      if (uploadIndex === -1) return false;
+      
+      const publicIdWithExt = parts.slice(uploadIndex + 2).join("/");
+      const publicId = publicIdWithExt.replace(/\.[^/.]+$/, "");
+
+      const result = await cloudinary.uploader.destroy(publicId);
+      return result.result === "ok";
+    } catch {
+      return false;
+    }
   }
 }
 
 // Storage Factory
 export function getStorageProvider(): StorageProvider {
-  if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
+  const hasCloudinaryEnv =
+    !!process.env.CLOUDINARY_URL ||
+    (!!process.env.CLOUDINARY_CLOUD_NAME && !!process.env.CLOUDINARY_API_KEY && !!process.env.CLOUDINARY_API_SECRET);
+
+  if (hasCloudinaryEnv) {
     return new CloudinaryStorageProvider();
   }
   return new LocalStorageProvider();

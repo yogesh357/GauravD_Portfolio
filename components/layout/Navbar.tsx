@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
 export function Navbar({
-  siteName = "Gaurav D.",
+  siteName = "Gaurav Damahe",
   instagram = "https://www.instagram.com/gaurav_unfiltered_",
   email = "gauravxd153@gmail.com",
   location = "Pune / Mumbai",
