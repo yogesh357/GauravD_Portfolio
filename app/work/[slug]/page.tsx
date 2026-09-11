@@ -57,7 +57,7 @@ export default async function PhotoDetailPage({ params }: Props) {
         {/* Top Back Navigation Breadcrumb */}
         <div className="mb-10 flex items-center justify-between border-b border-ink/10 pb-4 text-xs tracking-ultra uppercase text-ink-muted">
           <Link
-            href="/#portfolio"
+            href="/work"
             className="group inline-flex items-center space-x-2 text-ink hover:text-bronze transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1" />

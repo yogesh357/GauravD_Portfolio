@@ -57,10 +57,10 @@ export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
   );
 
   const navLinks = [
-    { label: "HOME", href: "/" },
-    { label: "ABOUT", href: "/#about" },
-    { label: "STORIES", href: "/#stories" },
-    { label: "CONTACT", href: "/#contact" },
+    { label: "WORK", href: "/work", isRoute: true },
+    { label: "ABOUT", href: "/#about", isRoute: false },
+    { label: "STORIES", href: "/#stories", isRoute: false },
+    { label: "CONTACT", href: "/#contact", isRoute: false },
   ];
 
   return (
@@ -93,16 +93,27 @@ export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8 text-xs tracking-widest uppercase font-sans">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="group relative text-ink hover:text-bronze transition-colors duration-300 py-1"
-              >
-                <span>{link.label}</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-bronze transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.isRoute ? (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="group relative text-ink hover:text-bronze transition-colors duration-300 py-1"
+                >
+                  <span>{link.label}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-bronze transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="group relative text-ink hover:text-bronze transition-colors duration-300 py-1"
+                >
+                  <span>{link.label}</span>
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-bronze transition-all duration-300 group-hover:w-full" />
+                </a>
+              )
+            )}
           </nav>
 
           {/* Right Action CTA */}
@@ -115,13 +126,13 @@ export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
             >
               INSTAGRAM
             </a>
-            <a
+            <Link
               href="/work"
               className="group inline-flex items-center space-x-1.5 text-xs font-medium tracking-widest uppercase px-4 py-2 rounded-full border border-ink/20 hover:border-ink hover:bg-ink hover:text-canvas transition-all duration-300 font-mono"
             >
               <span>EXPLORE</span>
               <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle Button */}
@@ -146,16 +157,27 @@ export function Navbar({ siteName = "GAURAV " }: { siteName?: string }) {
             NAVIGATION
           </p>
           <nav className="flex flex-col space-y-6">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="mobile-nav-item flex items-baseline justify-between border-b border-white/10 pb-4 text-2xl font-serif tracking-wide hover:text-bronze transition-colors"
-              >
-                <span>{link.label}</span>
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.isRoute ? (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mobile-nav-item flex items-baseline justify-between border-b border-white/10 pb-4 text-2xl font-serif tracking-wide hover:text-bronze transition-colors"
+                >
+                  <span>{link.label}</span>
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mobile-nav-item flex items-baseline justify-between border-b border-white/10 pb-4 text-2xl font-serif tracking-wide hover:text-bronze transition-colors"
+                >
+                  <span>{link.label}</span>
+                </a>
+              )
+            )}
           </nav>
         </div>
 

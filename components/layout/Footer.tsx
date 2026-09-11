@@ -91,16 +91,16 @@ export function Footer() {
         {/* Middle Tier: Navigation Links & Admin CMS */}
         <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-[11px]">
-            <a href="#portfolio" className="hover:text-canvas transition-colors">
+            <Link href="/work" className="hover:text-canvas transition-colors">
               WORK
-            </a>
-            <a href="#about" className="hover:text-canvas transition-colors">
+            </Link>
+            <a href="/#about" className="hover:text-canvas transition-colors">
               ABOUT
             </a>
-            <a href="#stories" className="hover:text-canvas transition-colors">
+            <a href="/#stories" className="hover:text-canvas transition-colors">
               STORIES
             </a>
-            <a href="#contact" className="hover:text-canvas transition-colors">
+            <a href="/#contact" className="hover:text-canvas transition-colors">
               CONTACT
             </a>
             <Link
