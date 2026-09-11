@@ -80,10 +80,10 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       if (portraitInnerRef.current) {
         gsap.fromTo(
           portraitInnerRef.current,
-          { yPercent: -4, scale: 1.05 },
+          { yPercent: -2, scale: 1.02 },
           {
-            yPercent: 5,
-            scale: 1.01,
+            yPercent: 2,
+            scale: 1.0,
             ease: "none",
             scrollTrigger: {
               trigger: el,
@@ -104,12 +104,12 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
       ref={containerRef}
       className="py-10 sm:py-14 lg:py-16 px-6 sm:px-12 max-w-7xl mx-auto border-t border-ink/10"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-11 items-start">
         {/* Left Column: Portrait & Location Tag */}
-        <div className="lg:col-span-5 flex flex-col items-center lg:items-start space-y-4">
+        <div className="w-full lg:w-[375px] shrink-0 flex flex-col items-center lg:items-start space-y-2.5">
           <div
             ref={portraitWrapperRef}
-            className="relative aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5] w-full max-w-md overflow-hidden bg-canvas-muted shadow-lg border border-ink/10 rounded-[2px]"
+            className="relative aspect-[1024/1416] w-full max-w-[375px] overflow-hidden bg-black shadow-xl border border-ink/15 rounded-[2px]"
           >
             <div ref={portraitInnerRef} className="relative w-full h-full">
               <Image
@@ -117,27 +117,27 @@ export function AboutPhotographer({ settings }: AboutPhotographerProps) {
                 alt="Gaurav Unfiltered with camera"
                 fill
                 priority
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 375px"
                 className="object-cover object-center"
               />
             </div>
           </div>
 
-          <div className="about-text-reveal w-full max-w-md flex items-center justify-between text-[11px] sm:text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-3 font-mono">
+          <div className="about-text-reveal w-full max-w-[375px] flex items-center justify-between text-[11px] sm:text-xs tracking-widest text-ink-muted uppercase border-b border-ink/10 pb-2 font-mono">
             <span className="font-semibold text-ink">GAURAV UNFILTERED</span>
             <span className="text-ink-muted">MAHARASHTRA, INDIA</span>
           </div>
         </div>
 
         {/* Right Column: Statement, Narrative & Badges */}
-        <div className="lg:col-span-7 flex flex-col space-y-5 lg:space-y-6 pt-1">
+        <div className="flex-1 min-w-0 flex flex-col space-y-3.5 lg:space-y-4">
           <div>
-            <div className="about-text-reveal flex items-center space-x-2.5 text-xs tracking-ultra uppercase text-ink-muted mb-2.5">
+            <div className="about-text-reveal flex items-center space-x-2.5 text-xs tracking-ultra uppercase text-ink-muted mb-2">
               <span className="text-bronze">•</span>
               <span>ABOUT & PERSPECTIVE</span>
             </div>
             <div className="overflow-hidden">
-              <h2 className="about-reveal-line font-serif text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-light text-ink leading-tight">
+              <h2 className="about-reveal-line font-serif text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-light text-ink leading-[1.1]">
                 Maharashtra — <span className="italic font-normal text-ink/90">Culture in Focus</span>
               </h2>
             </div>

@@ -412,7 +412,9 @@ export function PortfolioGrid({
 
                 <div className="flex items-baseline justify-between pt-0.5">
                   <h3 className="font-serif text-lg sm:text-xl font-light text-ink group-hover:text-bronze transition-colors">
-                    <Link href={`/work/${photo.slug}`}>{photo.title}</Link>
+                    <Link href={`/work/${photo.slug}`}>
+                      {photo.title}
+                    </Link>
                   </h3>
                   <Link
                     href={`/work/${photo.slug}`}

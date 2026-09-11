@@ -7,24 +7,22 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUp } from "lucide-react";
 
-export function Footer() {
-  const [parisTime, setParisTime] = useState<string>("");
-  const [tokyoTime, setTokyoTime] = useState<string>("");
+export function Footer({
+  siteName = "GAURAV",
+  location = "PUNE / MUMBAI",
+}: {
+  siteName?: string;
+  location?: string;
+} = {}) {
+  const [indiaTime, setIndiaTime] = useState<string>("");
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const updateClocks = () => {
       const now = new Date();
-      setParisTime(
-        now.toLocaleTimeString("en-GB", {
-          timeZone: "Europe/Paris",
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      );
-      setTokyoTime(
-        now.toLocaleTimeString("en-GB", {
-          timeZone: "Asia/Tokyo",
+      setIndiaTime(
+        now.toLocaleTimeString("en-IN", {
+          timeZone: "Asia/Kolkata",
           hour: "2-digit",
           minute: "2-digit",
         })
@@ -79,24 +77,19 @@ export function Footer() {
               href="/"
               className="font-serif text-2xl text-canvas tracking-wider hover:text-bronze transition-colors"
             >
-              GAURAV 
+              {siteName.toUpperCase()}
             </Link>
             <p className="text-[10px] text-canvas/40 tracking-ultra">
               FINE ART & EDITORIAL PHOTOGRAPHY STUDIO
             </p>
           </div>
 
-          {/* International Studio Time Clocks */}
-          <div className="flex items-center space-x-8 font-mono text-[11px]">
+          {/* Studio Time Clock */}
+          <div className="flex items-center space-x-6 font-mono text-[11px]">
             <div className="flex items-center space-x-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-canvas/50">PARIS:</span>
-              <span className="text-canvas">{parisTime || "12:00"} CET</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-canvas/50">TOKYO:</span>
-              <span className="text-canvas">{tokyoTime || "20:00"} JST</span>
+              <span className="text-canvas/50">{location.toUpperCase()}:</span>
+              <span className="text-canvas">{indiaTime || "12:00"} IST</span>
             </div>
           </div>
         </div>
@@ -104,16 +97,16 @@ export function Footer() {
         {/* Middle Tier: Navigation Links & Admin CMS */}
         <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex flex-wrap gap-x-8 gap-y-3 text-[11px]">
-            <a href="#portfolio" className="hover:text-canvas transition-colors">
+            <Link href="/work" className="hover:text-canvas transition-colors">
               WORK
-            </a>
-            <a href="#about" className="hover:text-canvas transition-colors">
+            </Link>
+            <a href="/#about" className="hover:text-canvas transition-colors">
               ABOUT
             </a>
-            <a href="#stories" className="hover:text-canvas transition-colors">
+            <a href="/#stories" className="hover:text-canvas transition-colors">
               STORIES
             </a>
-            <a href="#contact" className="hover:text-canvas transition-colors">
+            <a href="/#contact" className="hover:text-canvas transition-colors">
               CONTACT
             </a>
             <Link
@@ -136,9 +129,19 @@ export function Footer() {
         </div>
 
         {/* Bottom Tier: Copyright & Colophon */}
-        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2">
-          <p>© {new Date().getFullYear()} GAURAV ALL PHOTOGRAPHS COPYRIGHTED.</p>
-          <p>DESIGNED WITH EDITORIAL RESTRAINT • POWERED BY NEXT.JS & GSAP</p>
+        <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2 font-mono">
+          <p>© {new Date().getFullYear()} {siteName.toUpperCase()}. ALL PHOTOGRAPHS COPYRIGHTED.</p>
+          <div className="flex flex-wrap items-center gap-x-2 text-canvas/40">
+            <span>DESIGNED &amp; DEVELOPED BY</span>
+            <span className="text-canvas/80 font-medium tracking-widest">YOGESH</span>
+            <span className="text-canvas/30">•</span>
+            <a
+              href="tel:9763449839"
+              className="text-bronze hover:text-canvas transition-colors font-mono font-medium"
+            >
+              +91 9763449839
+            </a>
+          </div>
         </div>
       </div>
     </footer>

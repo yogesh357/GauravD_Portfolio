@@ -67,7 +67,7 @@ export const photos = pgTable(
 
 export const siteSettings = pgTable("site_settings", {
   id: varchar("id", { length: 50 }).primaryKey().default("default"),
-  photographerName: varchar("photographer_name", { length: 255 }).notNull().default("Gaurav D."),
+  photographerName: varchar("photographer_name", { length: 255 }).notNull().default("Gaurav Damahe"),
   tagline: varchar("tagline", { length: 255 }).notNull().default("Stories, framed in light."),
   bio: text("bio").notNull().default("I photograph people, places, and fleeting moments — searching for the quiet details that usually disappear."),
   email: varchar("email", { length: 255 }).notNull().default("gaurav@gauravd.studio"),

@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, Instagram, Phone, MapPin, Mail } from "lucide-react";
 import { SiteSettings } from "@/lib/db/schema";
 
 interface ContactSectionProps {
@@ -21,9 +21,11 @@ export function ContactSection({ settings }: ContactSectionProps) {
   });
   const containerRef = useRef<HTMLElement>(null);
 
-  const email = settings?.email || "gaurav@gaurav.studio";
-  const phone = settings?.phone || "+33 (0) 1 42 68 55 00";
-  const instagram = settings?.instagram || "https://instagram.com/gaurav.photo";
+  const name = settings?.photographerName || "Gaurav Damahe";
+  const phone = settings?.phone || "9699915638";
+  const address = settings?.location || "Pune / Mumbai, Maharashtra";
+  const email = settings?.email || "gauravxd153@gmail.com";
+  const instagram = settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_";
 
   useGSAP(
     () => {
@@ -88,10 +90,11 @@ export function ContactSection({ settings }: ContactSectionProps) {
           <span>COMMISSIONS & INQUIRIES</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
           {/* Left Column: Direct Inquiries & Studio Locations */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
-            <div className="space-y-4">
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+            {/* Heading & Intro Statement */}
+            <div className="space-y-3">
               <div className="overflow-hidden">
                 <h2 className="contact-line-reveal font-serif text-3xl sm:text-5xl font-light leading-[1.08]">
                   Have a story
@@ -102,61 +105,93 @@ export function ContactSection({ settings }: ContactSectionProps) {
                   worth framing?
                 </h2>
               </div>
-              <p className="contact-reveal text-canvas/70 text-sm sm:text-base font-light leading-relaxed">
-                Available for editorial assignments, fine-art prints, and creative collaborations worldwide. Reach out directly or send a message below.
+              <p className="contact-reveal text-canvas/70 text-sm sm:text-base font-light leading-relaxed pt-1">
+                Available for street photography, portraits, cultural visual essays, and travel commissions across Maharashtra and beyond. Reach out directly or send a message.
               </p>
             </div>
 
-            <div className="contact-reveal space-y-6 border-t border-white/10 pt-6">
-              <div>
-                <p className="text-[10px] tracking-ultra text-bronze uppercase mb-1.5">EMAIL & PHONE</p>
+            {/* Styled Contact Data: Name + 2x2 Tile Grid */}
+            <div className="contact-reveal space-y-3.5 border-t border-white/10 pt-4">
+              {/* Name Tag */}
+              <div className="flex items-baseline justify-between border-b border-white/5 pb-2">
+                <div>
+                  <p className="text-[10px] tracking-ultra text-bronze uppercase font-mono mb-0.5">DIRECT INQUIRIES</p>
+                  <h3 className="font-serif text-2xl sm:text-3xl text-canvas font-light">
+                    {name}
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono tracking-widest text-canvas/40 uppercase">
+                  MAHARASHTRA, IN
+                </span>
+              </div>
+
+              {/* 2x2 Compact Styled Info Grid */}
+              <div className="grid grid-cols-2 gap-2.5">
+                {/* 1. Phone */}
+                <a
+                  href={`tel:${phone}`}
+                  className="group flex flex-col justify-between p-3 rounded bg-white/[0.02] border border-white/10 hover:border-bronze/50 hover:bg-white/[0.05] transition-all duration-300"
+                >
+                  <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-canvas/40 uppercase mb-1.5">
+                    <span>DIRECT LINE</span>
+                    <Phone className="w-3 h-3 text-bronze group-hover:rotate-12 transition-transform duration-300" />
+                  </div>
+                  <span className="font-mono text-xs sm:text-sm text-canvas group-hover:text-bronze transition-colors font-medium">
+                    {phone.startsWith("+") ? phone : `+91 ${phone}`}
+                  </span>
+                </a>
+
+                {/* 2. Studio Location */}
+                <div className="flex flex-col justify-between p-3 rounded bg-white/[0.02] border border-white/10">
+                  <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-canvas/40 uppercase mb-1.5">
+                    <span>STUDIO BASE</span>
+                    <MapPin className="w-3 h-3 text-bronze" />
+                  </div>
+                  <span className="text-xs sm:text-sm text-canvas font-medium truncate">
+                    {address}
+                  </span>
+                </div>
+
+                {/* 3. Email */}
                 <a
                   href={`mailto:${email}`}
-                  className="font-serif text-2xl sm:text-3xl text-canvas hover:text-bronze transition-colors"
+                  className="group flex flex-col justify-between p-3 rounded bg-white/[0.02] border border-white/10 hover:border-bronze/50 hover:bg-white/[0.05] transition-all duration-300"
                 >
-                  {email}
+                  <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-canvas/40 uppercase mb-1.5">
+                    <span>EMAIL</span>
+                    <Mail className="w-3 h-3 text-bronze group-hover:translate-x-0.5 transition-transform duration-300" />
+                  </div>
+                  <span className="font-mono text-xs sm:text-sm text-canvas group-hover:text-bronze transition-colors truncate font-medium">
+                    {email}
+                  </span>
                 </a>
-                <p className="text-xs text-canvas/50 font-mono pt-1">{phone}</p>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4 text-xs tracking-widest uppercase text-canvas/60">
-                <div>
-                  <p className="text-white font-medium mb-1">PARIS</p>
-                  <p>18 Rue Vivienne</p>
-                  <p>75002 Paris, France</p>
-                </div>
-                <div>
-                  <p className="text-white font-medium mb-1">TOKYO</p>
-                  <p>Minami-Aoyama</p>
-                  <p>Minato-ku, Tokyo</p>
-                </div>
-              </div>
-
-              <div className="pt-1 flex items-center space-x-6 text-xs tracking-widest uppercase">
+                {/* 4. Instagram */}
                 <a
                   href={instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-1 text-bronze hover:text-white transition-colors"
+                  className="group flex flex-col justify-between p-3 rounded bg-white/[0.02] border border-white/10 hover:border-bronze/50 hover:bg-white/[0.05] transition-all duration-300"
                 >
-                  <span>INSTAGRAM</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-                <a
-                  href="https://behance.net"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-1 text-canvas/70 hover:text-white transition-colors"
-                >
-                  <span>BEHANCE</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <div className="flex items-center justify-between text-[10px] font-mono tracking-widest text-canvas/40 uppercase mb-1.5">
+                    <span>INSTAGRAM</span>
+                    <Instagram className="w-3 h-3 text-bronze group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <div className="flex items-center justify-between font-mono text-xs sm:text-sm text-canvas group-hover:text-bronze transition-colors font-medium">
+                    <span className="truncate">
+                      {instagram.includes("instagram.com/")
+                        ? `@${instagram.split("instagram.com/")[1].replace(/\?.*/, "").replace(/\/$/, "")}`
+                        : "@gaurav_unfiltered_"}
+                    </span>
+                    <ArrowUpRight className="w-3 h-3 text-canvas/40 group-hover:text-bronze transition-colors ml-1 shrink-0" />
+                  </div>
                 </a>
               </div>
             </div>
           </div>
 
           {/* Right Column: Clean Form */}
-          <div className="contact-reveal lg:col-span-7 bg-white/[0.03] border border-white/10 p-6 sm:p-8">
+          <div className="contact-reveal lg:col-span-7 bg-white/[0.03] border border-white/10 p-6 sm:p-7">
             {formSubmitted ? (
               <div className="py-16 text-center space-y-4">
                 <CheckCircle2 className="w-12 h-12 text-bronze mx-auto" />

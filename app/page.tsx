@@ -22,7 +22,12 @@ export default async function HomePage() {
   return (
     <main className="relative min-h-screen bg-canvas text-ink overflow-x-hidden selection:bg-ink selection:text-canvas">
       {/* Editorial Floating Navbar */}
-      <Navbar siteName={settings?.photographerName || "GAURAV "} />
+      <Navbar
+        siteName={settings?.photographerName || "Gaurav D."}
+        instagram={settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_"}
+        email={settings?.email || "gauravxd153@gmail.com"}
+        location={settings?.location || "Pune / Mumbai, Maharashtra"}
+      />
 
       {/* 1. Hero Section (Split Typography & Multi-Image Art-Directed Composition) */}
       <Hero
@@ -48,7 +53,10 @@ export default async function HomePage() {
       <ContactSection settings={settings} />
 
       {/* 6. Minimalist Editorial Footer with Studio Clocks */}
-      <Footer />
+      <Footer
+        siteName={settings?.photographerName || "Gaurav"}
+        location={settings?.location || "Pune / Mumbai"}
+      />
     </main>
   );
 }

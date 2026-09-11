@@ -16,7 +16,7 @@ interface HeroProps {
 
 export function Hero({
   featuredPhoto,
-  photographerName = "Gaurav Dhamale",
+  photographerName = "Gaurav Damahe",
   tagline = "Maharastra Seen Through My Lens",
 }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -260,7 +260,7 @@ export function Hero({
           {/* Name Plate with Horizontal Divider Line */}
           <div className="hero-reveal-meta flex items-center space-x-3 sm:space-x-4 pt-2">
             <span className="text-xs sm:text-sm tracking-[0.22em] uppercase text-ink font-mono font-medium whitespace-nowrap">
-              GAURAV Dhamale
+              GAURAV Damahe
             </span>
             <div className="h-[1px] w-24 sm:w-36 bg-ink/35" />
           </div>
@@ -322,7 +322,7 @@ export function Hero({
             <div className="relative w-full h-full">
               <Image
                 src="/siteImages/gaurav_hero_cutout.png"
-                alt="Gaurav Dhamale — Gaurav Unfiltered"
+                alt="Gaurav Damahe — Gaurav Unfiltered"
                 fill
                 priority
                 sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 35vw"
