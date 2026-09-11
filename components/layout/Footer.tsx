@@ -7,7 +7,13 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUp } from "lucide-react";
 
-export function Footer() {
+export function Footer({
+  siteName = "GAURAV",
+  location = "PUNE / MUMBAI",
+}: {
+  siteName?: string;
+  location?: string;
+} = {}) {
   const [indiaTime, setIndiaTime] = useState<string>("");
   const footerRef = useRef<HTMLElement>(null);
 
@@ -71,7 +77,7 @@ export function Footer() {
               href="/"
               className="font-serif text-2xl text-canvas tracking-wider hover:text-bronze transition-colors"
             >
-              GAURAV
+              {siteName.toUpperCase()}
             </Link>
             <p className="text-[10px] text-canvas/40 tracking-ultra">
               FINE ART & EDITORIAL PHOTOGRAPHY STUDIO
@@ -82,7 +88,7 @@ export function Footer() {
           <div className="flex items-center space-x-6 font-mono text-[11px]">
             <div className="flex items-center space-x-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-canvas/50">PUNE / MUMBAI:</span>
+              <span className="text-canvas/50">{location.toUpperCase()}:</span>
               <span className="text-canvas">{indiaTime || "12:00"} IST</span>
             </div>
           </div>
@@ -124,7 +130,7 @@ export function Footer() {
 
         {/* Bottom Tier: Copyright & Colophon */}
         <div className="footer-reveal flex flex-col sm:flex-row justify-between items-start sm:items-center text-[10px] text-canvas/40 tracking-wider pt-4 border-t border-white/5 gap-2 font-mono">
-          <p>© {new Date().getFullYear()} GAURAV. ALL PHOTOGRAPHS COPYRIGHTED.</p>
+          <p>© {new Date().getFullYear()} {siteName.toUpperCase()}. ALL PHOTOGRAPHS COPYRIGHTED.</p>
           <div className="flex flex-wrap items-center gap-x-2 text-canvas/40">
             <span>DESIGNED &amp; DEVELOPED BY</span>
             <span className="text-canvas/80 font-medium tracking-widest">YOGESH</span>

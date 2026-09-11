@@ -7,7 +7,17 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
-export function Navbar({ siteName = "Gaurav D." }: { siteName?: string }) {
+export function Navbar({
+  siteName = "Gaurav D.",
+  instagram = "https://www.instagram.com/gaurav_unfiltered_",
+  email = "gauravxd153@gmail.com",
+  location = "Pune / Mumbai",
+}: {
+  siteName?: string;
+  instagram?: string;
+  email?: string;
+  location?: string;
+}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
@@ -119,7 +129,7 @@ export function Navbar({ siteName = "Gaurav D." }: { siteName?: string }) {
           {/* Right Action CTA */}
           <div className="hidden sm:flex items-center space-x-6">
             <a
-              href="https://www.instagram.com/gaurav_unfiltered_?stkn=bXRiZ2cwYWIxNjdy"
+              href={instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-ink-muted hover:text-ink tracking-widest uppercase transition-colors font-mono"
@@ -183,16 +193,16 @@ export function Navbar({ siteName = "Gaurav D." }: { siteName?: string }) {
 
         <div className="border-t border-white/10 pt-6 flex flex-col space-y-3 text-xs tracking-widest uppercase text-white/60">
           <div className="flex justify-between items-center">
-            <span>PUNE / MUMBAI</span>
+            <span>{location.toUpperCase()}</span>
             <a
-              href="mailto:gaurav@gaurav.studio"
+              href={`mailto:${email}`}
               className="text-bronze hover:underline lowercase"
             >
-              gaurav@gaurav.studio
+              {email}
             </a>
           </div>
           <p className="text-[10px] text-white/40">
-            © {new Date().getFullYear()} GAURAV  ALL RIGHTS RESERVED.
+            © {new Date().getFullYear()} {siteName.toUpperCase()} ALL RIGHTS RESERVED.
           </p>
         </div>
       </div>

@@ -21,11 +21,11 @@ export function ContactSection({ settings }: ContactSectionProps) {
   });
   const containerRef = useRef<HTMLElement>(null);
 
-  const name = "Gaurav Damahe";
-  const phone = "9699915638";
-  const address = "Pune / Mumbai, Maharashtra";
+  const name = settings?.photographerName || "Gaurav Damahe";
+  const phone = settings?.phone || "9699915638";
+  const address = settings?.location || "Pune / Mumbai, Maharashtra";
   const email = settings?.email || "gauravxd153@gmail.com";
-  const instagram = "https://www.instagram.com/gaurav_unfiltered_?stkn=bXRiZ2cwYWIxNjdy";
+  const instagram = settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_";
 
   useGSAP(
     () => {
@@ -137,7 +137,7 @@ export function ContactSection({ settings }: ContactSectionProps) {
                     <Phone className="w-3 h-3 text-bronze group-hover:rotate-12 transition-transform duration-300" />
                   </div>
                   <span className="font-mono text-xs sm:text-sm text-canvas group-hover:text-bronze transition-colors font-medium">
-                    +91 {phone}
+                    {phone.startsWith("+") ? phone : `+91 ${phone}`}
                   </span>
                 </a>
 
@@ -178,7 +178,11 @@ export function ContactSection({ settings }: ContactSectionProps) {
                     <Instagram className="w-3 h-3 text-bronze group-hover:scale-110 transition-transform duration-300" />
                   </div>
                   <div className="flex items-center justify-between font-mono text-xs sm:text-sm text-canvas group-hover:text-bronze transition-colors font-medium">
-                    <span className="truncate">@gaurav_unfiltered_</span>
+                    <span className="truncate">
+                      {instagram.includes("instagram.com/")
+                        ? `@${instagram.split("instagram.com/")[1].replace(/\?.*/, "").replace(/\/$/, "")}`
+                        : "@gaurav_unfiltered_"}
+                    </span>
                     <ArrowUpRight className="w-3 h-3 text-canvas/40 group-hover:text-bronze transition-colors ml-1 shrink-0" />
                   </div>
                 </a>

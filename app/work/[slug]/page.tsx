@@ -51,7 +51,12 @@ export default async function PhotoDetailPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-canvas text-ink flex flex-col justify-between">
-      <Navbar siteName={settings?.photographerName || "Gaurav D."} />
+      <Navbar
+        siteName={settings?.photographerName || "Gaurav D."}
+        instagram={settings?.instagram || "https://www.instagram.com/gaurav_unfiltered_"}
+        email={settings?.email || "gauravxd153@gmail.com"}
+        location={settings?.location || "Pune / Mumbai, Maharashtra"}
+      />
 
       <main className="pt-28 sm:pt-36 pb-24 px-6 sm:px-12 max-w-7xl mx-auto w-full">
         {/* Top Back Navigation Breadcrumb */}
@@ -168,7 +173,10 @@ export default async function PhotoDetailPage({ params }: Props) {
         </div>
       </main>
 
-      <Footer />
+      <Footer
+        siteName={settings?.photographerName || "Gaurav"}
+        location={settings?.location || "Pune / Mumbai"}
+      />
     </div>
   );
 }
