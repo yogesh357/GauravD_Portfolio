@@ -65,12 +65,31 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
         body: formData,
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Upload failed");
+      const contentType = res.headers.get("content-type") || "";
+      let data: any = null;
+
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const textResponse = await res.text();
+        if (res.status === 413) {
+          throw new Error(
+            "File is too large for the server (HTTP 413 Request Entity Too Large). Please increase 'client_max_body_size 50M;' in your Nginx configuration on EC2, or upload an image under 10MB."
+          );
+        }
+        throw new Error(
+          `Server returned non-JSON error (HTTP ${res.status}): ${textResponse.slice(0, 150)}`
+        );
       }
 
-      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.error || `Upload failed with status ${res.status}`);
+      }
+
+      if (!data?.url) {
+        throw new Error("No image URL returned from upload server");
+      }
+
       setImageUrl(data.url);
       setUploadSuccess(true);
     } catch (err: unknown) {

@@ -52,21 +52,56 @@ export class LocalStorageProvider implements StorageProvider {
 }
 
 // 2. Cloudinary Storage Provider (via official Cloudinary SDK)
+function getCloudinaryConfig() {
+  const cloudinaryUrl = process.env.CLOUDINARY_URL?.trim();
+  if (cloudinaryUrl) {
+    try {
+      const match = cloudinaryUrl.match(/^cloudinary:\/\/([^:]+):([^@]+)@(.+)$/);
+      if (match) {
+        return {
+          cloud_name: match[3].replace(/^\/+/, ""),
+          api_key: match[1],
+          api_secret: match[2],
+          secure: true,
+        };
+      }
+      const parsed = new URL(cloudinaryUrl);
+      if (parsed.username && parsed.password && parsed.hostname) {
+        return {
+          cloud_name: parsed.hostname,
+          api_key: parsed.username,
+          api_secret: parsed.password,
+          secure: true,
+        };
+      }
+    } catch {
+      // continue to individual credentials check
+    }
+  }
+
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME?.trim();
+  const apiKey = process.env.CLOUDINARY_API_KEY?.trim();
+  const apiSecret = process.env.CLOUDINARY_API_SECRET?.trim();
+
+  if (cloudName && apiKey && apiSecret) {
+    return {
+      cloud_name: cloudName,
+      api_key: apiKey,
+      api_secret: apiSecret,
+      secure: true,
+    };
+  }
+
+  return null;
+}
+
 export class CloudinaryStorageProvider implements StorageProvider {
   name = "cloudinary";
 
   constructor() {
-    if (process.env.CLOUDINARY_URL) {
-      cloudinary.config({
-        cloudinary_url: process.env.CLOUDINARY_URL,
-      });
-    } else {
-      cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-        secure: true,
-      });
+    const config = getCloudinaryConfig();
+    if (config) {
+      cloudinary.config(config);
     }
   }
 
@@ -79,11 +114,20 @@ export class CloudinaryStorageProvider implements StorageProvider {
           folder: "gaurav_photography",
           public_id: `${Date.now()}_${baseName}`,
           resource_type: "image",
-          transformation: [{ quality: "auto:best" }],
+          overwrite: true,
         },
         (error, result: UploadApiResponse | undefined) => {
           if (error || !result) {
-            reject(new Error(error?.message || "Cloudinary upload failed"));
+            const msg = error?.message || "Cloudinary upload failed";
+            if (error?.http_code === 403 || msg.includes("403")) {
+              reject(
+                new Error(
+                  "Cloudinary returned HTTP 403 (Invalid credentials or unauthorized). Please verify your CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in .env."
+                )
+              );
+              return;
+            }
+            reject(new Error(msg));
             return;
           }
           resolve({
@@ -103,12 +147,11 @@ export class CloudinaryStorageProvider implements StorageProvider {
 
   async delete(fileUrl: string): Promise<boolean> {
     try {
-      // Extract public_id if from Cloudinary
       if (!fileUrl.includes("res.cloudinary.com")) return false;
       const parts = fileUrl.split("/");
       const uploadIndex = parts.indexOf("upload");
       if (uploadIndex === -1) return false;
-      
+
       const publicIdWithExt = parts.slice(uploadIndex + 2).join("/");
       const publicId = publicIdWithExt.replace(/\.[^/.]+$/, "");
 
@@ -122,11 +165,8 @@ export class CloudinaryStorageProvider implements StorageProvider {
 
 // Storage Factory
 export function getStorageProvider(): StorageProvider {
-  const hasCloudinaryEnv =
-    !!process.env.CLOUDINARY_URL ||
-    (!!process.env.CLOUDINARY_CLOUD_NAME && !!process.env.CLOUDINARY_API_KEY && !!process.env.CLOUDINARY_API_SECRET);
-
-  if (hasCloudinaryEnv) {
+  const config = getCloudinaryConfig();
+  if (config) {
     return new CloudinaryStorageProvider();
   }
   return new LocalStorageProvider();

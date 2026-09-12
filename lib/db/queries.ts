@@ -11,13 +11,31 @@ export async function getUserByEmail(email: string) {
 
 export async function getCategories() {
   const db = getDb();
-  return db.select().from(schema.categories).orderBy(asc(schema.categories.displayOrder));
+  return db
+    .select()
+    .from(schema.categories)
+    .where(eq(schema.categories.isDeleted, false))
+    .orderBy(asc(schema.categories.displayOrder));
 }
 
 export async function getCategoryBySlug(slug: string) {
   const db = getDb();
   const result = await db.query.categories.findFirst({
-    where: eq(schema.categories.slug, slug),
+    where: and(
+      eq(schema.categories.slug, slug),
+      eq(schema.categories.isDeleted, false)
+    ),
+  });
+  return result || null;
+}
+
+export async function getCategoryById(id: string) {
+  const db = getDb();
+  const result = await db.query.categories.findFirst({
+    where: and(
+      eq(schema.categories.id, id),
+      eq(schema.categories.isDeleted, false)
+    ),
   });
   return result || null;
 }
@@ -28,7 +46,7 @@ export async function getPhotos(filter?: {
   categorySlug?: string;
 }) {
   const db = getDb();
-  const conditions = [];
+  const conditions = [eq(schema.photos.isDeleted, false)];
 
   if (filter?.publishedOnly !== false) {
     conditions.push(eq(schema.photos.published, true));
@@ -40,11 +58,13 @@ export async function getPhotos(filter?: {
     const cat = await getCategoryBySlug(filter.categorySlug);
     if (cat) {
       conditions.push(eq(schema.photos.categoryId, cat.id));
+    } else {
+      return [];
     }
   }
 
   return db.query.photos.findMany({
-    where: conditions.length > 0 ? and(...conditions) : undefined,
+    where: and(...conditions),
     orderBy: [asc(schema.photos.displayOrder), desc(schema.photos.createdAt)],
     with: {
       category: true,
@@ -55,7 +75,10 @@ export async function getPhotos(filter?: {
 export async function getPhotoBySlug(slug: string) {
   const db = getDb();
   const result = await db.query.photos.findFirst({
-    where: eq(schema.photos.slug, slug),
+    where: and(
+      eq(schema.photos.slug, slug),
+      eq(schema.photos.isDeleted, false)
+    ),
     with: {
       category: true,
     },
@@ -66,7 +89,10 @@ export async function getPhotoBySlug(slug: string) {
 export async function getPhotoById(id: string) {
   const db = getDb();
   const result = await db.query.photos.findFirst({
-    where: eq(schema.photos.id, id),
+    where: and(
+      eq(schema.photos.id, id),
+      eq(schema.photos.isDeleted, false)
+    ),
     with: {
       category: true,
     },
@@ -113,7 +139,14 @@ export async function updatePhoto(id: string, data: Partial<schema.NewPhoto>) {
 
 export async function deletePhoto(id: string) {
   const db = getDb();
-  await db.delete(schema.photos).where(eq(schema.photos.id, id));
+  await db
+    .update(schema.photos)
+    .set({
+      isDeleted: true,
+      deletedAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(schema.photos.id, id));
   return true;
 }
 
@@ -135,7 +168,26 @@ export async function updateCategory(id: string, data: Partial<schema.NewCategor
 
 export async function deleteCategory(id: string) {
   const db = getDb();
-  await db.delete(schema.categories).where(eq(schema.categories.id, id));
+  const now = new Date();
+  await db
+    .update(schema.categories)
+    .set({
+      isDeleted: true,
+      deletedAt: now,
+      updatedAt: now,
+    })
+    .where(eq(schema.categories.id, id));
+
+  // Cascade soft delete to all photos belonging to this category
+  await db
+    .update(schema.photos)
+    .set({
+      isDeleted: true,
+      deletedAt: now,
+      updatedAt: now,
+    })
+    .where(eq(schema.photos.categoryId, id));
+
   return true;
 }
 

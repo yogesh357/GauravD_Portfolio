@@ -80,6 +80,8 @@ export function CategoriesManager({
               slug,
               description,
               displayOrder,
+              isDeleted: false,
+              deletedAt: null,
               createdAt: new Date(),
               updatedAt: new Date(),
             },

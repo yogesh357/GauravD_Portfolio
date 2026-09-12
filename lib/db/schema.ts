@@ -25,12 +25,15 @@ export const categories = pgTable(
     slug: varchar("slug", { length: 100 }).notNull().unique(),
     description: text("description"),
     displayOrder: integer("display_order").notNull().default(0),
+    isDeleted: boolean("is_deleted").notNull().default(false),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => ({
     slugIdx: index("categories_slug_idx").on(table.slug),
     displayOrderIdx: index("categories_display_order_idx").on(table.displayOrder),
+    isDeletedIdx: index("categories_is_deleted_idx").on(table.isDeleted),
   })
 );
 
@@ -52,6 +55,8 @@ export const photos = pgTable(
     aspectRatio: varchar("aspect_ratio", { length: 20 }).notNull().default("4/5"),
     published: boolean("published").notNull().default(true),
     displayOrder: integer("display_order").notNull().default(0),
+    isDeleted: boolean("is_deleted").notNull().default(false),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
@@ -60,6 +65,7 @@ export const photos = pgTable(
     categoryIdx: index("photos_category_id_idx").on(table.categoryId),
     publishedIdx: index("photos_published_idx").on(table.published),
     displayOrderIdx: index("photos_display_order_idx").on(table.displayOrder),
+    isDeletedIdx: index("photos_is_deleted_idx").on(table.isDeleted),
   })
 );
 
