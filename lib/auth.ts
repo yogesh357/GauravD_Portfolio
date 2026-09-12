@@ -65,5 +65,24 @@ export async function getCurrentUser(): Promise<TokenPayload | null> {
   const cookieStore = cookies();
   const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
   if (!token) return null;
-  return verifyJwtToken(token);
+
+  const payload = await verifyJwtToken(token);
+  if (!payload || !payload.email) return null;
+
+  try {
+    const dbUser = await getUserByEmail(payload.email);
+    if (!dbUser) {
+      // User does not exist in database (deleted or email changed) -> invalidate
+      return null;
+    }
+
+    return {
+      sub: dbUser.id,
+      email: dbUser.email,
+      name: dbUser.name,
+      role: dbUser.role,
+    };
+  } catch {
+    return null;
+  }
 }
