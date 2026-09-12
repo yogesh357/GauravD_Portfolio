@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { GsapProvider } from "@/components/animations/GsapProvider";
+import { PageTransitionProvider } from "@/components/animations/PageTransition";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -66,7 +67,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="font-sans antialiased bg-canvas text-ink selection:bg-ink selection:text-canvas">
-        <GsapProvider>{children}</GsapProvider>
+        <GsapProvider>
+          <PageTransitionProvider>{children}</PageTransitionProvider>
+        </GsapProvider>
       </body>
     </html>
   );
