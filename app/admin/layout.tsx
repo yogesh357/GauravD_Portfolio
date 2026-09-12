@@ -13,9 +13,10 @@ import {
 } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import { logoutAction } from "./auth-actions";
+import { ToastProvider } from "@/components/ui/Toast";
 
 export const metadata = {
-  title: "Studio CMS — Gaurav  Photography",
+  title: "Studio CMS — Gaurav Damahe Photography",
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,15 +25,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // If unauthenticated (e.g. on /admin/login), do NOT render the admin navigation or sidebar
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#0D0D0D] text-[#F4F1EB]">
-        {children}
-      </div>
+      <ToastProvider>
+        <div className="min-h-screen bg-[#0D0D0D] text-[#F4F1EB]">
+          {children}
+        </div>
+      </ToastProvider>
     );
   }
 
   // Only render the administrative dashboard shell for authenticated users
   return (
-    <div className="min-h-screen bg-[#111111] text-[#F4F1EB] flex flex-col md:flex-row">
+    <ToastProvider>
+      <div className="min-h-screen bg-[#111111] text-[#F4F1EB] flex flex-col md:flex-row">
       {/* Sidebar Navigation */}
       <aside className="w-full md:w-64 bg-[#0D0D0D] border-b md:border-b-0 md:border-r border-white/10 p-6 flex flex-col justify-between shrink-0">
         <div className="space-y-8">
@@ -132,5 +136,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {children}
       </main>
     </div>
+    </ToastProvider>
   );
 }

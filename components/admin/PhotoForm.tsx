@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Photo, Category } from "@/lib/db/schema";
 import { savePhotoAction } from "@/app/admin/actions";
 import { slugify } from "@/lib/utils";
+import { useToast } from "@/components/ui/Toast";
 import { Upload, ArrowLeft, Check, AlertCircle, RefreshCw, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
@@ -16,6 +17,7 @@ interface PhotoFormProps {
 
 export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
   const router = useRouter();
+  const toast = useToast();
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -92,8 +94,11 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
 
       setImageUrl(data.url);
       setUploadSuccess(true);
+      toast.success("Photograph uploaded successfully to secure storage");
     } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed to upload file");
+      const msg = err instanceof Error ? err.message : "Failed to upload file";
+      setErrorMsg(msg);
+      toast.error(msg);
     } finally {
       setUploading(false);
     }
@@ -104,7 +109,9 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
     setErrorMsg(null);
 
     if (!imageUrl) {
-      setErrorMsg("Please upload an image for this photograph before saving.");
+      const msg = "Please upload an image for this photograph before saving.";
+      setErrorMsg(msg);
+      toast.error(msg);
       return;
     }
 
@@ -128,10 +135,17 @@ export function PhotoForm({ initialPhoto, categories }: PhotoFormProps) {
     startTransition(async () => {
       const res = await savePhotoAction(formData);
       if (res.success) {
+        toast.success(
+          initialPhoto
+            ? `Photograph "${title}" updated successfully`
+            : `Photograph "${title}" registered successfully`
+        );
         router.push("/admin/photos");
         router.refresh();
       } else {
-        setErrorMsg(res.error || "Failed to save photograph");
+        const msg = res.error || "Failed to save photograph";
+        setErrorMsg(msg);
+        toast.error(msg);
       }
     });
   };

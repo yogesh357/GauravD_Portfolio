@@ -168,6 +168,24 @@ export async function updateCategory(id: string, data: Partial<schema.NewCategor
 
 export async function deleteCategory(id: string) {
   const db = getDb();
+
+  // Refuse deletion if active (non-deleted) photos exist in this category
+  const activePhotos = await db
+    .select({ id: schema.photos.id })
+    .from(schema.photos)
+    .where(
+      and(
+        eq(schema.photos.categoryId, id),
+        eq(schema.photos.isDeleted, false)
+      )
+    );
+
+  if (activePhotos.length > 0) {
+    throw new Error(
+      `Cannot delete category: Contains ${activePhotos.length} active photograph(s). Please reassign or delete the photographs first.`
+    );
+  }
+
   const now = new Date();
   await db
     .update(schema.categories)
@@ -177,16 +195,6 @@ export async function deleteCategory(id: string) {
       updatedAt: now,
     })
     .where(eq(schema.categories.id, id));
-
-  // Cascade soft delete to all photos belonging to this category
-  await db
-    .update(schema.photos)
-    .set({
-      isDeleted: true,
-      deletedAt: now,
-      updatedAt: now,
-    })
-    .where(eq(schema.photos.categoryId, id));
 
   return true;
 }

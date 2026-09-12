@@ -3,6 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { SiteSettings } from "@/lib/db/schema";
 import { updateSettingsAction } from "@/app/admin/actions";
+import { useToast } from "@/components/ui/Toast";
 import { Check, AlertCircle } from "lucide-react";
 
 interface SettingsFormProps {
@@ -10,6 +11,7 @@ interface SettingsFormProps {
 }
 
 export function SettingsForm({ settings }: SettingsFormProps) {
+  const toast = useToast();
   const [isPending, startTransition] = useTransition();
   const [successMsg, setSuccessMsg] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -40,9 +42,12 @@ export function SettingsForm({ settings }: SettingsFormProps) {
       const res = await updateSettingsAction(formData);
       if (res.success) {
         setSuccessMsg(true);
+        toast.success("Studio settings updated successfully across the website");
         setTimeout(() => setSuccessMsg(false), 4000);
       } else {
-        setErrorMsg(res.error || "Failed to update settings");
+        const msg = res.error || "Failed to update settings";
+        setErrorMsg(msg);
+        toast.error(msg);
       }
     });
   };

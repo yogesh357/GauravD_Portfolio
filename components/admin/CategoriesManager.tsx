@@ -4,6 +4,8 @@ import React, { useState, useTransition } from "react";
 import { Category, Photo } from "@/lib/db/schema";
 import { saveCategoryAction, deleteCategoryAction } from "@/app/admin/actions";
 import { slugify } from "@/lib/utils";
+import { useToast } from "@/components/ui/Toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { Plus, Edit2, Trash2, Check, AlertCircle } from "lucide-react";
 
 interface CategoriesManagerProps {
@@ -15,6 +17,7 @@ export function CategoriesManager({
   categories: initialCategories,
   photos,
 }: CategoriesManagerProps) {
+  const toast = useToast();
   const [categories, setCategories] = useState(initialCategories);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -23,6 +26,10 @@ export function CategoriesManager({
   const [displayOrder, setDisplayOrder] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // Custom Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -71,6 +78,7 @@ export function CategoriesManager({
                 : c
             )
           );
+          toast.success(`Category "${name}" updated successfully`);
         } else {
           setCategories((prev) => [
             ...prev,
@@ -86,28 +94,43 @@ export function CategoriesManager({
               updatedAt: new Date(),
             },
           ]);
+          toast.success(`Category "${name}" created successfully`);
         }
         handleCancel();
       } else {
-        setErrorMsg(res.error || "Failed to save category");
+        const err = res.error || "Failed to save category";
+        setErrorMsg(err);
+        toast.error(err);
       }
     });
   };
 
-  const handleDelete = (id: string, catName: string) => {
-    const count = photos.filter((p) => p.categoryId === id).length;
+  const openDeleteModal = (cat: Category) => {
+    const count = photos.filter((p) => p.categoryId === cat.id && !p.isDeleted).length;
     if (count > 0) {
-      if (!confirm(`Warning: ${count} photos belong to "${catName}". Deleting this category may affect them. Proceed?`)) {
-        return;
-      }
-    } else {
-      if (!confirm(`Delete category "${catName}"?`)) return;
+      toast.error(
+        `Cannot delete "${cat.name}": Contains ${count} active photograph(s). Please delete or reassign them first.`
+      );
+      return;
     }
+    setCategoryToDelete(cat);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!categoryToDelete) return;
+    const cat = categoryToDelete;
 
     startTransition(async () => {
-      const res = await deleteCategoryAction(id);
+      const res = await deleteCategoryAction(cat.id);
       if (res.success) {
-        setCategories((prev) => prev.filter((c) => c.id !== id));
+        setCategories((prev) => prev.filter((c) => c.id !== cat.id));
+        toast.success(`Category "${cat.name}" removed successfully`);
+        setDeleteModalOpen(false);
+        setCategoryToDelete(null);
+      } else {
+        const err = res.error || "Failed to delete category";
+        toast.error(err);
       }
     });
   };
@@ -158,7 +181,7 @@ export function CategoriesManager({
                     <Edit2 className="w-4 h-4" />
                   </button>
                   <button
-                    onClick={() => handleDelete(cat.id, cat.name)}
+                    onClick={() => openDeleteModal(cat)}
                     className="p-1.5 text-rose-400/70 hover:text-rose-400 transition-colors"
                     title="Delete category"
                   >
@@ -260,6 +283,24 @@ export function CategoriesManager({
           </form>
         </div>
       </div>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="Remove Category"
+        message="Are you certain you want to soft-delete this category archive? This action can only proceed if no active photos are attached."
+        itemTitle={categoryToDelete ? `${categoryToDelete.name} (/${categoryToDelete.slug})` : undefined}
+        confirmText="DELETE CATEGORY"
+        confirmVariant="danger"
+        isPending={isPending}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          if (!isPending) {
+            setDeleteModalOpen(false);
+            setCategoryToDelete(null);
+          }
+        }}
+      />
     </div>
   );
 }

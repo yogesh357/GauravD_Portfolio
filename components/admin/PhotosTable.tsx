@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Photo, Category } from "@/lib/db/schema";
 import { togglePublishAction, deletePhotoAction } from "@/app/admin/actions";
+import { useToast } from "@/components/ui/Toast";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import {
   Search,
   ExternalLink,
@@ -22,10 +24,15 @@ interface PhotosTableProps {
 }
 
 export function PhotosTable({ photos: initialPhotos, categories }: PhotosTableProps) {
+  const toast = useToast();
   const [photos, setPhotos] = useState(initialPhotos);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [isPending, startTransition] = useTransition();
+
+  // Custom Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [photoToDelete, setPhotoToDelete] = useState<(Photo & { category?: Category | null }) | null>(null);
 
   const filteredPhotos = photos.filter((photo) => {
     const matchesSearch =
@@ -41,7 +48,7 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
     return matchesSearch && matchesCategory;
   });
 
-  const handleTogglePublish = (id: string, current: boolean) => {
+  const handleTogglePublish = (id: string, current: boolean, title: string) => {
     startTransition(async () => {
       const res = await togglePublishAction(id, current);
       if (res.success && typeof res.newStatus === "boolean") {
@@ -49,16 +56,35 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
         setPhotos((prev) =>
           prev.map((p) => (p.id === id ? { ...p, published: updatedStatus } : p))
         );
+        toast.success(
+          updatedStatus
+            ? `"${title}" is now published live`
+            : `"${title}" moved to draft archive`
+        );
+      } else {
+        toast.error(res.error || "Failed to toggle status");
       }
     });
   };
 
-  const handleDelete = (id: string, title: string) => {
-    if (!confirm(`Are you sure you want to permanently delete "${title}"?`)) return;
+  const openDeleteModal = (photo: Photo & { category?: Category | null }) => {
+    setPhotoToDelete(photo);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!photoToDelete) return;
+    const photo = photoToDelete;
+
     startTransition(async () => {
-      const res = await deletePhotoAction(id);
+      const res = await deletePhotoAction(photo.id);
       if (res.success) {
-        setPhotos((prev) => prev.filter((p) => p.id !== id));
+        setPhotos((prev) => prev.filter((p) => p.id !== photo.id));
+        toast.success(`Photograph "${photo.title}" deleted successfully`);
+        setDeleteModalOpen(false);
+        setPhotoToDelete(null);
+      } else {
+        toast.error(res.error || "Failed to delete photograph");
       }
     });
   };
@@ -155,13 +181,12 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
                 </td>
                 <td className="p-4 text-center">
                   <button
-                    onClick={() => handleTogglePublish(photo.id, photo.published)}
+                    onClick={() => handleTogglePublish(photo.id, photo.published, photo.title)}
                     disabled={isPending}
-                    className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded text-[10px] font-mono transition-colors ${
-                      photo.published
+                    className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded text-[10px] font-mono transition-colors ${photo.published
                         ? "bg-emerald-400/10 text-emerald-300 border border-emerald-400/20 hover:bg-emerald-400/20"
                         : "bg-rose-400/10 text-rose-300 border border-rose-400/20 hover:bg-rose-400/20"
-                    }`}
+                      }`}
                   >
                     {photo.published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                     <span>{photo.published ? "LIVE" : "DRAFT"}</span>
@@ -185,7 +210,7 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
                       <Edit className="w-4 h-4" />
                     </Link>
                     <button
-                      onClick={() => handleDelete(photo.id, photo.title)}
+                      onClick={() => openDeleteModal(photo)}
                       disabled={isPending}
                       className="p-1.5 text-rose-400/70 hover:text-rose-400 transition-colors"
                       title="Delete photo"
@@ -206,6 +231,24 @@ export function PhotosTable({ photos: initialPhotos, categories }: PhotosTablePr
           </div>
         )}
       </div>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        title="Remove Photograph"
+        message="Are you certain you want to soft-delete this photograph from the archive? It will no longer appear on the live site or gallery."
+        itemTitle={photoToDelete ? `${photoToDelete.title} (/${photoToDelete.slug})` : undefined}
+        confirmText="DELETE PHOTOGRAPH"
+        confirmVariant="danger"
+        isPending={isPending}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          if (!isPending) {
+            setDeleteModalOpen(false);
+            setPhotoToDelete(null);
+          }
+        }}
+      />
     </div>
   );
 }
